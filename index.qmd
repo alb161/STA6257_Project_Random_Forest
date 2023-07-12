@@ -1,7 +1,7 @@
 ---
-title: "Report Sample"
-author: "Student name"
-date: '`r Sys.Date()`'
+title: "Random Forest Algorithm"
+author: "Amy Brown, Jeff Eddy, Armani Harris"
+date: "July 12, 2023"
 format:
   html:
     code-fold: true
@@ -11,63 +11,44 @@ bibliography: references.bib # file contains bibtex for references
 ---
 
 ## Introduction
-Kernel regression is a non-parametric estimator that estimates the conditional expectation of two variables which is random. The goal of a kernel regression is to discover the non-linear relationship between two random variables. To discover the non-linear relationship, kernel estimator or kernel smoothing is the main method to estimate the curve for non-parametric
-statistics. In kernel estimator, weight function is known as kernel function [@efr2008]. Cite this paper [@bro2014principal]. The GEE [@wang2014].
+Random Forests (RF) is a popular ensemble learning algorithm that combines multiple decision trees to improve predictive accuracy and handle complex datasets. This literature review aims to explore ten articles that discuss various aspects of the Random Forest algorithm, including its theoretical foundation, feature selection, data imbalance resolution, interpretability, and comparisons with other classification methods. The selected articles offer valuable insights into the strengths, weaknesses, and practical applications of Random Forest in different domains.
+
+### Literature Review
+Breiman [@Breiman2001] introduced the concept of Random Forests and highlighted the importance of the Law of Large Numbers in avoiding overfitting. Liaw and Wiener [@Liaw2002] expanded on this work, focusing on the classification and regression capabilities of RF. They discussed the use of bagging and highlighted the significance of variable importance in RF models.When dealing with datasets containing a high number of variables the importance of feature selection is discussed by Jaiswal, K. & Samikannu, R. [@Jaiswal2017]. Han and Kim investigated the optimal size of candidate feature sets in Random Forest for classification and regression tasks. The study reveals that the default candidate feature set is not always the best performing and that the optimal size can vary depending on the dataset used [@Han2019]. The potential challenges such as overfitting and handling multi-valued attributes exist when using the Random Forest (RF) algorithm. However, the advantages emphasized by Abdulkareem, N. M., & Abdulazeez, A. M entail accuracy, efficiency with large datasets, and minimal data preprocessing requirements [@Abdulkareem2021]. To address the issue of data imbalance, More and Rana [@More2017] reviewed techniques for resolving imbalanced datasets using RF. The various techniques include sampling, weighted Random Forest, and cost-sensitive methods, to handle imbalanced datasets. A practical application of Random Forest in computational biology and bioinformatics was conducted by Boulesteix, A. L. et al. [@Ali2012], providing insights into decision tree construction, handling bias, and recommendations for parameter tuning. Schonlau and Zou [@Schonlau2020] focused on optimizing RF models by tuning parameters and subtree iterations. They discussed the use of out-of-bag (OOB) samples to approximate the model's error during training. Zhu proposes a new algorithm, the SearchSize method, which estimates the optimal feature set size using out-of-bag error methodology [@Tongtian2020]. Tuning these parameters helps achieve higher prediction accuracy Schonlau, M., & Zou, R. Y. [@Schonlau2020]. Aria et al. [@Aria2022] discussed internal approaches that provide a global overview of the model. They mentioned the Mean Decrease Impurity (MDI) as a measure of variable importance and emphasized the visualization of RF classifiers using toolkits.
 
 
 ## Methods
 
+Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest.  A decision tree starts are the root node and splits into internal nodes based on the features divided into classes.  Further internal nodes are created based on the data split on the internal node.  The decision tree ends at the leaf node when all the data belongs to the same class [@Ali2012]. The Random Forest algorithm can be used for classification or regression models.  The target selected for the algorithm identifies if the algorithm will use a classification or regression model.  The leaf node will predict a category if a classification model is identified and a numerical value for a regression model.  The prediction is determined by taking the majority vote of all leaf nodes for classification and an average of the leaf nodes for regression.  This process is represented in the flowchart of Figure 1 [@Abdulkareem2021].
 
-The common non-parametric regression model is $Y_i = m(X_i) + \varepsilon_i$, where
-$Y_i$ can be defined as the sum of the regression function value $m(x)$ for $X_i$.
-Here $m(x)$ is unknown and $\varepsilon_i$ some errors. With the help of this definition, we can create the estimation for
-local averaging i.e. $m(x)$ can be estimated with the product of $Y_i$ average
-and $X_i$ is near to $x$. In other words, this means that we are discovering
-the line through the data points with the help of surrounding data points.
-The estimation formula is printed below [@R-base]:
 
-$$
-M_n(x) = \sum_{i=1}^{n} W_n (X_i) Y_i  \tag{1}
-$$
-$W_n(x)$ is the sum of weights that belongs to all real numbers. Weights
-are positive numbers and small if $X_i$ is far from $x$.
+![Figure 1 [@Abdulkareem2021]](RF flowchart.png) 
+
 
 ## Analysis and Results
-### Data and Vizualisation
-A study was conducted to determine how...
+The target variable was binary with categories of no heart disease (1) and heart disease (2). After removing the outlier observation in cholesterol, 269 observations were used to create a random forest algorithm to predict the presence of heart disease. Using the caret package in R, the dataset was split for a training model and a testing model at a 0.7 ratio. This resulted in 189 observations in the training dataset and 80 in the testing dataset. 
+ 
+A default training model based on classification was then created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node.
 
-```{r, warning=FALSE, echo=T, message=FALSE}
-# loading packages 
-library(tidyverse)
-library(knitr)
-library(ggthemes)
-library(ggrepel)
-library(dslabs)
-```
+The training model was assessed for the best possible number of decision trees, nodes, and number of features to consider at each node. The greatest accuracy was determined to be 200 trees with a node size of 8 and 2 features considered at each node. The final training model produced an accuracy of 0.8947 compared to the default training model with an accuracy of 0.8472, a 4.75% improvement in accuracy over the default RF parameters. 
+
+## Results
+Results from the predictive test model indicated that the feature major.vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 80.00. These features were blood vessels, chest pain type, thal reversible defect, normal thal, and max heart rate. All five features had a mean decrease Ginni score above 2.2. Resting blood pressure had the lowest variable importance with a score of 0.00 indicating that the feature did not significantly improve the model’s performance in predicting heart disease within this dataset. Fasting blood sugar was the far less significant than the other features as well, with a score of 4.03. 
+Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p< 0.001). Sensitivity and specificity were calculated at 0.886 and 0.75 respectively. The model has an estimated false positive rate of 25%. 
 
 
-```{r, warning=FALSE, echo=TRUE}
-# Load Data
-kable(head(murders))
+### Data and Visualization
+The Random Forest algorithm is reviewed using the Heart Disease Prediction dataset. There are 270 observations in the dataset without any missing values.  The target is heart disease predicting the presence or absence of heart disease. The target and the other 13 features are listed in Figure 2 [@Singh2023]. The boxplot of each feature is plotted in Figures 3. There is one extreme outlier in feature serum cholesterol. The datapoint will be removed before running the model. 
 
-ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total)) 
 
-  ggplot1 + geom_point(aes(col=region), size = 4) +
-  geom_text_repel(aes(label=abb)) +
-  scale_x_log10() +
-  scale_y_log10() +
-  geom_smooth(formula = "y~x", method=lm,se = F)+
-  xlab("Populations in millions (log10 scale)") + 
-  ylab("Total number of murders (log10 scale)") +
-  ggtitle("US Gun Murders in 2010") +
-  scale_color_discrete(name = "Region")+
-      theme_wsj()
-  
+![Figure 2 [@Singh2023]](Features and Target.png)
 
-```
+
+![Figure 3](boxplot.png)
+
 
 ### Statistical Modeling
 
-### Conlusion
+### Conclusion
 
 ## References
