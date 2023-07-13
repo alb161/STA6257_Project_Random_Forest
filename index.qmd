@@ -25,6 +25,8 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 ![Figure 1 [@Abdulkareem2021]](RF flowchart.png) 
 
 
+## Analysis and Results
+
 ### Data and Visualization
 The Random Forest algorithm is reviewed using the Heart Disease Prediction dataset. There are 270 observations in the dataset without any missing values.  The target is heart disease predicting the presence or absence of heart disease. The target and the other 13 features are listed in Figure 2 [@Singh2023]. The boxplot of each feature is plotted in Figures 3. There is an extreme outlier in feature serum cholesterol. The datapoint will be removed before running the model. 
 
@@ -36,10 +38,6 @@ The Random Forest algorithm is reviewed using the Heart Disease Prediction datas
 
 
 ![Figure 3](boxplot.png)
-=======
-
-
-## Analysis and Results
 
 ### Packages
 ```{r, warning=FALSE}
@@ -59,12 +57,12 @@ library(gridExtra)
 library(AppliedPredictiveModeling)
 library("ggplot2")
 ```
-## Load Data
+### Load Data
 
 ```{r}
 data<- read.csv('C:/Users/amybr/OneDrive/Desktop/dataset_heart.csv')
 ```
-## Data Transformation
+### Data Transformation
 Setting the target variable to factor. The thal feature was recoded for clarity and set as a factor variable. 
 ```{r}
 data$heart.disease<- as.factor(data$heart.disease)
@@ -75,20 +73,21 @@ data1$thal[data1$thal== 7]<-"reversible defect"
 data1$thal<- as.factor(data1$thal)
 ```
 
-# boxplot 
+### Remove Extreme Outlier
 Comparison of cholestrol variable with and without the extreme outlier.
 ```{r}
+#boxplot with outlier
 boxplot(data1)
 ```
-#remove extreme outlier
 ```{r}
+#outlier removed
 data1 = data1[data1$serum.cholestoral != "564", ]
 ```
-#rerun boxplot
 ```{r}
+#boxplot without outlier
 boxplot(data1)
 ```
-## Model Training
+### Model Training
 The target variable was binary with categories of no heart disease (1) and heart disease (2). After removing the outlier observation in cholesterol, 269 observations were used to create a random forest algorithm to predict the presence of heart disease. Using the caret package in R, the data set was split for a training model and a testing model at a 0.7 ratio. This resulted in 189 observations in the training data set and 80 in the testing data set. 
  
 ```{r}
