@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -110,35 +144,770 @@ div.csl-indent {
 <figcaption class="figure-caption">Figure 1 <span class="citation" data-cites="Abdulkareem2021">(<a href="#ref-Abdulkareem2021" role="doc-biblioref">Abdulkareem and Abdulazeez 2021</a>)</span></figcaption>
 </figure>
 </div>
-</section>
-<section id="analysis-and-results" class="level2">
-<h2 class="anchored" data-anchor-id="analysis-and-results">Analysis and Results</h2>
-<p>The target variable was binary with categories of no heart disease (1) and heart disease (2). After removing the outlier observation in cholesterol, 269 observations were used to create a random forest algorithm to predict the presence of heart disease. Using the caret package in R, the dataset was split for a training model and a testing model at a 0.7 ratio. This resulted in 189 observations in the training dataset and 80 in the testing dataset.</p>
-<p>A default training model based on classification was then created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node.</p>
-<p>The training model was assessed for the best possible number of decision trees, nodes, and number of features to consider at each node. The greatest accuracy was determined to be 200 trees with a node size of 8 and 2 features considered at each node. The final training model produced an accuracy of 0.8947 compared to the default training model with an accuracy of 0.8472, a 4.75% improvement in accuracy over the default RF parameters.</p>
-</section>
-<section id="results" class="level2">
-<h2 class="anchored" data-anchor-id="results">Results</h2>
-<p>Results from the predictive test model indicated that the feature major.vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 80.00. These features were blood vessels, chest pain type, thal reversible defect, normal thal, and max heart rate. All five features had a mean decrease Ginni score above 2.2. Resting blood pressure had the lowest variable importance with a score of 0.00 indicating that the feature did not significantly improve the model’s performance in predicting heart disease within this dataset. Fasting blood sugar was the far less significant than the other features as well, with a score of 4.03. Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p&lt; 0.001). Sensitivity and specificity were calculated at 0.886 and 0.75 respectively. The model has an estimated false positive rate of 25%.</p>
 <section id="data-and-visualization" class="level3">
 <h3 class="anchored" data-anchor-id="data-and-visualization">Data and Visualization</h3>
-<p>The Random Forest algorithm is reviewed using the Heart Disease Prediction dataset. There are 270 observations in the dataset without any missing values. The target is heart disease predicting the presence or absence of heart disease. The target and the other 13 features are listed in Figure 2 <span class="citation" data-cites="Singh2023">(<a href="#ref-Singh2023" role="doc-biblioref">Singh 2023</a>)</span>. The boxplot of each feature is plotted in Figures 3. There is one extreme outlier in feature serum cholesterol. The datapoint will be removed before running the model.</p>
+<p>The Random Forest algorithm is reviewed using the Heart Disease Prediction dataset. There are 270 observations in the dataset without any missing values. The target is heart disease predicting the presence or absence of heart disease. The target and the other 13 features are listed in Figure 2 <span class="citation" data-cites="Singh2023">(<a href="#ref-Singh2023" role="doc-biblioref">Singh 2023</a>)</span>. The boxplot of each feature is plotted in Figures 3. There is an extreme outlier in feature serum cholesterol. The datapoint will be removed before running the model.</p>
+<p><a href="https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset">Link to Documentation for Heart Disease Prediction data</a></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="Features%20and%20Target.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure 2 <span class="citation" data-cites="Singh2023">(<a href="#ref-Singh2023" role="doc-biblioref">Singh 2023</a>)</span></figcaption>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="boxplot.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure 3</figcaption>
+<figcaption class="figure-caption">Figure 2</figcaption>
 </figure>
 </div>
 </section>
-<section id="statistical-modeling" class="level3">
-<h3 class="anchored" data-anchor-id="statistical-modeling">Statistical Modeling</h3>
 </section>
+<section id="figure-3" class="level1">
+<h1><img src="boxplot.png" class="img-fluid" alt="Figure 3"></h1>
+<section id="analysis-and-results" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-and-results">Analysis and Results</h2>
+<section id="packages" class="level3">
+<h3 class="anchored" data-anchor-id="packages">Packages</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(boot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'boot'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:lattice':
+
+    melanoma</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ────────────────────────────────────── tidymodels 1.1.0 ──</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>✔ broom        1.0.5     ✔ rsample      1.1.1
+✔ dials        1.2.0     ✔ tibble       3.2.1
+✔ dplyr        1.1.2     ✔ tidyr        1.3.0
+✔ infer        1.0.4     ✔ tune         1.1.1
+✔ modeldata    1.1.0     ✔ workflows    1.1.3
+✔ parsnip      1.1.0     ✔ workflowsets 1.0.1
+✔ purrr        1.0.1     ✔ yardstick    1.2.0
+✔ recipes      1.0.6     </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+✖ purrr::discard()         masks scales::discard()
+✖ dplyr::filter()          masks stats::filter()
+✖ dplyr::lag()             masks stats::lag()
+✖ purrr::lift()            masks caret::lift()
+✖ yardstick::precision()   masks caret::precision()
+✖ yardstick::recall()      masks caret::recall()
+✖ yardstick::sensitivity() masks caret::sensitivity()
+✖ yardstick::specificity() masks caret::specificity()
+✖ recipes::step()          masks stats::step()
+• Use suppressPackageStartupMessages() to eliminate package startup messages</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lindia)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: carData</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'car'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    some</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    recode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:boot':
+
+    logit</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(htmltools)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ forcats   1.0.0     ✔ readr     2.1.4
+✔ lubridate 1.9.2     ✔ stringr   1.5.0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ readr::col_factor() masks scales::col_factor()
+✖ purrr::discard()    masks scales::discard()
+✖ dplyr::filter()     masks stats::filter()
+✖ stringr::fixed()    masks recipes::fixed()
+✖ dplyr::lag()        masks stats::lag()
+✖ purrr::lift()       masks caret::lift()
+✖ car::recode()       masks dplyr::recode()
+✖ car::some()         masks purrr::some()
+✖ readr::spec()       masks yardstick::spec()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastDummies)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>randomForest 4.7-1.1
+Type rfNews() to see new features/changes/bug fixes.
+
+Attaching package: 'randomForest'
+
+The following object is masked from 'package:dplyr':
+
+    combine
+
+The following object is masked from 'package:ggplot2':
+
+    margin</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'gridExtra'
+
+The following object is masked from 'package:randomForest':
+
+    combine
+
+The following object is masked from 'package:dplyr':
+
+    combine</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AppliedPredictiveModeling)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="load-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-data">Load Data</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>data<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'C:/Users/amybr/OneDrive/Desktop/dataset_heart.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="data-transformation" class="level2">
+<h2 class="anchored" data-anchor-id="data-transformation">Data Transformation</h2>
+<p>Setting the target variable to factor. The thal feature was recoded for clarity and set as a factor variable.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>heart.disease<span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>heart.disease)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>data1<span class="ot">=</span>data</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">3</span>]<span class="ot">&lt;-</span><span class="st">"normal"</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">6</span>]<span class="ot">&lt;-</span><span class="st">"fixed defect"</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">7</span>]<span class="ot">&lt;-</span><span class="st">"reversible defect"</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal<span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data1<span class="sc">$</span>thal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="boxplot" class="level1">
+<h1>boxplot</h1>
+<p>Comparison of cholestrol variable with and without the extreme outlier.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(data1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>#remove extreme outlier</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">=</span> data1[data1<span class="sc">$</span>serum.cholestoral <span class="sc">!=</span> <span class="st">"564"</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>#rerun boxplot</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(data1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="model-training" class="level2">
+<h2 class="anchored" data-anchor-id="model-training">Model Training</h2>
+<p>The target variable was binary with categories of no heart disease (1) and heart disease (2). After removing the outlier observation in cholesterol, 269 observations were used to create a random forest algorithm to predict the presence of heart disease. Using the caret package in R, the data set was split for a training model and a testing model at a 0.7 ratio. This resulted in 189 observations in the training data set and 80 in the testing data set.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(data1<span class="sc">$</span>heart.disease, <span class="at">p =</span> <span class="fl">0.7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> data1[split, ]</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> data1[<span class="sc">-</span>split, ]</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   189 obs. of  14 variables:
+ $ age                                 : int  70 60 63 59 44 61 57 71 46 53 ...
+ $ sex                                 : int  1 1 0 1 1 1 0 0 1 1 ...
+ $ chest.pain.type                     : int  4 4 4 4 3 1 4 4 4 4 ...
+ $ resting.blood.pressure              : int  130 140 150 135 140 134 128 112 140 140 ...
+ $ serum.cholestoral                   : int  322 293 407 234 235 234 303 149 311 203 ...
+ $ fasting.blood.sugar                 : int  0 0 0 0 0 0 0 0 0 1 ...
+ $ resting.electrocardiographic.results: int  2 2 2 0 2 0 2 0 0 2 ...
+ $ max.heart.rate                      : int  109 170 154 161 180 145 159 125 120 155 ...
+ $ exercise.induced.angina             : int  0 0 0 0 0 0 0 0 1 1 ...
+ $ oldpeak                             : num  2.4 1.2 4 0.5 0 2.6 0 1.6 1.8 3.1 ...
+ $ ST.segment                          : int  2 2 2 2 1 2 1 2 2 3 ...
+ $ major.vessels                       : int  3 2 3 0 0 2 1 0 2 0 ...
+ $ thal                                : Factor w/ 3 levels "fixed defect",..: 2 3 3 3 2 2 2 2 3 3 ...
+ $ heart.disease                       : Factor w/ 2 levels "1","2": 2 2 2 1 1 2 1 1 2 2 ...</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   80 obs. of  14 variables:
+ $ age                                 : int  57 64 74 65 56 59 53 48 71 57 ...
+ $ sex                                 : int  1 1 0 1 1 1 1 1 0 1 ...
+ $ chest.pain.type                     : int  2 4 2 4 3 4 4 2 3 3 ...
+ $ resting.blood.pressure              : int  124 128 120 120 130 110 142 130 110 128 ...
+ $ serum.cholestoral                   : int  261 263 269 177 256 239 226 245 265 229 ...
+ $ fasting.blood.sugar                 : int  0 0 0 0 1 0 0 0 1 0 ...
+ $ resting.electrocardiographic.results: int  0 0 2 0 2 2 2 2 2 2 ...
+ $ max.heart.rate                      : int  141 105 121 140 142 142 111 180 130 150 ...
+ $ exercise.induced.angina             : int  0 1 1 0 1 1 1 0 0 0 ...
+ $ oldpeak                             : num  0.3 0.2 0.2 0.4 0.6 1.2 0 0.2 0 0.4 ...
+ $ ST.segment                          : int  1 2 1 1 2 2 1 2 1 2 ...
+ $ major.vessels                       : int  0 1 1 0 1 1 0 0 1 1 ...
+ $ thal                                : Factor w/ 3 levels "fixed defect",..: 3 3 2 3 1 3 3 2 2 3 ...
+ $ heart.disease                       : Factor w/ 2 levels "1","2": 2 1 1 1 2 2 1 1 1 2 ...</code></pre>
+</div>
+</div>
+<p>A default training model based on classification was then created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8472.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the control</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>trControl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">number =</span> <span class="dv">10</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">search =</span> <span class="st">"grid"</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co">#model with default values</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>rf_default <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+189 samples
+ 13 predictor
+  2 classes: '1', '2' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 169, 170, 170, 171, 169, 171, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+   2    0.8471930  0.6869781
+   8    0.8311111  0.6550283
+  14    0.8258480  0.6427563
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 2.</code></pre>
+</div>
+</div>
+<p>The training model was assessed for the best possible number of decision trees, nodes, and number of features to consider at each node. After performing the following procedures, the greatest accuracy was determined to be 200 trees with a node size of 8 and 2 features considered at each node.<br>
+The first tuning parameter evaluated was the number of features the model could consider at each node in a tree.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Search best mtry</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>tuneGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">.mtry =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span> <span class="dv">10</span>))</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>rf_mtry <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> tuneGrid,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl,</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">300</span>)</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_mtry)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+189 samples
+ 13 predictor
+  2 classes: '1', '2' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 169, 170, 170, 171, 169, 171, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+   1    0.8521637  0.6957755
+   2    0.8574561  0.7059519
+   3    0.8416374  0.6747361
+   4    0.8416667  0.6744959
+   5    0.8150292  0.6211198
+   6    0.8258480  0.6437005
+   7    0.8311111  0.6536152
+   8    0.8202924  0.6328778
+   9    0.8311111  0.6547690
+  10    0.8103216  0.6146161
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 2.</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+189 samples
+ 13 predictor
+  2 classes: '1', '2' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 169, 170, 170, 171, 169, 171, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+   2    0.8471930  0.6869781
+   8    0.8311111  0.6550283
+  14    0.8258480  0.6427563
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 2.</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>best_mtry <span class="ot">&lt;-</span> rf_mtry<span class="sc">$</span>bestTune<span class="sc">$</span>mtry </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>best_mtry</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+<p>The subsequent procedure evaluates the optimal number of nodes for the model.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Search maxnodes - look for highest accuracy</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>store_maxnode <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co">#assigns best mtry to tuneGrid</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>tuneGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">.mtry =</span> best_mtry)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (maxnodes <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span> <span class="dv">15</span>)) {</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    rf_maxnode <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> train,</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">tuneGrid =</span> tuneGrid,</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">trControl =</span> trControl,</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxnodes =</span> maxnodes,</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">ntree =</span> <span class="dv">300</span>)</span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>    current_iteration <span class="ot">&lt;-</span> <span class="fu">toString</span>(maxnodes)</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>    store_maxnode[[current_iteration]] <span class="ot">&lt;-</span> rf_maxnode</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>results_mtry <span class="ot">&lt;-</span> <span class="fu">resamples</span>(store_maxnode)</span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results_mtry)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+summary.resamples(object = results_mtry)
+
+Models: 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 
+Number of resamples: 10 
+
+Accuracy 
+        Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
+5  0.6842105 0.8333333 0.8500000 0.8524561 0.8947368    1    0
+6  0.7368421 0.8333333 0.8500000 0.8577193 0.8947368    1    0
+7  0.6842105 0.8375000 0.8694444 0.8527485 0.8947368    1    0
+8  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+9  0.6842105 0.8375000 0.8694444 0.8580117 0.8947368    1    0
+10 0.7368421 0.8333333 0.8723684 0.8627193 0.8986842    1    0
+11 0.6842105 0.8333333 0.8500000 0.8471930 0.8947368    1    0
+12 0.7368421 0.7833333 0.8377193 0.8416374 0.8855263    1    0
+13 0.6842105 0.8083333 0.8460526 0.8477485 0.8932749    1    0
+14 0.6842105 0.8333333 0.8723684 0.8574561 0.8986842    1    0
+15 0.6842105 0.8375000 0.8918129 0.8630117 0.8986842    1    0
+
+Kappa 
+        Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
+5  0.3666667 0.6493506 0.6938776 0.6959523 0.7857843    1    0
+6  0.4508671 0.6493506 0.6938776 0.7067994 0.7857843    1    0
+7  0.3294118 0.6604824 0.7346154 0.6964070 0.7857843    1    0
+8  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
+9  0.3294118 0.6604824 0.7375000 0.7078311 0.7857843    1    0
+10 0.4311377 0.6515699 0.7351741 0.7161245 0.7957071    1    0
+11 0.3294118 0.6515699 0.6969388 0.6853067 0.7857843    1    0
+12 0.4311377 0.5614899 0.6599354 0.6741824 0.7688759    1    0
+13 0.3294118 0.6093074 0.6852601 0.6868673 0.7839744    1    0
+14 0.3294118 0.6515699 0.7351741 0.7059519 0.7957071    1    0
+15 0.3294118 0.6604824 0.7728507 0.7170522 0.7957071    1    0</code></pre>
+</div>
+</div>
+<p>The final parameter evaluation was the ideal number of trees for the model. From the output of the code, investigators observed the accuracy of the model stabilizes at 200 trees.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#search best ntree</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>store_maxtrees <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ntree <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>, <span class="dv">500</span>, <span class="dv">600</span>, <span class="dv">700</span>, <span class="dv">800</span>, <span class="dv">900</span>, <span class="dv">1000</span>)) {</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    rf_maxtrees <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> train,</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">tuneGrid =</span> tuneGrid,</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">trControl =</span> trControl,</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxnodes =</span> <span class="dv">8</span>,</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">ntree =</span> ntree)</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>    key <span class="ot">&lt;-</span> <span class="fu">toString</span>(ntree)</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>    store_maxtrees[[key]] <span class="ot">&lt;-</span> rf_maxtrees</span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>results_tree <span class="ot">&lt;-</span> <span class="fu">resamples</span>(store_maxtrees)</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results_tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+summary.resamples(object = results_tree)
+
+Models: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000 
+Number of resamples: 10 
+
+Accuracy 
+          Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
+100  0.6842105 0.7958333 0.8918129 0.8574561 0.8986842    1    0
+200  0.6842105 0.8472222 0.8947368 0.8680117 0.9000000    1    0
+300  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+400  0.6842105 0.8472222 0.8947368 0.8627485 0.9000000    1    0
+500  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+600  0.6842105 0.8333333 0.8723684 0.8521930 0.8986842    1    0
+700  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+800  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+900  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+1000 0.6842105 0.8333333 0.8723684 0.8521930 0.8986842    1    0
+
+Kappa 
+          Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
+100  0.3294118 0.5682062 0.7728507 0.7037457 0.7925830    1    0
+200  0.3666667 0.6793207 0.7826797 0.7263713 0.7969385    1    0
+300  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
+400  0.3294118 0.6793207 0.7826797 0.7161987 0.7969385    1    0
+500  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
+600  0.3294118 0.6515699 0.7382353 0.6953004 0.7925830    1    0
+700  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
+800  0.3294118 0.6493506 0.7826797 0.7042107 0.7969385    1    0
+900  0.3294118 0.6493506 0.7826797 0.7042107 0.7969385    1    0
+1000 0.3294118 0.6493506 0.7382353 0.6944127 0.7925830    1    0</code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#train final model</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>fit_rf <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> tuneGrid,</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl,</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesize =</span> <span class="dv">200</span>,</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxnodes =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The final training model produced an accuracy of 0.8947 compared to the default training model with an accuracy of 0.8472, a 4.75% improvement in accuracy over the default RF parameters.</p>
+</section>
+<section id="predictive-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="predictive-modeling">Predictive Modeling</h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#evaluate model</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span><span class="fu">predict</span>(fit_rf, test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Results from the predictive test model indicated that the feature major.vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 80.00. These features were blood vessels, chest pain type, thal reversible defect, normal thal, and max heart rate.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImp</span>(fit_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>rf variable importance
+
+                                     Importance
+major.vessels                            100.00
+chest.pain.type                           89.10
+thalreversible defect                     88.09
+thalnormal                                85.38
+max.heart.rate                            82.05
+exercise.induced.angina                   76.81
+oldpeak                                   67.38
+ST.segment                                63.02
+age                                       56.87
+sex                                       46.98
+resting.electrocardiographic.results      37.04
+serum.cholestoral                         32.24
+fasting.blood.sugar                        4.03
+resting.blood.pressure                     0.00</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>fit_rf<span class="sc">$</span>finalModel<span class="sc">$</span>importance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                1             2
+age                                   0.006649963  0.0082939006
+sex                                   0.003947447  0.0048932338
+chest.pain.type                       0.024356535  0.0302475327
+resting.blood.pressure               -0.000168914 -0.0001565251
+serum.cholestoral                     0.001743199  0.0020621133
+fasting.blood.sugar                   0.000000000  0.0000000000
+resting.electrocardiographic.results  0.002316066  0.0034131170
+max.heart.rate                        0.015972279  0.0193490606
+exercise.induced.angina               0.014266276  0.0180482971
+oldpeak                               0.010059016  0.0128071622
+ST.segment                            0.008953733  0.0125510780
+major.vessels                         0.032692250  0.0427474298
+thalnormal                            0.024456719  0.0296382821
+thalreversible defect                 0.023607638  0.0285222451
+                                     MeanDecreaseAccuracy MeanDecreaseGini
+age                                          0.0073172338        0.7489385
+sex                                          0.0043324727        0.4369837
+chest.pain.type                              0.0266969135        2.8043812
+resting.blood.pressure                      -0.0001655052        0.1466509
+serum.cholestoral                            0.0018910366        0.2929344
+fasting.blood.sugar                          0.0000000000        0.0000000
+resting.electrocardiographic.results         0.0027344460        0.2409971
+max.heart.rate                               0.0173078113        2.2834300
+exercise.induced.angina                      0.0158339752        1.6975523
+oldpeak                                      0.0112084162        1.5384911
+ST.segment                                   0.0103860566        1.0168241
+major.vessels                                0.0366856158        4.2386834
+thalnormal                                   0.0265306581        2.7375482
+thalreversible defect                        0.0255560227        2.7589069</code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>randomForest<span class="sc">::</span><span class="fu">varImpPlot</span>(fit_rf<span class="sc">$</span>finalModel, <span class="at">scale=</span><span class="cn">FALSE</span>, <span class="at">type=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(fit_rf<span class="sc">$</span>finalModel<span class="sc">$</span>importance, <span class="at">rownames=</span><span class="st">'Feature'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>MeanDecreaseAccuracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 5
+   Feature                    `1`      `2` MeanDecreaseAccuracy MeanDecreaseGini
+   &lt;chr&gt;                    &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;
+ 1 major.vessels          3.27e-2  4.27e-2             0.0367              4.24 
+ 2 chest.pain.type        2.44e-2  3.02e-2             0.0267              2.80 
+ 3 thalnormal             2.45e-2  2.96e-2             0.0265              2.74 
+ 4 thalreversible defect  2.36e-2  2.85e-2             0.0256              2.76 
+ 5 max.heart.rate         1.60e-2  1.93e-2             0.0173              2.28 
+ 6 exercise.induced.ang…  1.43e-2  1.80e-2             0.0158              1.70 
+ 7 oldpeak                1.01e-2  1.28e-2             0.0112              1.54 
+ 8 ST.segment             8.95e-3  1.26e-2             0.0104              1.02 
+ 9 age                    6.65e-3  8.29e-3             0.00732             0.749
+10 sex                    3.95e-3  4.89e-3             0.00433             0.437
+11 resting.electrocardi…  2.32e-3  3.41e-3             0.00273             0.241
+12 serum.cholestoral      1.74e-3  2.06e-3             0.00189             0.293
+13 fasting.blood.sugar    0        0                   0                   0    
+14 resting.blood.pressu… -1.69e-4 -1.57e-4            -0.000166            0.147</code></pre>
+</div>
+</div>
+<p>All five features had a mean decrease Ginni score above 2.2. Resting blood pressure had the lowest variable importance with a score of 0.00 indicating that the feature did not significantly improve the model’s performance in predicting heart disease within this dataset. Fasting blood sugar was the far less significant than the other features as well, with a score of 4.03.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(fit_rf<span class="sc">$</span>finalModel<span class="sc">$</span>importance, <span class="at">rownames=</span><span class="st">'Feature'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>MeanDecreaseGini)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 5
+   Feature                    `1`      `2` MeanDecreaseAccuracy MeanDecreaseGini
+   &lt;chr&gt;                    &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;
+ 1 major.vessels          3.27e-2  4.27e-2             0.0367              4.24 
+ 2 chest.pain.type        2.44e-2  3.02e-2             0.0267              2.80 
+ 3 thalreversible defect  2.36e-2  2.85e-2             0.0256              2.76 
+ 4 thalnormal             2.45e-2  2.96e-2             0.0265              2.74 
+ 5 max.heart.rate         1.60e-2  1.93e-2             0.0173              2.28 
+ 6 exercise.induced.ang…  1.43e-2  1.80e-2             0.0158              1.70 
+ 7 oldpeak                1.01e-2  1.28e-2             0.0112              1.54 
+ 8 ST.segment             8.95e-3  1.26e-2             0.0104              1.02 
+ 9 age                    6.65e-3  8.29e-3             0.00732             0.749
+10 sex                    3.95e-3  4.89e-3             0.00433             0.437
+11 serum.cholestoral      1.74e-3  2.06e-3             0.00189             0.293
+12 resting.electrocardi…  2.32e-3  3.41e-3             0.00273             0.241
+13 resting.blood.pressu… -1.69e-4 -1.57e-4            -0.000166            0.147
+14 fasting.blood.sugar    0        0                   0                   0    </code></pre>
+</div>
+</div>
+<p>Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p&lt; 0.001). Sensitivity and specificity were calculated at 0.886 and 0.75 respectively.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(prediction, test<span class="sc">$</span>heart.disease)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>cm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  1  2
+         1 39  9
+         2  5 27
+                                          
+               Accuracy : 0.825           
+                 95% CI : (0.7238, 0.9009)
+    No Information Rate : 0.55            
+    P-Value [Acc &gt; NIR] : 2.048e-07       
+                                          
+                  Kappa : 0.6429          
+                                          
+ Mcnemar's Test P-Value : 0.4227          
+                                          
+            Sensitivity : 0.8864          
+            Specificity : 0.7500          
+         Pos Pred Value : 0.8125          
+         Neg Pred Value : 0.8438          
+             Prevalence : 0.5500          
+         Detection Rate : 0.4875          
+   Detection Prevalence : 0.6000          
+      Balanced Accuracy : 0.8182          
+                                          
+       'Positive' Class : 1               
+                                          </code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>draw_confusion_matrix <span class="ot">&lt;-</span> <span class="cf">function</span>(cm) {</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)))</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">345</span>), <span class="fu">c</span>(<span class="dv">300</span>, <span class="dv">450</span>), <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xaxt=</span><span class="st">'n'</span>, <span class="at">yaxt=</span><span class="st">'n'</span>)</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">title</span>(<span class="st">'CONFUSION MATRIX'</span>, <span class="at">cex.main=</span><span class="dv">2</span>)</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create the matrix </span></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">150</span>, <span class="dv">430</span>, <span class="dv">240</span>, <span class="dv">370</span>, <span class="at">col=</span><span class="st">'#3F97D0'</span>)</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">435</span>, <span class="st">'Positive'</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">250</span>, <span class="dv">430</span>, <span class="dv">340</span>, <span class="dv">370</span>, <span class="at">col=</span><span class="st">'#F7AD50'</span>)</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">435</span>, <span class="st">'Negative'</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">125</span>, <span class="dv">370</span>, <span class="st">'Predicted'</span>, <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">srt=</span><span class="dv">90</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">245</span>, <span class="dv">450</span>, <span class="st">'Actual'</span>, <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">150</span>, <span class="dv">305</span>, <span class="dv">240</span>, <span class="dv">365</span>, <span class="at">col=</span><span class="st">'#F7AD50'</span>)</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">250</span>, <span class="dv">305</span>, <span class="dv">340</span>, <span class="dv">365</span>, <span class="at">col=</span><span class="st">'#3F97D0'</span>)</span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">140</span>, <span class="dv">400</span>, <span class="st">'Positive'</span>, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">srt=</span><span class="dv">90</span>)</span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">140</span>, <span class="dv">335</span>, <span class="st">'Negative'</span>, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">srt=</span><span class="dv">90</span>)</span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the cm results </span></span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(cm<span class="sc">$</span>table)</span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">400</span>, res[<span class="dv">1</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">335</span>, res[<span class="dv">2</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">400</span>, res[<span class="dv">3</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">335</span>, res[<span class="dv">4</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the specifics </span></span>
+<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">main =</span> <span class="st">"DETAILS"</span>, <span class="at">xaxt=</span><span class="st">'n'</span>, <span class="at">yaxt=</span><span class="st">'n'</span>)</span>
+<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">10</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">1</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb59-29"><a href="#cb59-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">10</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">1</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb59-30"><a href="#cb59-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">2</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb59-31"><a href="#cb59-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">2</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb59-32"><a href="#cb59-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">50</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">5</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb59-33"><a href="#cb59-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">50</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">5</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb59-34"><a href="#cb59-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">6</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb59-35"><a href="#cb59-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">6</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb59-36"><a href="#cb59-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">90</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">7</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb59-37"><a href="#cb59-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">90</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">7</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb59-38"><a href="#cb59-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-39"><a href="#cb59-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the accuracy information </span></span>
+<span id="cb59-40"><a href="#cb59-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">35</span>, <span class="fu">names</span>(cm<span class="sc">$</span>overall[<span class="dv">1</span>]), <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb59-41"><a href="#cb59-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">20</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>overall[<span class="dv">1</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.4</span>)</span>
+<span id="cb59-42"><a href="#cb59-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">35</span>, <span class="fu">names</span>(cm<span class="sc">$</span>overall[<span class="dv">2</span>]), <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb59-43"><a href="#cb59-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">20</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>overall[<span class="dv">2</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.4</span>)</span>
+<span id="cb59-44"><a href="#cb59-44" aria-hidden="true" tabindex="-1"></a>}  </span>
+<span id="cb59-45"><a href="#cb59-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-46"><a href="#cb59-46" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_confusion_matrix</span>(cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The model has an estimated false positive rate of 25%. False positive rate is calculated by the number of false positives divided by the sum of false positives and true negatives. FPR= FP/(FP + TN).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="dv">9</span><span class="sc">/</span>(<span class="dv">9</span><span class="sc">+</span><span class="dv">27</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.25</code></pre>
+</div>
+</div>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
 </section>
@@ -146,6 +915,7 @@ div.csl-indent {
 <section id="references" class="level2 unnumbered">
 
 
+</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">

@@ -1,0 +1,255 @@
+---
+title: "Random Forest"
+output: html_document
+date: "2023-07-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+options(repos = c(CRAN = "https://cran.rstudio.com"))
+library(caret)
+library(boot)
+library(tidymodels)
+library(lindia)
+library(car)
+library(haven)
+library(htmltools)
+library(tidyverse)
+library(dplyr)
+library(fastDummies)
+library(nnet)
+library(randomForest)
+library(gridExtra)
+library(AppliedPredictiveModeling)
+library("ggplot2")
+
+#data read
+data<- read.csv('C:/Users/Iknow/OneDrive/Desktop/Capstone/Trial DS/dataset_heart.csv')
+
+#data observations
+head(data)
+summary(data)
+str(data)
+any(is.na(data))
+unique(data$heart.disease)
+data$heart.disease<- as.factor(data$heart.disease)
+data1=data
+data1$thal[data1$thal== 3]<-"normal"
+data1$thal[data1$thal== 6]<-"fixed defect"
+data1$thal[data1$thal== 7]<-"reversible defect"
+data1$thal<- as.factor(data1$thal)
+
+
+# boxplot and scatter plot
+boxplot(data1)
+
+
+#transparentTheme(trans = .4)
+#featurePlot(x = data[, 1:13], 
+#            y = data$heart.disease, 
+#            plot = "pairs",
+            ## Add a key at the top
+#            auto.key = list(columns = 13))
+
+
+#hist(data1$major.vessels, main = "Histogram")
+#boxplot(data1$major.vessels, main = "Boxplot")
+#qqnorm(data1$major.vessels, main = "Normal Q-Q plot")
+
+#remove extrem outlier
+data1 = data1[data1$serum.cholestoral != "564", ]
+
+#rerun boxplot
+boxplot(data1)
+```
+
+## Data split on target (heart.disease) on data
+
+```{r, warning=FALSE}
+set.seed(123)
+split <- createDataPartition(data1$heart.disease, p = 0.7, list = FALSE)
+train <- data1[split, ]
+test <- data1[-split, ]
+
+```
+## Ceating a new code chunk for the RF model default
+
+```{r, warning=FALSE}
+set.seed(123)
+# Define the control
+trControl <- trainControl(method = "cv",
+    number = 10,
+    search = "grid")
+#model with default values
+rf_default <- train(heart.disease~.,
+    data = train,
+    method = "rf",
+    metric = "Accuracy",
+    trControl = trControl)
+# Print the results
+print(rf_default)
+```
+
+
+```{r, warning=FALSE}
+#Search best mtry
+set.seed(123)
+tuneGrid <- expand.grid(.mtry = c(1: 10))
+rf_mtry <- train(heart.disease~.,
+    data = train,
+    method = "rf",
+    metric = "Accuracy",
+    tuneGrid = tuneGrid,
+    trControl = trControl,
+    importance = TRUE,
+    nodesize = 14,
+    ntree = 300)
+print(rf_mtry)
+print(rf_default)
+
+best_mtry <- rf_mtry$bestTune$mtry 
+best_mtry
+```
+```{r}
+#Search maxnodes - look for highest accuracy
+
+store_maxnode <- list()
+#assigns best mtry to tuneGrid
+tuneGrid <- expand.grid(.mtry = best_mtry)
+for (maxnodes in c(5: 15)) {
+    set.seed(123)
+    rf_maxnode <- train(heart.disease~.,
+        data = train,
+        method = "rf",
+        metric = "Accuracy",
+        tuneGrid = tuneGrid,
+        trControl = trControl,
+        importance = TRUE,
+        nodesize = 14,
+        maxnodes = maxnodes,
+        ntree = 300)
+    current_iteration <- toString(maxnodes)
+    store_maxnode[[current_iteration]] <- rf_maxnode
+}
+results_mtry <- resamples(store_maxnode)
+summary(results_mtry)
+```
+
+```{r, warning=FALSE}
+#search best ntree
+store_maxtrees <- list()
+for (ntree in c(100, 200, 300, 400, 500, 600, 700, 800, 900, 1000)) {
+    set.seed(123)
+    rf_maxtrees <- train(heart.disease~.,
+        data = train,
+        method = "rf",
+        metric = "Accuracy",
+        tuneGrid = tuneGrid,
+        trControl = trControl,
+        importance = TRUE,
+        nodesize = 14,
+        maxnodes = 8,
+        ntree = ntree)
+    key <- toString(ntree)
+    store_maxtrees[[key]] <- rf_maxtrees
+}
+results_tree <- resamples(store_maxtrees)
+summary(results_tree)
+```
+
+```{r}
+#train final model
+set.seed(123)
+fit_rf <- train(heart.disease~.,
+    data = train,
+    method = "rf",
+    metric = "Accuracy",
+    tuneGrid = tuneGrid,
+    trControl = trControl,
+    importance = TRUE,
+    nodesize = 200,
+    maxnodes = 8)
+```
+```{r}
+#evaluate model
+prediction <-predict(fit_rf, test)
+```
+```{r}
+#fit_rf$finalModel
+#variable importance
+varImp(fit_rf)
+fit_rf$finalModel$importance
+##type 1 meandecreaseaccuracy type2 meandecreasegini
+randomForest::varImpPlot(fit_rf$finalModel, scale=FALSE, type=2)
+as_tibble(fit_rf$finalModel$importance, rownames='Feature') %>%
+  arrange(-MeanDecreaseAccuracy)
+as_tibble(fit_rf$finalModel$importance, rownames='Feature') %>%
+  arrange(-MeanDecreaseGini)
+```
+```{r}
+#confusion matrix
+cm <- confusionMatrix(prediction, test$heart.disease)
+cm
+```
+```{r}
+draw_confusion_matrix <- function(cm) {
+  layout(matrix(c(1,1,2)))
+  par(mar=c(2,2,2,2))
+  plot(c(100, 345), c(300, 450), type = "n", xlab="", ylab="", xaxt='n', yaxt='n')
+  title('CONFUSION MATRIX', cex.main=2)
+
+  # create the matrix 
+  rect(150, 430, 240, 370, col='#3F97D0')
+  text(195, 435, 'Positive', cex=1.2)
+  rect(250, 430, 340, 370, col='#F7AD50')
+  text(295, 435, 'Negative', cex=1.2)
+  text(125, 370, 'Predicted', cex=1.3, srt=90, font=2)
+  text(245, 450, 'Actual', cex=1.3, font=2)
+  rect(150, 305, 240, 365, col='#F7AD50')
+  rect(250, 305, 340, 365, col='#3F97D0')
+  text(140, 400, 'Positive', cex=1.2, srt=90)
+  text(140, 335, 'Negative', cex=1.2, srt=90)
+
+  # add in the cm results 
+  res <- as.numeric(cm$table)
+  text(195, 400, res[1], cex=1.6, font=2, col='white')
+  text(195, 335, res[2], cex=1.6, font=2, col='white')
+  text(295, 400, res[3], cex=1.6, font=2, col='white')
+  text(295, 335, res[4], cex=1.6, font=2, col='white')
+
+  # add in the specifics 
+  plot(c(100, 0), c(100, 0), type = "n", xlab="", ylab="", main = "DETAILS", xaxt='n', yaxt='n')
+  text(10, 85, names(cm$byClass[1]), cex=1.2, font=2)
+  text(10, 70, round(as.numeric(cm$byClass[1]), 3), cex=1.2)
+  text(30, 85, names(cm$byClass[2]), cex=1.2, font=2)
+  text(30, 70, round(as.numeric(cm$byClass[2]), 3), cex=1.2)
+  text(50, 85, names(cm$byClass[5]), cex=1.2, font=2)
+  text(50, 70, round(as.numeric(cm$byClass[5]), 3), cex=1.2)
+  text(70, 85, names(cm$byClass[6]), cex=1.2, font=2)
+  text(70, 70, round(as.numeric(cm$byClass[6]), 3), cex=1.2)
+  text(90, 85, names(cm$byClass[7]), cex=1.2, font=2)
+  text(90, 70, round(as.numeric(cm$byClass[7]), 3), cex=1.2)
+
+  # add in the accuracy information 
+  text(30, 35, names(cm$overall[1]), cex=1.5, font=2)
+  text(30, 20, round(as.numeric(cm$overall[1]), 3), cex=1.4)
+  text(70, 35, names(cm$overall[2]), cex=1.5, font=2)
+  text(70, 20, round(as.numeric(cm$overall[2]), 3), cex=1.4)
+}  
+
+draw_confusion_matrix(cm)
+```
+
+
+
+
+
