@@ -228,7 +228,6 @@ as_tibble(fit_rf$finalModel$importance, rownames='Feature') %>%
 Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p< 0.001). Sensitivity and specificity were calculated at 0.886 and 0.75 respectively.  
 ```{r}
 cm <- confusionMatrix(prediction, test$heart.disease)
-cm
 ```
 ```{r}
 draw_confusion_matrix <- function(cm) {
