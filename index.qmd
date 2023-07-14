@@ -1,7 +1,7 @@
 ---
 title: "Random Forest Algorithm"
 author: "Amy Brown, Jeff Eddy, Armani Harris"
-date: "July 12, 2023"
+date: "July 13, 2023"
 format:
   html:
     code-fold: true
@@ -19,7 +19,7 @@ Breiman [@Breiman2001] introduced the concept of Random Forests and highlighted 
 
 ## Methods
 
-Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest.  A decision tree starts are the root node and splits into internal nodes based on the features divided into classes.  Further internal nodes are created based on the data split on the internal node.  The decision tree ends at the leaf node when all the data belongs to the same class [@Ali2012]. The Random Forest algorithm can be used for classification or regression models.  The target selected for the algorithm identifies if the algorithm will use a classification or regression model.  The leaf node will predict a category if a classification model is identified and a numerical value for a regression model.  The prediction is determined by taking the majority vote of all leaf nodes for classification and an average of the leaf nodes for regression.  This process is represented in the flowchart of Figure 1 [@Abdulkareem2021].
+Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest.  A decision tree starts are the root node and splits into internal nodes based on the decrease in accuracy when a feature is removed and further divided into classes known as permutation importance.  Further internal nodes are created based on the data split on the internal node.  The decision tree ends at the leaf node when all the data belongs to the same class [@Ali2012]. The Random Forest algorithm can be used for classification or regression models.  The target selected for the algorithm identifies if the algorithm will use a classification or regression model.  The leaf node will predict a category if a classification model is identified and a numerical value for a regression model.  The prediction is determined by taking the majority vote of all leaf nodes for classification and an average of the leaf nodes for regression.  This process is represented in the flowchart of Figure 1 [@Abdulkareem2021].
 
 
 ![Figure 1 [@Abdulkareem2021]](RF flowchart.png) 
@@ -91,7 +91,7 @@ test <- data1[-split, ]
 str(train)
 str(test)
 ```
-A default training model based on classification was then created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8472. 
+A default training model based on classification was then created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472. 
 
 ```{r, message=FALSE}
 set.seed(123)
@@ -109,8 +109,7 @@ rf_default <- train(heart.disease~.,
 print(rf_default)
 ```
 
-The training model was assessed for the best possible number of decision trees, nodes, and number of features to consider at each node. After performing the following procedures, the greatest accuracy was determined to be 200 trees with a node size of 8 and 2 features considered at each node.  
-The first tuning parameter evaluated was the number of features the model could consider at each node in a tree.
+The training model was assessed for the best possible number of decision trees, nodes, and number of features to consider at each node. After performing the following procedures, the greatest accuracy was determined to be 200 trees with a node size of 14, max nodes of 8, and 2 features considered at each node. The first tuning parameter evaluated was the number of features the model could consider at each node in a tree.
 
 ```{r, message=FALSE}
 #Search best mtry
@@ -130,7 +129,7 @@ print(rf_default)
 
 best_mtry <- rf_mtry$bestTune$mtry 
 ```
-The subsequent procedure evaluates the optimal number of nodes for the model.
+The subsequent procedure evaluates the optimal number of max nodes for the model.
 
 ```{r, message=FALSE}
 #Search maxnodes - look for highest accuracy
@@ -179,6 +178,7 @@ for (ntree in c(100, 200, 300, 400, 500, 600, 700, 800, 900, 1000)) {
 results_tree <- resamples(store_maxtrees)
 summary(results_tree)
 ```
+The final training model produced an accuracy of 0.8680 compared to the default training model with an accuracy of 0.8472, a 2.08% improvement in accuracy over the default RF parameters.
 
 ```{r, message=FALSE}
 #train final model
@@ -190,24 +190,26 @@ fit_rf <- train(heart.disease~.,
     tuneGrid = tuneGrid,
     trControl = trControl,
     importance = TRUE,
-    nodesize = 200,
+    nodesize = 14,
+    ntree = 200,
     maxnodes = 8)
+print(fit_rf)
 ```
-The final training model produced an accuracy of 0.8947 compared to the default training model with an accuracy of 0.8472, a 4.75% improvement in accuracy over the default RF parameters.
+
 
 ## Predictive Modeling
 ```{r, message=FALSE}
 #evaluate model
 prediction <-predict(fit_rf, test)
 ```
-Results from the predictive test model indicated that the feature major.vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 80.00. These features were blood vessels, chest pain type, thal reversible defect, normal thal, and max heart rate. 
+Results from the predictive test model indicated that the feature major.vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 60.00. These features were major vessels, thal normal, old peak, chest pain type, max heart rate, and thal reversible defect. 
 ```{r, message=FALSE}
 varImp(fit_rf)
 fit_rf$finalModel$importance
 ```
 
 ```{r, message=FALSE}
-randomForest::varImpPlot(fit_rf$finalModel, scale=FALSE, type=2)
+randomForest::varImpPlot(fit_rf$finalModel, scale=FALSE, type=1)
 as_tibble(fit_rf$finalModel$importance, rownames='Feature') %>%
   arrange(-MeanDecreaseAccuracy)
 ```
@@ -217,7 +219,7 @@ as_tibble(fit_rf$finalModel$importance, rownames='Feature') %>%
   arrange(-MeanDecreaseGini)
 ```
 
-Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p< 0.001). Sensitivity and specificity were calculated at 0.886 and 0.75 respectively.  
+Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p< 0.001). Sensitivity and specificity were calculated at 0.909 and 0.722 respectively.  
 ```{r, message=FALSE}
 cm <- confusionMatrix(prediction, test$heart.disease)
 ```
@@ -237,8 +239,8 @@ draw_confusion_matrix <- function(cm) {
   text(245, 450, 'Actual', cex=1.3, font=2)
   rect(150, 305, 240, 365, col='#F7AD50')
   rect(250, 305, 340, 365, col='#3F97D0')
-  text(140, 400, 'Positive', cex=1.2, srt=90)
-  text(140, 335, 'Negative', cex=1.2, srt=90)
+  text(140, 400, 'True', cex=1.2, srt=90)
+  text(140, 335, 'False', cex=1.2, srt=90)
 
   # add in the cm results 
   res <- as.numeric(cm$table)
@@ -269,10 +271,10 @@ draw_confusion_matrix <- function(cm) {
 
 draw_confusion_matrix(cm)
 ```
-The model has an estimated false positive rate of 25%. False positive rate is calculated by the number of false positives divided by the sum of false positives and true negatives. FPR= FP/(FP + TN). 
+The model has an estimated false positive rate of 28.57%. False positive rate is calculated by the number of false positives divided by the sum of false positives and true negatives. FPR= FP/(FP + TN). 
 
 ```{r, message=FALSE}
-9/(9+27)
+4/(4+10)
 ```
 
 ### Conclusion
