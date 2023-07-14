@@ -97,7 +97,10 @@ test <- data1[-split, ]
 str(train)
 str(test)
 ```
-A default training model based on classification was then created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472. 
+
+#### K-Fold Cross-Validation Sampling Method
+
+A default training model using K-Fold Cross Validation Sampling Method based on classification was created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472. 
 
 ```{r, message=FALSE}
 set.seed(123)
@@ -201,7 +204,31 @@ fit_rf <- train(heart.disease~.,
     maxnodes = 8)
 print(fit_rf)
 ```
+#### Bootstrap Sampling Method
 
+A default training model using Bootstrap Sampling Method based on classification was created to compare with the Cross-Validation Sampling Method.  Bootstrap does not need cross-validation. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni Impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8330 compared to .8472 of the K-Fold Cross-Validation Sampling Method.
+```{r, message=FALSE}
+set.seed(123)
+fit_rf2 <- train(heart.disease~.,
+    data = train,
+    method = "rf",
+    importance = TRUE)
+print(fit_rf2)
+```
+To compare the final training settings in the K-Fold Cross-Validation Sampling Method to the Bootstrap Sampling Method, the same settings were used to train. The Bootstrap Sampling Method is still slightly lower than the K-Fold Cross Validation Sampling Method with .8367 accuracy compared to .8680. Since K-Fold Cross-Validation Sampling Method is higher in Accuracy, the predictive modeling will be based off from the K-Fold Cross-Validation Sampling Method.  
+```{r, message=FALSE}
+#train final model
+set.seed(123)
+fit_rf2 <- train(heart.disease~.,
+    data = train,
+    method = "rf",
+    tuneGrid = tuneGrid,
+    importance = TRUE,
+    nodesize = 14,
+    ntree = 200,
+    maxnodes = 8)
+print(fit_rf2)
+```
 
 ## Predictive Modeling
 ```{r, message=FALSE}
@@ -211,18 +238,9 @@ prediction <-predict(fit_rf, test)
 Results from the predictive test model indicated that the feature major.vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 60.00. These features were major vessels, thal normal, old peak, chest pain type, max heart rate, and thal reversible defect. 
 ```{r, message=FALSE}
 varImp(fit_rf)
-fit_rf$finalModel$importance
 ```
-
 ```{r, message=FALSE}
 randomForest::varImpPlot(fit_rf$finalModel, scale=FALSE, type=1)
-as_tibble(fit_rf$finalModel$importance, rownames='Feature') %>%
-  arrange(-MeanDecreaseAccuracy)
-```
-All five features had a mean decrease Ginni score above 2.2. Resting blood pressure had the lowest variable importance with a score of 0.00 indicating that the feature did not significantly improve the model’s performance in predicting heart disease within this dataset. Fasting blood sugar was the far less significant than the other features as well, with a score of 4.03. 
-```{r, message=FALSE}
-as_tibble(fit_rf$finalModel$importance, rownames='Feature') %>%
-  arrange(-MeanDecreaseGini)
 ```
 
 Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p< 0.001). Sensitivity and specificity were calculated at 0.909 and 0.722 respectively.  

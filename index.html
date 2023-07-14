@@ -279,7 +279,9 @@ div.csl-indent {
  $ heart.disease                       : Factor w/ 2 levels "1","2": 2 1 1 1 2 2 1 1 1 2 ...</code></pre>
 </div>
 </div>
-<p>A default training model based on classification was then created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472.</p>
+<section id="k-fold-cross-validation-sampling-method" class="level4">
+<h4 class="anchored" data-anchor-id="k-fold-cross-validation-sampling-method">K-Fold Cross-Validation Sampling Method</h4>
+<p>A default training model using K-Fold Cross Validation Sampling Method based on classification was created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -552,21 +554,91 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </div>
 </div>
 </section>
+<section id="bootstrap-sampling-method" class="level4">
+<h4 class="anchored" data-anchor-id="bootstrap-sampling-method">Bootstrap Sampling Method</h4>
+<p>A default training model using Bootstrap Sampling Method based on classification was created to compare with the Cross-Validation Sampling Method. Bootstrap does not need cross-validation. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni Impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8330 compared to .8472 of the K-Fold Cross-Validation Sampling Method.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>fit_rf2 <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit_rf2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+189 samples
+ 13 predictor
+  2 classes: '1', '2' 
+
+No pre-processing
+Resampling: Bootstrapped (25 reps) 
+Summary of sample sizes: 189, 189, 189, 189, 189, 189, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+   2    0.8330381  0.6595505
+   8    0.8236219  0.6407188
+  14    0.8097574  0.6129731
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 2.</code></pre>
+</div>
+</div>
+<p>To compare the final training settings in the K-Fold Cross-Validation Sampling Method to the Bootstrap Sampling Method, the same settings were used to train. The Bootstrap Sampling Method is still slightly lower than the K-Fold Cross Validation Sampling Method with .8367 accuracy compared to .8680. Since K-Fold Cross-Validation Sampling Method is higher in Accuracy, the predictive modeling will be based off from the K-Fold Cross-Validation Sampling Method.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#train final model</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>fit_rf2 <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> tuneGrid,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">200</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxnodes =</span> <span class="dv">8</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit_rf2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+189 samples
+ 13 predictor
+  2 classes: '1', '2' 
+
+No pre-processing
+Resampling: Bootstrapped (25 reps) 
+Summary of sample sizes: 189, 189, 189, 189, 189, 189, ... 
+Resampling results:
+
+  Accuracy   Kappa    
+  0.8367264  0.6650343
+
+Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
+</div>
+</div>
+</section>
+</section>
 </section>
 <section id="predictive-modeling" class="level2">
 <h2 class="anchored" data-anchor-id="predictive-modeling">Predictive Modeling</h2>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#evaluate model</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span><span class="fu">predict</span>(fit_rf, test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#evaluate model</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span><span class="fu">predict</span>(fit_rf, test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Results from the predictive test model indicated that the feature major.vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 60.00. These features were major vessels, thal normal, old peak, chest pain type, max heart rate, and thal reversible defect.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImp</span>(fit_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImp</span>(fit_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>rf variable importance
@@ -587,169 +659,82 @@ resting.electrocardiographic.results      24.41
 serum.cholestoral                         17.40
 fasting.blood.sugar                        0.00</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fit_rf<span class="sc">$</span>finalModel<span class="sc">$</span>importance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>                                                 1             2
-age                                   0.0011564630  0.0123525792
-sex                                   0.0093320694  0.0023561499
-chest.pain.type                       0.0146846273  0.0442709213
-resting.blood.pressure                0.0033619877  0.0058585262
-serum.cholestoral                     0.0035602189  0.0008505624
-fasting.blood.sugar                  -0.0002573861 -0.0003658429
-resting.electrocardiographic.results  0.0021292170  0.0033862215
-max.heart.rate                        0.0148322333  0.0217140481
-exercise.induced.angina               0.0068683205  0.0183959342
-oldpeak                               0.0205050584  0.0284296986
-ST.segment                            0.0046980947  0.0136104103
-major.vessels                         0.0411719119  0.0457137195
-thalnormal                            0.0350632014  0.0390855289
-thalreversible defect                 0.0250277125  0.0178202558
-                                     MeanDecreaseAccuracy MeanDecreaseGini
-age                                          0.0059735141        3.2332176
-sex                                          0.0061336072        1.5998276
-chest.pain.type                              0.0276627802        5.3335092
-resting.blood.pressure                       0.0045152460        2.0471615
-serum.cholestoral                            0.0024907405        1.8940181
-fasting.blood.sugar                         -0.0002721872        0.2163558
-resting.electrocardiographic.results         0.0028241930        0.7013877
-max.heart.rate                               0.0179612489        5.2253632
-exercise.induced.angina                      0.0119438895        3.2751391
-oldpeak                                      0.0237797508        4.5006716
-ST.segment                                   0.0086663823        1.8801007
-major.vessels                                0.0426984682        8.2276435
-thalnormal                                   0.0361374390        5.7155641
-thalreversible defect                        0.0215125063        4.8552917</code></pre>
-</div>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>randomForest<span class="sc">::</span><span class="fu">varImpPlot</span>(fit_rf<span class="sc">$</span>finalModel, <span class="at">scale=</span><span class="cn">FALSE</span>, <span class="at">type=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>randomForest<span class="sc">::</span><span class="fu">varImpPlot</span>(fit_rf<span class="sc">$</span>finalModel, <span class="at">scale=</span><span class="cn">FALSE</span>, <span class="at">type=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(fit_rf<span class="sc">$</span>finalModel<span class="sc">$</span>importance, <span class="at">rownames=</span><span class="st">'Feature'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>MeanDecreaseAccuracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 14 × 5
-   Feature                    `1`      `2` MeanDecreaseAccuracy MeanDecreaseGini
-   &lt;chr&gt;                    &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;
- 1 major.vessels          4.12e-2  4.57e-2             0.0427              8.23 
- 2 thalnormal             3.51e-2  3.91e-2             0.0361              5.72 
- 3 chest.pain.type        1.47e-2  4.43e-2             0.0277              5.33 
- 4 oldpeak                2.05e-2  2.84e-2             0.0238              4.50 
- 5 thalreversible defect  2.50e-2  1.78e-2             0.0215              4.86 
- 6 max.heart.rate         1.48e-2  2.17e-2             0.0180              5.23 
- 7 exercise.induced.ang…  6.87e-3  1.84e-2             0.0119              3.28 
- 8 ST.segment             4.70e-3  1.36e-2             0.00867             1.88 
- 9 sex                    9.33e-3  2.36e-3             0.00613             1.60 
-10 age                    1.16e-3  1.24e-2             0.00597             3.23 
-11 resting.blood.pressu…  3.36e-3  5.86e-3             0.00452             2.05 
-12 resting.electrocardi…  2.13e-3  3.39e-3             0.00282             0.701
-13 serum.cholestoral      3.56e-3  8.51e-4             0.00249             1.89 
-14 fasting.blood.sugar   -2.57e-4 -3.66e-4            -0.000272            0.216</code></pre>
-</div>
-</div>
-<p>All five features had a mean decrease Ginni score above 2.2. Resting blood pressure had the lowest variable importance with a score of 0.00 indicating that the feature did not significantly improve the model’s performance in predicting heart disease within this dataset. Fasting blood sugar was the far less significant than the other features as well, with a score of 4.03.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(fit_rf<span class="sc">$</span>finalModel<span class="sc">$</span>importance, <span class="at">rownames=</span><span class="st">'Feature'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>MeanDecreaseGini)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 14 × 5
-   Feature                    `1`      `2` MeanDecreaseAccuracy MeanDecreaseGini
-   &lt;chr&gt;                    &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;
- 1 major.vessels          4.12e-2  4.57e-2             0.0427              8.23 
- 2 thalnormal             3.51e-2  3.91e-2             0.0361              5.72 
- 3 chest.pain.type        1.47e-2  4.43e-2             0.0277              5.33 
- 4 max.heart.rate         1.48e-2  2.17e-2             0.0180              5.23 
- 5 thalreversible defect  2.50e-2  1.78e-2             0.0215              4.86 
- 6 oldpeak                2.05e-2  2.84e-2             0.0238              4.50 
- 7 exercise.induced.ang…  6.87e-3  1.84e-2             0.0119              3.28 
- 8 age                    1.16e-3  1.24e-2             0.00597             3.23 
- 9 resting.blood.pressu…  3.36e-3  5.86e-3             0.00452             2.05 
-10 serum.cholestoral      3.56e-3  8.51e-4             0.00249             1.89 
-11 ST.segment             4.70e-3  1.36e-2             0.00867             1.88 
-12 sex                    9.33e-3  2.36e-3             0.00613             1.60 
-13 resting.electrocardi…  2.13e-3  3.39e-3             0.00282             0.701
-14 fasting.blood.sugar   -2.57e-4 -3.66e-4            -0.000272            0.216</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p&lt; 0.001). Sensitivity and specificity were calculated at 0.909 and 0.722 respectively.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(prediction, test<span class="sc">$</span>heart.disease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(prediction, test<span class="sc">$</span>heart.disease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>draw_confusion_matrix <span class="ot">&lt;-</span> <span class="cf">function</span>(cm) {</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)))</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">345</span>), <span class="fu">c</span>(<span class="dv">300</span>, <span class="dv">450</span>), <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xaxt=</span><span class="st">'n'</span>, <span class="at">yaxt=</span><span class="st">'n'</span>)</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">title</span>(<span class="st">'CONFUSION MATRIX'</span>, <span class="at">cex.main=</span><span class="dv">2</span>)</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create the matrix </span></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">150</span>, <span class="dv">430</span>, <span class="dv">240</span>, <span class="dv">370</span>, <span class="at">col=</span><span class="st">'#3F97D0'</span>)</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">435</span>, <span class="st">'Positive'</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">250</span>, <span class="dv">430</span>, <span class="dv">340</span>, <span class="dv">370</span>, <span class="at">col=</span><span class="st">'#F7AD50'</span>)</span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">435</span>, <span class="st">'Negative'</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">125</span>, <span class="dv">370</span>, <span class="st">'Predicted'</span>, <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">srt=</span><span class="dv">90</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">245</span>, <span class="dv">450</span>, <span class="st">'Actual'</span>, <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">150</span>, <span class="dv">305</span>, <span class="dv">240</span>, <span class="dv">365</span>, <span class="at">col=</span><span class="st">'#F7AD50'</span>)</span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">250</span>, <span class="dv">305</span>, <span class="dv">340</span>, <span class="dv">365</span>, <span class="at">col=</span><span class="st">'#3F97D0'</span>)</span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">140</span>, <span class="dv">400</span>, <span class="st">'True'</span>, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">srt=</span><span class="dv">90</span>)</span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">140</span>, <span class="dv">335</span>, <span class="st">'False'</span>, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">srt=</span><span class="dv">90</span>)</span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the cm results </span></span>
-<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(cm<span class="sc">$</span>table)</span>
-<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">400</span>, res[<span class="dv">1</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">335</span>, res[<span class="dv">2</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
-<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">400</span>, res[<span class="dv">3</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
-<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">335</span>, res[<span class="dv">4</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
-<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the specifics </span></span>
-<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">main =</span> <span class="st">"DETAILS"</span>, <span class="at">xaxt=</span><span class="st">'n'</span>, <span class="at">yaxt=</span><span class="st">'n'</span>)</span>
-<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">10</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">1</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">10</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">1</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">2</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">2</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">50</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">5</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">50</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">5</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">6</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">6</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">90</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">7</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">90</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">7</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the accuracy information </span></span>
-<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">35</span>, <span class="fu">names</span>(cm<span class="sc">$</span>overall[<span class="dv">1</span>]), <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">20</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>overall[<span class="dv">1</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.4</span>)</span>
-<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">35</span>, <span class="fu">names</span>(cm<span class="sc">$</span>overall[<span class="dv">2</span>]), <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">20</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>overall[<span class="dv">2</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.4</span>)</span>
-<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a>}  </span>
-<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_confusion_matrix</span>(cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>draw_confusion_matrix <span class="ot">&lt;-</span> <span class="cf">function</span>(cm) {</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)))</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">345</span>), <span class="fu">c</span>(<span class="dv">300</span>, <span class="dv">450</span>), <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xaxt=</span><span class="st">'n'</span>, <span class="at">yaxt=</span><span class="st">'n'</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">title</span>(<span class="st">'CONFUSION MATRIX'</span>, <span class="at">cex.main=</span><span class="dv">2</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create the matrix </span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">150</span>, <span class="dv">430</span>, <span class="dv">240</span>, <span class="dv">370</span>, <span class="at">col=</span><span class="st">'#3F97D0'</span>)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">435</span>, <span class="st">'Positive'</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">250</span>, <span class="dv">430</span>, <span class="dv">340</span>, <span class="dv">370</span>, <span class="at">col=</span><span class="st">'#F7AD50'</span>)</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">435</span>, <span class="st">'Negative'</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">125</span>, <span class="dv">370</span>, <span class="st">'Predicted'</span>, <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">srt=</span><span class="dv">90</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">245</span>, <span class="dv">450</span>, <span class="st">'Actual'</span>, <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">150</span>, <span class="dv">305</span>, <span class="dv">240</span>, <span class="dv">365</span>, <span class="at">col=</span><span class="st">'#F7AD50'</span>)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">250</span>, <span class="dv">305</span>, <span class="dv">340</span>, <span class="dv">365</span>, <span class="at">col=</span><span class="st">'#3F97D0'</span>)</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">140</span>, <span class="dv">400</span>, <span class="st">'True'</span>, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">srt=</span><span class="dv">90</span>)</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">140</span>, <span class="dv">335</span>, <span class="st">'False'</span>, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">srt=</span><span class="dv">90</span>)</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the cm results </span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(cm<span class="sc">$</span>table)</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">400</span>, res[<span class="dv">1</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">335</span>, res[<span class="dv">2</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">400</span>, res[<span class="dv">3</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">335</span>, res[<span class="dv">4</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the specifics </span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">main =</span> <span class="st">"DETAILS"</span>, <span class="at">xaxt=</span><span class="st">'n'</span>, <span class="at">yaxt=</span><span class="st">'n'</span>)</span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">10</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">1</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">10</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">1</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">2</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">2</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">50</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">5</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">50</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">5</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">6</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">6</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">90</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">7</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">90</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">7</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the accuracy information </span></span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">35</span>, <span class="fu">names</span>(cm<span class="sc">$</span>overall[<span class="dv">1</span>]), <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">20</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>overall[<span class="dv">1</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.4</span>)</span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">35</span>, <span class="fu">names</span>(cm<span class="sc">$</span>overall[<span class="dv">2</span>]), <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">20</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>overall[<span class="dv">2</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.4</span>)</span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>}  </span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_confusion_matrix</span>(cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>The model has an estimated false positive rate of 28.57%. False positive rate is calculated by the number of false positives divided by the sum of false positives and true negatives. FPR= FP/(FP + TN).</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">/</span>(<span class="dv">4</span><span class="sc">+</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">/</span>(<span class="dv">4</span><span class="sc">+</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.2857143</code></pre>
