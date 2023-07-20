@@ -47,10 +47,22 @@ data1$thal[data1$thal== 3]<-"normal"
 data1$thal[data1$thal== 6]<-"fixed defect"
 data1$thal[data1$thal== 7]<-"reversible defect"
 data1$thal<- as.factor(data1$thal)
+datacholesteroral=data1
+data_bp_hr=data1
+dataage=data1
+dataother=data1
 
+#boxplot serum cholesterol, resting blood pressure, and max heart rate
+datacholesteroral = datacholesteroral %>% select(1,4,5,8)
+boxplot(x=NULL, data=datacholesteroral, width=8, height=8)
 
-# boxplot and scatter plot
-boxplot(data1)
+# boxplot age
+dataage = dataage %>% select('age')
+boxplot(dataage)
+
+# boxplot of all other variables
+dataother = dataother %>% select(2,3,6,7,9:14)
+boxplot(dataother)
 
 
 #transparentTheme(trans = .4)
@@ -67,9 +79,10 @@ boxplot(data1)
 
 #remove extrem outlier
 data1 = data1[data1$serum.cholestoral != "564", ]
+datacholesteroral = data1$serum.cholestoral
 
 #rerun boxplot
-boxplot(data1)
+boxplot(datacholesteroral)
 ```
 
 ## Data split on target (heart.disease) on data

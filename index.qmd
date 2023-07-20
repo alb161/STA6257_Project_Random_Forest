@@ -19,38 +19,32 @@ Breiman [@Breiman2001] introduced the concept of Random Forests and highlighted 
 
 ## Methods
 
-Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. There are two sampling methods types for the sampling at each split in the Random Forest algorithm: k-fold cross-validation and bootstrap.  
+Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. There are two sampling methods types reviewed for each split at the nodes in the Random Forest algorithm: k-fold cross-validation and bootstrap. The basic steps of the Random Forest algorithm are displayed in Figure 1.
 
-With the k-fold cross-validation sampling method, a decision tree starts are the root node and splits into internal nodes based on the decrease in accuracy when a feature is removed and further divided into classes known as Permutation Importance or Mean Decrease Accuracy. The sampling is random and split into k groups. Further internal nodes are created based on the data split on the internal node. The decision tree ends at the leaf node when all the data belongs to the same class [@Abdulkareem2021]. 
+![Figure 1 [@Abdulkareem2021]](RF algorithm steps.png) 
 
-With the bootstrap sampling method, two-thirds of the training data is used for training and draws the sample with replacement for the next resampling. The chosen samples are referred to the bag, whereas the remaining are called out of bag samples. The decision tree for the training samples start at the root node and splits into internal nodes based on Gini Impurity also known as Mean Decrease Impurity. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. The out of bag samples at each node is then used to estimate unbiased classification error.  Further internal nodes are created based on the data split on the internal node. The decision tree ends at the leaf node [@Jaiswal2017].
+The k-fold cross-validation sampling method starts with a decision at the tree root node and splits into internal nodes based on the decrease in accuracy when a feature is removed and further divided into classes known as Permutation Importance or Mean Decrease Accuracy. The sampling is random and split into k groups. Further internal nodes are created based on the data split on the internal node. The decision tree ends at the leaf node when all the data belongs to the same class [@Abdulkareem2021]. 
 
-The Random Forest algorithm can be used for classification or regression models.  The target selected for the algorithm identifies if the algorithm will use a classification or regression model.  The leaf node will predict a category if a classification model is identified and a numerical value for a regression model.  The prediction is determined by taking the majority vote of all leaf nodes for classification and an average of the leaf nodes for regression.  This Random Forest algorithm process is represented in the flowchart of Figure 1 [@Abdulkareem2021].
+In the bootstrap sampling method, two-thirds of the training data is used for training and draws the sample with replacement for the next resampling. The chosen samples are referred to the bag, whereas the remaining are called out of bag samples. The decision tree for the training samples start at the root node and splits into internal nodes based on Gini Impurity also known as Mean Decrease Impurity. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. The out of bag samples at each node is then used to estimate unbiased classification error.  Further internal nodes are created based on the data split on the internal node. The decision tree ends at the leaf node [@Jaiswal2017].
 
-![Figure 1 [@Abdulkareem2021]](RF flowchart.png) 
+The Random Forest algorithm can be used for classification or regression models.  The target selected for the algorithm identifies if the algorithm will use a classification or regression model.  The leaf node will predict a category if a classification model is identified and a numerical value for a regression model.  The prediction is determined by taking the majority vote of all leaf nodes for classification and an average of the leaf nodes for regression.  This Random Forest algorithm process is represented in the flowchart of Figure 2 [@Abdulkareem2021].
 
-The generalized steps of the Random Forest algorithm are displayed in Figure 2:
-
-![Figure 2 [@Abdulkareem2021]](RF algorithm steps.png) 
-
-The Random Forest algorithm training diagram is represented in Figure 3:
-
-![Figure 3 [@Abdulkareem2021]](RF training flowchart.png) 
+![Figure 2 [@Abdulkareem2021]](RF flowchart.png) 
 
 
 ## Analysis and Results
 
 ### Data and Visualization
-The Random Forest algorithm is reviewed using the Heart Disease Prediction dataset. There are 270 observations in the dataset without any missing values.  The target is heart disease predicting the presence or absence of heart disease. The target and the other 13 features are listed in Figure 2 [@Singh2023]. The boxplot of each feature is plotted in Figures 3. There is an extreme outlier in feature serum cholesterol. The datapoint will be removed before running the model. 
+The Random Forest algorithm is reviewed using the Heart Disease Prediction dataset. There are 270 observations in the dataset without any missing values.  The target is heart disease predicting the presence or absence of heart disease. The target and the other 13 features are listed in Figure 3 [@Singh2023]. The boxplot of each feature is plotted in Figures 4. There is an extreme outlier in feature serum cholesterol. The datapoint will be removed before running the model. 
 
 
 <a href="https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset">Link to Documentation for Heart Disease Prediction data</a>
 
 
-![Figure 2 [@Singh2023]](Features and Target.png)
+![Figure 3 [@Singh2023]](Features and Target.png)
 
 
-![Figure 3](boxplot.png)
+![Figure 4](boxplot.png)
 
 ### Packages
 ```{r, message=FALSE}
