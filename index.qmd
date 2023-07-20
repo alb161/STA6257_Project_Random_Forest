@@ -1,7 +1,7 @@
 ---
 title: "Random Forest Algorithm"
 author: "Amy Brown, Jeff Eddy, Armani Harris"
-date: "July 15, 2023"
+date: "July 19, 2023"
 format:
   html:
     code-fold: true
@@ -33,7 +33,7 @@ The generalized steps of the Random Forest algorithm are displayed in Figure 2:
 
 ![Figure 2 [@Abdulkareem2021]](RF algorithm steps.png) 
 
-The Random Forest algorithm training digram is represented in Figure 3:
+The Random Forest algorithm training diagram is represented in Figure 3:
 
 ![Figure 3 [@Abdulkareem2021]](RF training flowchart.png) 
 
