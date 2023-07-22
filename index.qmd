@@ -1,7 +1,7 @@
 ---
 title: "Random Forest Algorithm"
 author: "Amy Brown, Jeff Eddy, Armani Harris"
-date: "July 19, 2023"
+date: "July 21, 2023"
 format:
   html:
     code-fold: true
@@ -111,7 +111,7 @@ geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 ```
-### Removal Extreme Outlier
+### Removal of Extreme Outlier
 
 The extreme outlier for the feature serum cholesterol is removed from the dataset and validated in the boxplot.
 
@@ -285,9 +285,12 @@ prediction <-predict(fit_rf, test)
 Results from the predictive test model indicated that the feature major.vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 60.00. These features were major vessels, thal normal, old peak, chest pain type, max heart rate, and thal reversible defect. 
 ```{r, message=FALSE}
 varImp(fit_rf)
+rfImp<- varImp(fit_rf)
+plot(rfImp, lwd=2)
 ```
 ```{r, message=FALSE}
-randomForest::varImpPlot(fit_rf$finalModel, scale=FALSE, type=1)
+ggplot(rfImp, aes(x = importance(), y = value)) +
+  geom_bar(stat = "identity", linewidth = 0.5,fill="blue")
 ```
 
 Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p< 0.001). Sensitivity and specificity were calculated at 0.909 and 0.722 respectively.  

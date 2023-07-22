@@ -222,17 +222,15 @@ print(fit_rf)
 #evaluate model
 prediction <-predict(fit_rf, test)
 ```
-```{r}
-#fit_rf$finalModel
-#variable importance
-#varImp(fit_rf)
-fit_rf$finalModel$importance
-##type 1 meandecreaseaccuracy type2 meandecreasegini
-randomForest::varImpPlot(fit_rf$finalModel, scale=FALSE, type=1)
-#as_tibble(fit_rf$finalModel$importance, rownames='Feature') %>%
-#  arrange(-MeanDecreaseAccuracy)
-#as_tibble(fit_rf$finalModel$importance, rownames='Feature') %>%
-#  arrange(-MeanDecreaseGini)
+```{r, message=FALSE}
+varImp(fit_rf)
+rfImp<- varImp(fit_rf)
+plot(rfImp, lwd=2)
+```
+```{r, message=FALSE}
+ggplot(rfImp, aes(x = importance(), y = value)) +
+  geom_bar(stat = "identity", linewidth = 0.5,fill="blue")
+
 ```
 ```{r}
 #confusion matrix
