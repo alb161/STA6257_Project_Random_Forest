@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Amy Brown, Jeff Eddy, Armani Harris">
-<meta name="dcterms.date" content="2023-07-21">
+<meta name="dcterms.date" content="2023-07-22">
 
 <title>Random Forest Algorithm</title>
 <style>
@@ -117,7 +117,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 21, 2023</p>
+      <p class="date">July 22, 2023</p>
     </div>
   </div>
   
@@ -290,14 +290,26 @@ div.csl-indent {
 </section>
 <section id="model-training" class="level3">
 <h3 class="anchored" data-anchor-id="model-training">Model Training</h3>
-<p>The target variable was binary with categories of no heart disease (1) and heart disease (2). After removing the outlier observation in cholesterol, 269 observations were used to create a random forest algorithm to predict the presence of heart disease. Using the caret package in R, the data set was split for a training model and a testing model at a 0.7 ratio. This resulted in 189 observations in the training data set and 80 in the testing data set.</p>
+<p>The target variable was binary with categories of no heart disease (1) and heart disease (2). After removing the outlier observation in cholesterol, 269 observations were used to create a random forest algorithm to predict the presence of heart disease. Using the caret package in R, the data set was split for a training model and a testing model at a 0.7 ratio. This resulted in 189 observations in the training data set and 80 in the testing data set. The training dataset was then assessed for the best parameter options that produced the greatest estimated accuracy. Algorithm parameters are defined as such:</p>
+<pre><code>  Ntree: The number of trees.
+  
+  Mtry: Controls the amount of randomness that is added to the process. The number of randomly sampled variables drawn at each split.
+  
+  Terminal nodes: The number of leaf nodes in the tree.
+  
+  Max nodes: A way to control the complexity of the trees. Maximum number of terminal nodes trees in the forest can have.
+  
+  Nodesize: Minimum size of terminal nodes. 
+  
+  Feature: A set of inputs.</code></pre>
+<p>The testing dataset was then passed into the tuned algorithm to create a predictive model.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(data1<span class="sc">$</span>heart.disease, <span class="at">p =</span> <span class="fl">0.7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> data1[split, ]</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> data1[<span class="sc">-</span>split, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(data1<span class="sc">$</span>heart.disease, <span class="at">p =</span> <span class="fl">0.7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> data1[split, ]</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> data1[<span class="sc">-</span>split, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="k-fold-cross-validation-sampling-method" class="level4">
@@ -306,19 +318,19 @@ div.csl-indent {
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the control</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>trControl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">number =</span> <span class="dv">10</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">search =</span> <span class="st">"grid"</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#model with default values</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>rf_default <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the control</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>trControl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">number =</span> <span class="dv">10</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">search =</span> <span class="st">"grid"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#model with default values</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>rf_default <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Forest 
@@ -345,19 +357,19 @@ The final value used for the model was mtry = 2.</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Search best mtry</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>tuneGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">.mtry =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span> <span class="dv">10</span>))</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>rf_mtry <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> tuneGrid,</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl,</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">300</span>)</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_mtry)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Search best mtry</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>tuneGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">.mtry =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span> <span class="dv">10</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>rf_mtry <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> tuneGrid,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">300</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_mtry)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Forest 
@@ -388,7 +400,7 @@ The final value used for the model was mtry = 2.</code></pre>
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Forest 
@@ -412,35 +424,35 @@ The final value used for the model was mtry = 2.</code></pre>
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>best_mtry <span class="ot">&lt;-</span> rf_mtry<span class="sc">$</span>bestTune<span class="sc">$</span>mtry </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>best_mtry <span class="ot">&lt;-</span> rf_mtry<span class="sc">$</span>bestTune<span class="sc">$</span>mtry </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>The subsequent procedure evaluates the optimal number of max nodes for the model.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Search maxnodes - look for highest accuracy</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>store_maxnode <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#assigns best mtry to tuneGrid</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>tuneGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">.mtry =</span> best_mtry)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (maxnodes <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span> <span class="dv">15</span>)) {</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    rf_maxnode <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> train,</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"rf"</span>,</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">tuneGrid =</span> tuneGrid,</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">trControl =</span> trControl,</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxnodes =</span> maxnodes,</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">ntree =</span> <span class="dv">300</span>)</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    current_iteration <span class="ot">&lt;-</span> <span class="fu">toString</span>(maxnodes)</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    store_maxnode[[current_iteration]] <span class="ot">&lt;-</span> rf_maxnode</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>results_mtry <span class="ot">&lt;-</span> <span class="fu">resamples</span>(store_maxnode)</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results_mtry)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Search maxnodes - look for highest accuracy</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>store_maxnode <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#assigns best mtry to tuneGrid</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>tuneGrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">.mtry =</span> best_mtry)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (maxnodes <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span> <span class="dv">15</span>)) {</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    rf_maxnode <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> train,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">tuneGrid =</span> tuneGrid,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">trControl =</span> trControl,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxnodes =</span> maxnodes,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">ntree =</span> <span class="dv">300</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    current_iteration <span class="ot">&lt;-</span> <span class="fu">toString</span>(maxnodes)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    store_maxnode[[current_iteration]] <span class="ot">&lt;-</span> rf_maxnode</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>results_mtry <span class="ot">&lt;-</span> <span class="fu">resamples</span>(store_maxnode)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results_mtry)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -483,25 +495,25 @@ Kappa
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#search best ntree</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>store_maxtrees <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ntree <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>, <span class="dv">500</span>, <span class="dv">600</span>, <span class="dv">700</span>, <span class="dv">800</span>, <span class="dv">900</span>, <span class="dv">1000</span>)) {</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    rf_maxtrees <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> train,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"rf"</span>,</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">tuneGrid =</span> tuneGrid,</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">trControl =</span> trControl,</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxnodes =</span> <span class="dv">8</span>,</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">ntree =</span> ntree)</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    key <span class="ot">&lt;-</span> <span class="fu">toString</span>(ntree)</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    store_maxtrees[[key]] <span class="ot">&lt;-</span> rf_maxtrees</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>results_tree <span class="ot">&lt;-</span> <span class="fu">resamples</span>(store_maxtrees)</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results_tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#search best ntree</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>store_maxtrees <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ntree <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>, <span class="dv">500</span>, <span class="dv">600</span>, <span class="dv">700</span>, <span class="dv">800</span>, <span class="dv">900</span>, <span class="dv">1000</span>)) {</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    rf_maxtrees <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> train,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">tuneGrid =</span> tuneGrid,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">trControl =</span> trControl,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxnodes =</span> <span class="dv">8</span>,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">ntree =</span> ntree)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    key <span class="ot">&lt;-</span> <span class="fu">toString</span>(ntree)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    store_maxtrees[[key]] <span class="ot">&lt;-</span> rf_maxtrees</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>results_tree <span class="ot">&lt;-</span> <span class="fu">resamples</span>(store_maxtrees)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results_tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -542,19 +554,19 @@ Kappa
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#train final model</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>fit_rf <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> tuneGrid,</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl,</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">200</span>,</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxnodes =</span> <span class="dv">8</span>)</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#train final model</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>fit_rf <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> tuneGrid,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">200</span>,</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxnodes =</span> <span class="dv">8</span>)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Forest 
@@ -581,12 +593,12 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>fit_rf2 <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit_rf2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>fit_rf2 <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit_rf2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Forest 
@@ -613,17 +625,17 @@ The final value used for the model was mtry = 2.</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#train final model</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>fit_rf2 <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> tuneGrid,</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">200</span>,</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxnodes =</span> <span class="dv">8</span>)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit_rf2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#train final model</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>fit_rf2 <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> tuneGrid,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">200</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxnodes =</span> <span class="dv">8</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit_rf2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Forest 
@@ -651,15 +663,15 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#evaluate model</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span><span class="fu">predict</span>(fit_rf, test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#evaluate model</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span><span class="fu">predict</span>(fit_rf, test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Results from the predictive test model indicated that the feature major.vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 60.00. These features were major vessels, thal normal, old peak, chest pain type, max heart rate, and thal reversible defect.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImp</span>(fit_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImp</span>(fit_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>rf variable importance
@@ -682,18 +694,15 @@ fasting.blood.sugar                        0.00</code></pre>
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>rfImp<span class="ot">&lt;-</span> <span class="fu">varImp</span>(fit_rf)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(rfImp, <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>rfImp<span class="ot">&lt;-</span> <span class="fu">varImp</span>(fit_rf)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(rfImp, lwd=2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
-</div>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rfImp, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">importance</span>(), <span class="at">y =</span> value)) <span class="sc">+</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>,<span class="at">fill=</span><span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rfImp, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">importance</span>(), <span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>,<span class="at">fill=</span><span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
@@ -703,58 +712,58 @@ fasting.blood.sugar                        0.00</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(prediction, test<span class="sc">$</span>heart.disease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(prediction, test<span class="sc">$</span>heart.disease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>draw_confusion_matrix <span class="ot">&lt;-</span> <span class="cf">function</span>(cm) {</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)))</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">345</span>), <span class="fu">c</span>(<span class="dv">300</span>, <span class="dv">450</span>), <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xaxt=</span><span class="st">'n'</span>, <span class="at">yaxt=</span><span class="st">'n'</span>)</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">title</span>(<span class="st">'CONFUSION MATRIX'</span>, <span class="at">cex.main=</span><span class="dv">2</span>)</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create the matrix </span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">150</span>, <span class="dv">430</span>, <span class="dv">240</span>, <span class="dv">370</span>, <span class="at">col=</span><span class="st">'#3F97D0'</span>)</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">435</span>, <span class="st">'Positive'</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">250</span>, <span class="dv">430</span>, <span class="dv">340</span>, <span class="dv">370</span>, <span class="at">col=</span><span class="st">'#F7AD50'</span>)</span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">435</span>, <span class="st">'Negative'</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">125</span>, <span class="dv">370</span>, <span class="st">'Predicted'</span>, <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">srt=</span><span class="dv">90</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">245</span>, <span class="dv">450</span>, <span class="st">'Actual'</span>, <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">150</span>, <span class="dv">305</span>, <span class="dv">240</span>, <span class="dv">365</span>, <span class="at">col=</span><span class="st">'#F7AD50'</span>)</span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">250</span>, <span class="dv">305</span>, <span class="dv">340</span>, <span class="dv">365</span>, <span class="at">col=</span><span class="st">'#3F97D0'</span>)</span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">140</span>, <span class="dv">400</span>, <span class="st">'True'</span>, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">srt=</span><span class="dv">90</span>)</span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">140</span>, <span class="dv">335</span>, <span class="st">'False'</span>, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">srt=</span><span class="dv">90</span>)</span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the cm results </span></span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(cm<span class="sc">$</span>table)</span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">400</span>, res[<span class="dv">1</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">335</span>, res[<span class="dv">2</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">400</span>, res[<span class="dv">3</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">335</span>, res[<span class="dv">4</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the specifics </span></span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">main =</span> <span class="st">"DETAILS"</span>, <span class="at">xaxt=</span><span class="st">'n'</span>, <span class="at">yaxt=</span><span class="st">'n'</span>)</span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">10</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">1</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">10</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">1</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">2</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">2</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">50</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">5</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">50</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">5</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">6</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">6</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">90</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">7</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">90</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">7</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
-<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the accuracy information </span></span>
-<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">35</span>, <span class="fu">names</span>(cm<span class="sc">$</span>overall[<span class="dv">1</span>]), <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">20</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>overall[<span class="dv">1</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.4</span>)</span>
-<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">35</span>, <span class="fu">names</span>(cm<span class="sc">$</span>overall[<span class="dv">2</span>]), <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
-<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">20</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>overall[<span class="dv">2</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.4</span>)</span>
-<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>}  </span>
-<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_confusion_matrix</span>(cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>draw_confusion_matrix <span class="ot">&lt;-</span> <span class="cf">function</span>(cm) {</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)))</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">345</span>), <span class="fu">c</span>(<span class="dv">300</span>, <span class="dv">450</span>), <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">xaxt=</span><span class="st">'n'</span>, <span class="at">yaxt=</span><span class="st">'n'</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">title</span>(<span class="st">'CONFUSION MATRIX'</span>, <span class="at">cex.main=</span><span class="dv">2</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create the matrix </span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">150</span>, <span class="dv">430</span>, <span class="dv">240</span>, <span class="dv">370</span>, <span class="at">col=</span><span class="st">'#3F97D0'</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">435</span>, <span class="st">'Positive'</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">250</span>, <span class="dv">430</span>, <span class="dv">340</span>, <span class="dv">370</span>, <span class="at">col=</span><span class="st">'#F7AD50'</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">435</span>, <span class="st">'Negative'</span>, <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">125</span>, <span class="dv">370</span>, <span class="st">'Predicted'</span>, <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">srt=</span><span class="dv">90</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">245</span>, <span class="dv">450</span>, <span class="st">'Actual'</span>, <span class="at">cex=</span><span class="fl">1.3</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">150</span>, <span class="dv">305</span>, <span class="dv">240</span>, <span class="dv">365</span>, <span class="at">col=</span><span class="st">'#F7AD50'</span>)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">250</span>, <span class="dv">305</span>, <span class="dv">340</span>, <span class="dv">365</span>, <span class="at">col=</span><span class="st">'#3F97D0'</span>)</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">140</span>, <span class="dv">400</span>, <span class="st">'True'</span>, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">srt=</span><span class="dv">90</span>)</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">140</span>, <span class="dv">335</span>, <span class="st">'False'</span>, <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">srt=</span><span class="dv">90</span>)</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the cm results </span></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(cm<span class="sc">$</span>table)</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">400</span>, res[<span class="dv">1</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">195</span>, <span class="dv">335</span>, res[<span class="dv">2</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">400</span>, res[<span class="dv">3</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">295</span>, <span class="dv">335</span>, res[<span class="dv">4</span>], <span class="at">cex=</span><span class="fl">1.6</span>, <span class="at">font=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">'white'</span>)</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the specifics </span></span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">0</span>), <span class="at">type =</span> <span class="st">"n"</span>, <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>, <span class="at">main =</span> <span class="st">"DETAILS"</span>, <span class="at">xaxt=</span><span class="st">'n'</span>, <span class="at">yaxt=</span><span class="st">'n'</span>)</span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">10</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">1</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">10</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">1</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">2</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">2</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">50</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">5</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">50</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">5</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">6</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">6</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">90</span>, <span class="dv">85</span>, <span class="fu">names</span>(cm<span class="sc">$</span>byClass[<span class="dv">7</span>]), <span class="at">cex=</span><span class="fl">1.2</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">90</span>, <span class="dv">70</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>byClass[<span class="dv">7</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.2</span>)</span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add in the accuracy information </span></span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">35</span>, <span class="fu">names</span>(cm<span class="sc">$</span>overall[<span class="dv">1</span>]), <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">30</span>, <span class="dv">20</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>overall[<span class="dv">1</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.4</span>)</span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">35</span>, <span class="fu">names</span>(cm<span class="sc">$</span>overall[<span class="dv">2</span>]), <span class="at">cex=</span><span class="fl">1.5</span>, <span class="at">font=</span><span class="dv">2</span>)</span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="dv">70</span>, <span class="dv">20</span>, <span class="fu">round</span>(<span class="fu">as.numeric</span>(cm<span class="sc">$</span>overall[<span class="dv">2</span>]), <span class="dv">3</span>), <span class="at">cex=</span><span class="fl">1.4</span>)</span>
+<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>}  </span>
+<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_confusion_matrix</span>(cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
@@ -764,7 +773,7 @@ fasting.blood.sugar                        0.00</code></pre>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">/</span>(<span class="dv">4</span><span class="sc">+</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">/</span>(<span class="dv">4</span><span class="sc">+</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.2857143</code></pre>

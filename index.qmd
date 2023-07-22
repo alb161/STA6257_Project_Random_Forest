@@ -1,7 +1,7 @@
 ---
 title: "Random Forest Algorithm"
 author: "Amy Brown, Jeff Eddy, Armani Harris"
-date: "July 21, 2023"
+date: "July 22, 2023"
 format:
   html:
     code-fold: true
@@ -109,7 +109,6 @@ levels(data_lt_100_melt$variable) <- c("sex","chest.pain.type","fasting.blood.su
 ggplot(data_lt_100_melt, aes(variable, value)) + 
 geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
-
 ```
 ### Removal of Extreme Outlier
 
@@ -136,7 +135,21 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
 ### Model Training
-The target variable was binary with categories of no heart disease (1) and heart disease (2). After removing the outlier observation in cholesterol, 269 observations were used to create a random forest algorithm to predict the presence of heart disease. Using the caret package in R, the data set was split for a training model and a testing model at a 0.7 ratio. This resulted in 189 observations in the training data set and 80 in the testing data set. 
+The target variable was binary with categories of no heart disease (1) and heart disease (2). After removing the outlier observation in cholesterol, 269 observations were used to create a random forest algorithm to predict the presence of heart disease. Using the caret package in R, the data set was split for a training model and a testing model at a 0.7 ratio. This resulted in 189 observations in the training data set and 80 in the testing data set. The training dataset was then assessed for the best parameter options that produced the greatest estimated accuracy. Algorithm parameters are defined as such: 
+
+      Ntree: The number of trees.
+      
+      Mtry: Controls the amount of randomness that is added to the process. The number of randomly sampled variables drawn at each split.
+      
+      Terminal nodes: The number of leaf nodes in the tree.
+      
+      Max nodes: A way to control the complexity of the trees. Maximum number of terminal nodes trees in the forest can have.
+      
+      Nodesize: Minimum size of terminal nodes. 
+      
+      Feature: A set of inputs.
+
+The testing dataset was then passed into the tuned algorithm to create a predictive model.
  
 ```{r, message=FALSE}
 set.seed(123)
@@ -286,7 +299,7 @@ Results from the predictive test model indicated that the feature major.vessels 
 ```{r, message=FALSE}
 varImp(fit_rf)
 rfImp<- varImp(fit_rf)
-plot(rfImp, lwd=2)
+#plot(rfImp, lwd=2)
 ```
 ```{r, message=FALSE}
 ggplot(rfImp, aes(x = importance(), y = value)) +
