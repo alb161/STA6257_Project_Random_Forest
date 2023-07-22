@@ -31,39 +31,54 @@ library(randomForest)
 library(gridExtra)
 library(AppliedPredictiveModeling)
 library("ggplot2")
+library("reshape2")
 
 #data read
 data<- read.csv('C:/Users/amybr/OneDrive/Desktop/dataset_heart.csv')
 
 #data observations
-head(data)
-summary(data)
-str(data)
+#head(data)
+#summary(data)
+#str(data)
 any(is.na(data))
 unique(data$heart.disease)
+data_gt_100=data
+data_lt_100=data
 data$heart.disease<- as.factor(data$heart.disease)
 data1=data
 data1$thal[data1$thal== 3]<-"normal"
 data1$thal[data1$thal== 6]<-"fixed defect"
 data1$thal[data1$thal== 7]<-"reversible defect"
 data1$thal<- as.factor(data1$thal)
-datacholesteroral=data1
-data_bp_hr=data1
-dataage=data1
-dataother=data1
 
-#boxplot serum cholesterol, resting blood pressure, and max heart rate
-datacholesteroral = datacholesteroral %>% select(1,4,5,8)
-boxplot(x=NULL, data=datacholesteroral, width=8, height=8)
 
-# boxplot age
-dataage = dataage %>% select('age')
-boxplot(dataage)
+#boxplot age, serum cholesterol, resting blood pressure, and max heart rate
+data_gt_100 = data_gt_100 %>% select(1,4,5,8)
+
+# Reshape sample data to long form
+data_gt_100_melt <- melt(data_gt_100)
+
+# Add variable parameter for axis label in dataset
+levels(data_gt_100_melt$variable) <- c("aging","resting.blood.pressure","serum.cholesterol","max.heart.rate")
+  
+# Draw boxplot
+ggplot(data_gt_100_melt, aes(variable, value)) + 
+geom_boxplot(width = .25)  +
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 # boxplot of all other variables
-dataother = dataother %>% select(2,3,6,7,9:14)
-boxplot(dataother)
+data_lt_100 = data_lt_100 %>% select(2,3,6,7,9:14)
 
+# Reshape sample data to long form
+data_lt_100_melt <- melt(data_lt_100)
+
+# Add variable parameter for axis label in dataset
+levels(data_lt_100_melt$variable) <- c("sex","chest.pain.type","fasting.blood.sugar","resting.electrocardiographic.results", "exercise.induced.angina","oldpeak","ST.segment","major.vessels", "thal", "heart.disease")
+  
+# Draw boxplot
+ggplot(data_lt_100_melt, aes(variable, value)) + 
+geom_boxplot(width = .25)  +
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 #transparentTheme(trans = .4)
 #featurePlot(x = data[, 1:13], 
@@ -77,12 +92,23 @@ boxplot(dataother)
 #boxplot(data1$major.vessels, main = "Boxplot")
 #qqnorm(data1$major.vessels, main = "Normal Q-Q plot")
 
-#remove extrem outlier
-data1 = data1[data1$serum.cholestoral != "564", ]
-datacholesteroral = data1$serum.cholestoral
+#remove extreme outlier
+data_gt_100 = data_gt_100[data1$serum.cholestoral != "564", ]
 
-#rerun boxplot
-boxplot(datacholesteroral)
+
+#rerun boxplot after extreme outlier removed 
+
+# Reshape sample data to long form
+data_gt_100_melt <- melt(data_gt_100)
+
+# Add variable parameter for axis label in dataset
+levels(data_gt_100_melt$variable) <- c("aging","resting.blood.pressure","serum.cholesterol","max.heart.rate")
+  
+# Draw boxplot
+ggplot(data_gt_100_melt, aes(variable, value)) + 
+geom_boxplot(width = .25)  +
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
 ```
 
 ## Data split on target (heart.disease) on data

@@ -34,18 +34,6 @@ The Random Forest algorithm can be used for classification or regression models.
 
 ## Analysis and Results
 
-### Data and Visualization
-The Random Forest algorithm is reviewed using the Heart Disease Prediction dataset. There are 270 observations in the dataset without any missing values.  The target is heart disease predicting the presence or absence of heart disease. The target and the other 13 features are listed in Figure 3 [@Singh2023]. The boxplot of each feature is plotted in Figures 4. There is an extreme outlier in feature serum cholesterol. The datapoint will be removed before running the model. 
-
-
-<a href="https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset">Link to Documentation for Heart Disease Prediction data</a>
-
-
-![Figure 3 [@Singh2023]](Features and Target.png)
-
-
-![Figure 4](boxplot.png)
-
 ### Packages
 ```{r, message=FALSE}
 library(caret)
@@ -63,15 +51,20 @@ library(randomForest)
 library(gridExtra)
 library(AppliedPredictiveModeling)
 library("ggplot2")
+library("reshape2")
 ```
 ### Load Data
 
-```{r}
+```{r, message=FALSE}
 data<- read.csv('C:/Users/amybr/OneDrive/Desktop/dataset_heart.csv')
 ```
 ### Data Transformation
 Setting the target variable to factor. The thal feature was recoded for clarity and set as a factor variable. 
-```{r}
+```{r, message=FALSE}
+#any(is.na(data))
+#unique(data$heart.disease)
+data_gt_100=data
+data_lt_100=data
 data$heart.disease<- as.factor(data$heart.disease)
 data1=data
 data1$thal[data1$thal== 3]<-"normal"
@@ -80,11 +73,66 @@ data1$thal[data1$thal== 7]<-"reversible defect"
 data1$thal<- as.factor(data1$thal)
 ```
 
-### Remove Extreme Outlier
-Boxplot without the extreme outlier.
-```{r}
+### Data and Visualization
+The Random Forest algorithm is reviewed using the Heart Disease Prediction dataset. There are 270 observations in the dataset without any missing values.  The target is heart disease predicting the presence or absence of heart disease. The target and the other 13 features are listed in Figure 3 [@Singh2023]. Two boxplots were created to scale the features accordingly. An extreme outlier was observed in the feature serum cholesterol. The datapoint will be removed before running the model. 
+
+
+<a href="https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset">Link to Documentation for Heart Disease Prediction data</a>
+
+
+![Figure 3 [@Singh2023]](Features and Target.png)
+```{r, message=FALSE}
+#boxplot age, serum cholesterol, resting blood pressure, and max heart rate
+data_gt_100 = data %>% select(1,4,5,8)
+
+# Reshape sample data to long form
+data_gt_100_melt <- melt(data_gt_100)
+
+# Add variable parameter for axis label in dataset
+levels(data_gt_100_melt$variable) <- c("aging","resting.blood.pressure","serum.cholesterol","max.heart.rate")
+  
+# Draw boxplot
+ggplot(data_gt_100_melt, aes(variable, value)) + 
+geom_boxplot(width = .25)  +
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+# boxplot of all other variables
+data_lt_100 = data_lt_100 %>% select(2,3,6,7,9:14)
+
+# Reshape sample data to long form
+data_lt_100_melt <- melt(data_lt_100)
+
+# Add variable parameter for axis label in dataset
+levels(data_lt_100_melt$variable) <- c("sex","chest.pain.type","fasting.blood.sugar","resting.electrocardiographic.results", "exercise.induced.angina","oldpeak","ST.segment","major.vessels", "thal", "heart.disease")
+  
+# Draw boxplot
+ggplot(data_lt_100_melt, aes(variable, value)) + 
+geom_boxplot(width = .25)  +
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+```
+### Removal Extreme Outlier
+
+The extreme outlier for the feature serum cholesterol is removed from the dataset and validated in the boxplot.
+
+```{r, message=FALSE}
+#remove extreme outlier
+data_gt_100 = data_gt_100[data$serum.cholestoral != "564", ]
 data1 = data1[data1$serum.cholestoral != "564", ]
-boxplot(data1)
+
+
+#rerun boxplot after extreme outlier removed 
+
+# Reshape sample data to long form
+data_gt_100_melt <- melt(data_gt_100)
+
+# Add variable parameter for axis label in dataset
+levels(data_gt_100_melt$variable) <- c("aging","resting.blood.pressure","serum.cholesterol","max.heart.rate")
+  
+# Draw boxplot
+ggplot(data_gt_100_melt, aes(variable, value)) + 
+geom_boxplot(width = .25)  +
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
 ### Model Training
@@ -95,7 +143,6 @@ set.seed(123)
 split <- createDataPartition(data1$heart.disease, p = 0.7, list = FALSE)
 train <- data1[split, ]
 test <- data1[-split, ]
-str(train)
 ```
 
 #### K-Fold Cross-Validation Sampling Method
