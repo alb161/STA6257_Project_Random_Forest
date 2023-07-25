@@ -137,12 +137,12 @@ div.csl-indent {
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<p>Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. A decision tree starts at the tree root node and splits into internal nodes. The tree continues to grow as the data splits on the internal node. The tree ends with leaf node when the data splits have stopped. For the Random Forest algorithm, two sampling methods types were reviewed using the r caret package: repeated k-fold cross-validation and bootstrapping <span class="citation" data-cites="Abdulkareem2021">(<a href="#ref-Abdulkareem2021" role="doc-biblioref">Abdulkareem and Abdulazeez 2021</a>)</span>.</p>
+<p>Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. A decision tree starts at the tree root node and splits into internal nodes. The tree continues to grow as the data splits on the internal node. The tree ends with leaf node when the data splits have stopped. For the Random Forest algorithm, two feature sampling methods types were reviewed using the r caret package: repeated k-fold cross-validation and bootstrapping <span class="citation" data-cites="Abdulkareem2021">(<a href="#ref-Abdulkareem2021" role="doc-biblioref">Abdulkareem and Abdulazeez 2021</a>)</span>.</p>
 <p>The basic steps of the Random Forest algorithm are as follows:</p>
 <ol type="1">
 <li>Randomly select k features from a total of m features where k &lt; m.</li>
-<li>Specify a node size d amoung the k features in step 1 using the best split point discussed in step 3.</li>
-<li>For bootstrap sampling method, each node is split into additional internal nodes using Gini Impurity. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. For the repeated k-fold cross-validation, each node is split into additional internal nodes using Permuation Importance. The Permutation Importance is calculated by evaluating the decrease in accuracy when a feature is removed and further divided into classes.</li>
+<li>Specify a node size d from the k features in step 1 using the best split point discussed in step 3.</li>
+<li>For bootstrap feature sampling method, each node is split into additional internal nodes using Gini Impurity. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. For the repeated k-fold cross-validation feature sampling method, each node is split into additional internal nodes using Permuation Importance. The Permutation Importance is calculated by evaluating the decrease in accuracy when a feature is removed and further divided into classes.</li>
 <li>Repeat the previous steps 1 through 4 steps until l node is remaining.</li>
 <li>Continue to build the forest by repeating steps 1 through 4 for n number of times to create n number of trees <span class="citation" data-cites="Jaiswal2017">(<a href="#ref-Jaiswal2017" role="doc-biblioref">Jaiswal and Samikannu 2017</a>)</span>.</li>
 </ol>
@@ -310,12 +310,14 @@ div.csl-indent {
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
-<section id="model-training" class="level3">
-<h3 class="anchored" data-anchor-id="model-training">Model Training</h3>
+<section id="statistical-modeling" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-modeling">Statistical Modeling</h3>
+<section id="model-training" class="level4">
+<h4 class="anchored" data-anchor-id="model-training">Model Training</h4>
 <p>The target variable was binary with categories of no heart disease (1) and heart disease (2). After removing the outlier observation in cholesterol, 269 observations were used to create a random forest algorithm to predict the presence of heart disease. Using the caret package in R, the data set was split for a training model and a testing model at a 0.7 ratio. This resulted in 189 observations in the training data set and 80 in the testing data set. The training dataset was then assessed for the best parameter options that produced the greatest estimated accuracy. Algorithm parameters are defined as such:</p>
 <p>Ntree: The number of trees.</p>
 <p>Mtry: Controls the amount of randomness that is added to the process. The number of randomly sampled variables drawn at each split.</p>
@@ -333,8 +335,8 @@ div.csl-indent {
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> data1[<span class="sc">-</span>split, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="k-fold-cross-validation-sampling-method" class="level4">
-<h4 class="anchored" data-anchor-id="k-fold-cross-validation-sampling-method">K-Fold Cross-Validation Sampling Method</h4>
+<section id="k-fold-cross-validation-sampling-method" class="level5">
+<h5 class="anchored" data-anchor-id="k-fold-cross-validation-sampling-method">K-Fold Cross-Validation Sampling Method</h5>
 <p>A default training model using repeated k-fold cross-validation sampling method based on classification was created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472.</p>
 <div class="cell">
 <details>
@@ -608,8 +610,8 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </div>
 </div>
 </section>
-<section id="bootstrap-sampling-method" class="level4">
-<h4 class="anchored" data-anchor-id="bootstrap-sampling-method">Bootstrap Sampling Method</h4>
+<section id="bootstrap-sampling-method" class="level5">
+<h5 class="anchored" data-anchor-id="bootstrap-sampling-method">Bootstrap Sampling Method</h5>
 <p>A default training model using bootstrap sampling method based on classification was created to compare with the repeated k-fold cross-validation sampling method. Bootstrap does not need cross-validation. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni Impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8330 compared to .8472 of the repeated -fold cross-validation sampling method.</p>
 <div class="cell">
 <details>
@@ -679,8 +681,8 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </section>
 </section>
 </section>
-<section id="predictive-modeling" class="level2">
-<h2 class="anchored" data-anchor-id="predictive-modeling">Predictive Modeling</h2>
+<section id="predictive-modeling" class="level3">
+<h3 class="anchored" data-anchor-id="predictive-modeling">Predictive Modeling</h3>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -720,7 +722,7 @@ fasting.blood.sugar                        0.00</code></pre>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>,<span class="at">fill=</span><span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p&lt; 0.001). Sensitivity and specificity were calculated at 0.909 and 0.722 respectively.</p>
@@ -777,7 +779,7 @@ fasting.blood.sugar                        0.00</code></pre>
 <span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_confusion_matrix</span>(cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>The model has an estimated false positive rate of 28.57%. False positive rate is calculated by the number of false positives divided by the sum of false positives and true negatives. FPR= FP/(FP + TN).</p>
@@ -790,9 +792,10 @@ fasting.blood.sugar                        0.00</code></pre>
 <pre><code>[1] 0.2857143</code></pre>
 </div>
 </div>
+</section>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
-<p>In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. Two sampling methods were reviewed: repeated k-fold cross-validation and bootstrap. In repeated k-fold cross-validation, decision trees are constructed based on Permutation Importance, while in bootstrap training data is Gini Impurity. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.</p>
+<p>In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. Two feature sampling methods were reviewed: repeated k-fold cross-validation and bootstrap. In repeated k-fold cross-validation, decision trees are constructed based on Permutation Importance, while in bootstrap is constructed based on Gini Impurity. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.</p>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">

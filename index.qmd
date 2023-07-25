@@ -20,13 +20,13 @@ Breiman [@Breiman2001] introduced the concept of Random Forests and highlighted 
 
 ## Methods
 
-Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. A decision tree starts at the tree root node and splits into internal nodes. The tree continues to grow as the data splits on the internal node.  The tree ends with leaf node when the data splits have stopped. For the Random Forest algorithm, two sampling methods types were reviewed using the r caret package: repeated k-fold cross-validation and bootstrapping [@Abdulkareem2021].
+Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. A decision tree starts at the tree root node and splits into internal nodes. The tree continues to grow as the data splits on the internal node.  The tree ends with leaf node when the data splits have stopped. For the Random Forest algorithm, two feature sampling methods types were reviewed using the r caret package: repeated k-fold cross-validation and bootstrapping [@Abdulkareem2021].
 
 The basic steps of the Random Forest algorithm are as follows:
 
 1. Randomly select k features from a total of m features where k < m.
-2. Specify a node size d amoung the k features in step 1 using the best split point discussed in step 3.
-3. For bootstrap sampling method, each node is split into additional internal nodes using Gini Impurity. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. For the repeated k-fold cross-validation, each node is split into additional internal nodes using Permuation Importance. The Permutation Importance is calculated by evaluating the decrease in accuracy when a feature is removed and further divided into classes.
+2. Specify a node size d from the k features in step 1 using the best split point discussed in step 3.
+3. For bootstrap feature sampling method, each node is split into additional internal nodes using Gini Impurity. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. For the repeated k-fold cross-validation feature sampling method, each node is split into additional internal nodes using Permuation Importance. The Permutation Importance is calculated by evaluating the decrease in accuracy when a feature is removed and further divided into classes.
 4. Repeat the previous steps 1 through 4 steps until l node is remaining.
 5. Continue to build the forest by repeating steps 1 through 4 for n number of times to create n number of trees [@Jaiswal2017].
 
@@ -128,9 +128,6 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 Setting the target variable to factor. The thal feature was recoded for clarity and set as a factor variable.
 
 ```{r, message=FALSE}
-```
-
-```{r, message=FALSE}
 data$heart.disease<- as.factor(data$heart.disease)
 data1=data
 data1$thal[data1$thal== 3]<-"normal"
@@ -162,8 +159,9 @@ ggplot(data_gt_100_melt, aes(variable, value)) +
 geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
+### Statistical Modeling
 
-### Model Training
+#### Model Training
 
 The target variable was binary with categories of no heart disease (1) and heart disease (2). After removing the outlier observation in cholesterol, 269 observations were used to create a random forest algorithm to predict the presence of heart disease. Using the caret package in R, the data set was split for a training model and a testing model at a 0.7 ratio. This resulted in 189 observations in the training data set and 80 in the testing data set. The training dataset was then assessed for the best parameter options that produced the greatest estimated accuracy. Algorithm parameters are defined as such:
 
@@ -188,7 +186,7 @@ train <- data1[split, ]
 test <- data1[-split, ]
 ```
 
-#### K-Fold Cross-Validation Sampling Method
+##### K-Fold Cross-Validation Sampling Method
 
 A default training model using repeated k-fold cross-validation sampling method based on classification was created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472.
 
@@ -298,7 +296,7 @@ fit_rf <- train(heart.disease~.,
 print(fit_rf)
 ```
 
-#### Bootstrap Sampling Method
+##### Bootstrap Sampling Method
 
 A default training model using bootstrap sampling method based on classification was created to compare with the repeated k-fold cross-validation sampling method. Bootstrap does not need cross-validation. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni Impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8330 compared to .8472 of the repeated -fold cross-validation sampling method.
 
@@ -327,7 +325,7 @@ fit_rf2 <- train(heart.disease~.,
 print(fit_rf2)
 ```
 
-## Predictive Modeling
+### Predictive Modeling
 
 ```{r, message=FALSE}
 # Evaluate model
@@ -404,6 +402,6 @@ The model has an estimated false positive rate of 28.57%. False positive rate is
 
 ### Conclusion
 
-In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. Two sampling methods were reviewed: repeated k-fold cross-validation and bootstrap. In repeated k-fold cross-validation, decision trees are constructed based on Permutation Importance, while in bootstrap training data is Gini Impurity. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.
+In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. Two feature sampling methods were reviewed: repeated k-fold cross-validation and bootstrap. In repeated k-fold cross-validation, decision trees are constructed based on Permutation Importance, while in bootstrap is constructed based on Gini Impurity. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.
 
 ## References
