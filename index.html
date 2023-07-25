@@ -137,16 +137,25 @@ div.csl-indent {
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<p>Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. There are two sampling methods types reviewed for each split point at the nodes in the Random Forest algorithm: k-fold cross-validation and bootstrap. The basic steps of the Random Forest algorithm are as follows:</p>
+<p>Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. A decision tree starts at the tree root node and splits into internal nodes. The tree continues to grow as the data splits on the internal node. The tree ends with leaf node when the data splits have stopped. For the Random Forest algorithm, two sampling methods types were reviewed using the r caret package: repeated k-fold cross-validation and bootstrapping <span class="citation" data-cites="Abdulkareem2021">(<a href="#ref-Abdulkareem2021" role="doc-biblioref">Abdulkareem and Abdulazeez 2021</a>)</span>.</p>
+<p>The basic steps of the Random Forest algorithm using repeated k-fold cross-validation method are outlined below:</p>
 <ol type="1">
-<li>Randomly select k features from a total of m features where k &lt; m.</li>
-<li>Calculate node d using the best split point.</li>
-<li>The node is split into additional internal nodes using the best split method.</li>
-<li>Repeat the previous steps 1 through 3 steps until l node is remaining.</li>
-<li>Continue to build the forest by repeating steps 1 through 4 for n number of times to create n number of trees <span class="citation" data-cites="Abdulkareem2021">(<a href="#ref-Abdulkareem2021" role="doc-biblioref">Abdulkareem and Abdulazeez 2021</a>)</span>.</li>
+<li>The data randomly shuffled and split into k groups. The k value is selected by the operator and is arbitrary.</li>
+<li>One of the k groups is held back for testing while the remaining groups are fit and trained separately.</li>
+<li>The k group left out is evaluated in testing.</li>
+<li>The evaluation score is retained and the model is discarded.</li>
+<li>Step 1 through 4 are repeated for n times where n is another arbitrary value selected by the operator <span class="citation" data-cites="Abdulkareem2021">(<a href="#ref-Abdulkareem2021" role="doc-biblioref">Abdulkareem and Abdulazeez 2021</a>)</span>.</li>
 </ol>
-<p>The k-fold cross-validation sampling method starts with a decision at the tree root node and splits into internal nodes based on the decrease in accuracy when a feature is removed and further divided into classes known as Permutation Importance or Mean Decrease Accuracy. The sampling is random and split into k groups. Further internal nodes are created based on the data split on the internal node. The decision tree ends at the leaf node when all the data belongs to the same class <span class="citation" data-cites="Abdulkareem2021">(<a href="#ref-Abdulkareem2021" role="doc-biblioref">Abdulkareem and Abdulazeez 2021</a>)</span>.</p>
-<p>In the bootstrap sampling method, two-thirds of the training data is used for training and draws the sample with replacement for the next resampling. The chosen samples are referred to the bag, whereas the remaining are called out of bag samples. The decision tree for the training samples start at the root node and splits into internal nodes based on Gini Impurity also known as Mean Decrease Impurity. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. The out of bag samples at each node is then used to estimate unbiased classification error. Further internal nodes are created based on the data split on the internal node. The decision tree ends at the leaf node <span class="citation" data-cites="Jaiswal2017">(<a href="#ref-Jaiswal2017" role="doc-biblioref">Jaiswal and Samikannu 2017</a>)</span>.</p>
+<p>The basic steps of the Random Forest algorithm using the bootstrap sampling method are as follows:</p>
+<ol type="1">
+<li>The data split into two-thirds for training and one-third for testing. The data is sampled with replacement with the data chosen referred to the bag, whereas the remaining are called out of bag samples. The out of bag samples at each node is then used to estimate unbiased classification error.</li>
+<li>Randomly select k features from a total of m features where k &lt; m.</li>
+<li>Specify a minimum and maximum node size d for the tree nodes.</li>
+<li>Each node is split into additional internal nodes using the Gini Impurity. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average.</li>
+<li>Repeat the previous steps 1 through 4 steps until l node is remaining.</li>
+<li>Continue to build the forest by repeating steps 1 through 5 for n number of times to create n number of trees .</li>
+<li>The test data is evaluaed against the model <span class="citation" data-cites="Jaiswal2017">(<a href="#ref-Jaiswal2017" role="doc-biblioref">Jaiswal and Samikannu 2017</a>)</span>.</li>
+</ol>
 <p>The Random Forest algorithm can be used for classification or regression models. The target selected for the algorithm identifies if the algorithm will use a classification or regression model. The leaf node will predict a category if a classification model is identified and a numerical value for a regression model. The prediction is determined by taking the majority vote of all leaf nodes for classification and an average of the leaf nodes for regression. This Random Forest algorithm process is represented in the flowchart of Figure 1 <span class="citation" data-cites="Abdulkareem2021">(<a href="#ref-Abdulkareem2021" role="doc-biblioref">Abdulkareem and Abdulazeez 2021</a>)</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -336,7 +345,7 @@ div.csl-indent {
 </div>
 <section id="k-fold-cross-validation-sampling-method" class="level4">
 <h4 class="anchored" data-anchor-id="k-fold-cross-validation-sampling-method">K-Fold Cross-Validation Sampling Method</h4>
-<p>A default training model using k-fold cross validation sampling method based on classification was created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472.</p>
+<p>A default training model using repeated k-fold cross-validation sampling method based on classification was created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by the k groups arbitrarily set by the operator. Accuracy of the default model was 0.8472.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -611,7 +620,7 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </section>
 <section id="bootstrap-sampling-method" class="level4">
 <h4 class="anchored" data-anchor-id="bootstrap-sampling-method">Bootstrap Sampling Method</h4>
-<p>A default training model using bootstrap sampling method based on classification was created to compare with the k-fold cross-validation sampling method. Bootstrap does not need cross-validation. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni Impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8330 compared to .8472 of the k-fold cross-validation sampling method.</p>
+<p>A default training model using bootstrap sampling method based on classification was created to compare with the repeated k-fold cross-validation sampling method. Bootstrap does not need cross-validation. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni Impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8330 compared to .8472 of the repeated -fold cross-validation sampling method.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -643,7 +652,7 @@ Accuracy was used to select the optimal model using the largest value.
 The final value used for the model was mtry = 2.</code></pre>
 </div>
 </div>
-<p>To compare the final training settings in the k-fold cross-validation sampling method to the bootstrap sampling method, the same settings were used to train. The bootstrap sampling method is still slightly lower than the k-fold cross-validation Sampling Method with .8367 accuracy compared to .8680. Since k-fold cross-validation sampling method is higher in Accuracy, the predictive modeling will be based off from the k-fold cross-validation sampling method.</p>
+<p>To compare the final training settings in the repeated k-fold cross-validation sampling method to the bootstrap sampling method, the same settings were used to train. The bootstrap sampling method is still slightly lower than the repeated k-fold cross-validation Sampling Method with .8367 accuracy compared to .8680. Since repeated k-fold cross-validation sampling method is higher in Accuracy, the predictive modeling will be based off from the repeated k-fold cross-validation sampling method.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -793,7 +802,7 @@ fasting.blood.sugar                        0.00</code></pre>
 </div>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
-<p>In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. It employs two sampling methods: k-fold cross-validation and bootstrap. In k-fold cross-validation, decision trees are constructed based on feature importance and accuracy decrease, while in bootstrap, training data is randomly sampled with replacement. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.</p>
+<p>In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. Two sampling methods were reviewed: repeated k-fold cross-validation and bootstrap. In repeated k-fold cross-validation, decision trees are constructed based a number of k folds arbitrarily set, while in bootstrap training data is randomly sampled with replacement. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.</p>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
