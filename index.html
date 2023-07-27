@@ -270,48 +270,47 @@ div.csl-indent {
 </div>
 </div>
 </section>
-<section id="data-transformation" class="level3">
-<h3 class="anchored" data-anchor-id="data-transformation">Data Transformation</h3>
+<section id="removal-of-extreme-outlier" class="level3">
+<h3 class="anchored" data-anchor-id="removal-of-extreme-outlier">Removal of Extreme Outlier</h3>
 <p>Setting the target variable to factor. The thal feature was recoded for clarity and set as a factor variable.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>heart.disease<span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data<span class="sc">$</span>heart.disease)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data1<span class="ot">=</span>data</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">3</span>]<span class="ot">&lt;-</span><span class="st">"normal"</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">6</span>]<span class="ot">&lt;-</span><span class="st">"fixed defect"</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">7</span>]<span class="ot">&lt;-</span><span class="st">"reversible defect"</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal<span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data1<span class="sc">$</span>thal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove extreme outlier</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data_gt_100 <span class="ot">=</span> data_gt_100[data<span class="sc">$</span>serum.cholestoral <span class="sc">!=</span> <span class="st">"564"</span>, ]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>data1<span class="ot">=</span>data</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">=</span> data1[data1<span class="sc">$</span>serum.cholestoral <span class="sc">!=</span> <span class="st">"564"</span>, ]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Rerun boxplot after extreme outlier removed </span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape sample data to long form</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>data_gt_100_melt <span class="ot">&lt;-</span> <span class="fu">melt</span>(data_gt_100)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add variable parameter for axis label in dataset</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(data_gt_100_melt<span class="sc">$</span>variable) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"aging"</span>,<span class="st">"resting.blood.pressure"</span>,<span class="st">"serum.cholesterol"</span>,<span class="st">"max.heart.rate"</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw boxplot</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_gt_100_melt, <span class="fu">aes</span>(variable, value)) <span class="sc">+</span> </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>(<span class="at">width =</span> .<span class="dv">25</span>)  <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
 </div>
 </section>
-<section id="removal-of-extreme-outlier" class="level3">
-<h3 class="anchored" data-anchor-id="removal-of-extreme-outlier">Removal of Extreme Outlier</h3>
+<section id="data-transformation" class="level3">
+<h3 class="anchored" data-anchor-id="data-transformation">Data Transformation</h3>
 <p>The extreme outlier for the feature serum cholesterol is removed from the dataset and validated in the boxplot.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove extreme outlier</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data_gt_100 <span class="ot">=</span> data_gt_100[data<span class="sc">$</span>serum.cholestoral <span class="sc">!=</span> <span class="st">"564"</span>, ]</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">=</span> data1[data1<span class="sc">$</span>serum.cholestoral <span class="sc">!=</span> <span class="st">"564"</span>, ]</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Rerun boxplot after extreme outlier removed </span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape sample data to long form</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>data_gt_100_melt <span class="ot">&lt;-</span> <span class="fu">melt</span>(data_gt_100)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add variable parameter for axis label in dataset</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(data_gt_100_melt<span class="sc">$</span>variable) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"aging"</span>,<span class="st">"resting.blood.pressure"</span>,<span class="st">"serum.cholesterol"</span>,<span class="st">"max.heart.rate"</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw boxplot</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_gt_100_melt, <span class="fu">aes</span>(variable, value)) <span class="sc">+</span> </span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>(<span class="at">width =</span> .<span class="dv">25</span>)  <span class="sc">+</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>heart.disease<span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data1<span class="sc">$</span>heart.disease)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">3</span>]<span class="ot">&lt;-</span><span class="st">"normal"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">6</span>]<span class="ot">&lt;-</span><span class="st">"fixed defect"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">7</span>]<span class="ot">&lt;-</span><span class="st">"reversible defect"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal<span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data1<span class="sc">$</span>thal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
-</div>
 </div>
 </section>
 <section id="statistical-modeling" class="level3">

@@ -123,28 +123,15 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 ```
 
-### Data Transformation
+### Removal of Extreme Outlier
 
 Setting the target variable to factor. The thal feature was recoded for clarity and set as a factor variable.
 
 ```{r, message=FALSE}
-data$heart.disease<- as.factor(data$heart.disease)
-data1=data
-data1$thal[data1$thal== 3]<-"normal"
-data1$thal[data1$thal== 6]<-"fixed defect"
-data1$thal[data1$thal== 7]<-"reversible defect"
-data1$thal<- as.factor(data1$thal)
-```
-
-### Removal of Extreme Outlier
-
-The extreme outlier for the feature serum cholesterol is removed from the dataset and validated in the boxplot.
-
-```{r, message=FALSE}
 # Remove extreme outlier
 data_gt_100 = data_gt_100[data$serum.cholestoral != "564", ]
+data1=data
 data1 = data1[data1$serum.cholestoral != "564", ]
-
 
 # Rerun boxplot after extreme outlier removed 
 
@@ -158,6 +145,18 @@ levels(data_gt_100_melt$variable) <- c("aging","resting.blood.pressure","serum.c
 ggplot(data_gt_100_melt, aes(variable, value)) + 
 geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+```
+
+### Data Transformation
+
+The extreme outlier for the feature serum cholesterol is removed from the dataset and validated in the boxplot.
+
+```{r, message=FALSE}
+data1$heart.disease<- as.factor(data1$heart.disease)
+data1$thal[data1$thal== 3]<-"normal"
+data1$thal[data1$thal== 6]<-"fixed defect"
+data1$thal[data1$thal== 7]<-"reversible defect"
+data1$thal<- as.factor(data1$thal)
 ```
 
 ### Statistical Modeling

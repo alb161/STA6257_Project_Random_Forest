@@ -8,9 +8,9 @@ bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
 ---
 
-## Introduction
+## Introduction {.smaller}
 
-## Literature Review
+## Literature Review {.smaller}
 
 ## Methods - Random Forest Algorithm {.smaller}
 
@@ -170,17 +170,17 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
     -   Value 7 to reversible defect
 
 ```{r, message=FALSE}
-data$heart.disease<- as.factor(data$heart.disease)
+data1$heart.disease<- as.factor(data1$heart.disease)
 data1$thal[data1$thal== 3]<-"normal"
 data1$thal[data1$thal== 6]<-"fixed defect"
 data1$thal[data1$thal== 7]<-"reversible defect"
 data1$thal<- as.factor(data1$thal)
 ```
 
-## Model Training
+## Model Training {.smaller}
 
-## Predictive Modeling
+## Predictive Modeling {.smaller}
 
-## Conclusion
+## Conclusion {.smaller}
 
-## References
+## References {.smaller}
