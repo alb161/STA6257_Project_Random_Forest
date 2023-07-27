@@ -86,7 +86,7 @@ The Random Forest algorithm is reviewed using the Heart Disease Prediction datas
 13. thal: 3 = normal; 6 = fixed defect; 7 = reversable defect\
 14. Target (Absence (1) or presence (2) of heart disease) [@Singh2023]\
 
-To visualize the data, two boxplots were created to scale the features accordingly. An extreme outlier was observed in the feature serum cholesterol at a value of 564. Mild outliers were also observed in features resting blood pressure, serum cholesterol, max heart rate, chest pain type, fasting blood sugar, old peak, and major vessels. Since there are only 270 observation, the extreme outlier datapoint will be removed before running the model.
+To visualize the data, two boxplots were created to scale the features accordingly. An extreme outlier was observed in the feature serum cholesterol at a value of 564. Mild outliers were also observed in features resting blood pressure, serum cholesterol, max heart rate, chest pain type, fasting blood sugar, old peak, and major vessels. Since there are only 270 observations, the extreme outlier datapoint will be removed before running the model.
 
 ```{r, message=FALSE}
 # Split dataframe into dataframe for box plots only
