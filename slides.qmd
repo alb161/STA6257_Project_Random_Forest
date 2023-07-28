@@ -1,25 +1,29 @@
 ---
 title: "Random Forest Algorithm"
 author: "Amy Brown, Jeff Eddy, Armani Harris"
-date: "July 25, 2023"
+date: "July 27, 2023"
 format: revealjs
 course: STA 6257 - Advance Statistical Modeling
 bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
 ---
 
-## Introduction {.smaller}
+## Introduction {style="font-size: 80%;"}
 
-## Literature Review {.smaller}
+Random Forests (RF) is a popular ensemble learning algorithm that combines multiple decision trees to improve predictive accuracy and handle complex datasets. This literature review aims to explore ten articles that discuss various aspects of the Random Forest algorithm, including its theoretical foundation, feature selection, data imbalance resolution, interpretability, and comparisons with other classification methods. The selected articles offer valuable insights into the strengths, weaknesses, and practical applications of Random Forest in different domains.
 
-## Methods - Random Forest Algorithm {.smaller}
+## Literature Review {style="font-size: 70%;"}
+
+Breiman [@Breiman2001] introduced the concept of Random Forests and highlighted the importance of the Law of Large Numbers in avoiding overfitting. Liaw and Wiener [@Liaw2002] expanded on this work, focusing on the classification and regression capabilities of RF. They discussed the use of bagging and highlighted the significance of variable importance in RF models.When dealing with datasets containing a high number of variables the importance of feature selection is discussed by Jaiswal, K. & Samikannu, R. [@Jaiswal2017]. Han and Kim investigated the optimal size of candidate feature sets in Random Forest for classification and regression tasks. The study reveals that the default candidate feature set is not always the best performing and that the optimal size can vary depending on the dataset used [@Han2019].The potential challenges such as overfitting and handling multi-valued attributes exist when using the Random Forest (RF) algorithm. However, the advantages emphasized by Abdulkareem, N. M., & Abdulazeez, A. M entail accuracy, efficiency with large datasets, and minimal data preprocessing requirements [@Abdulkareem2021].
+
+## Methods - Random Forest Algorithm {style="font-size: 80%;"}
 
 Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest.
 
 -   The algorithm can be used for both classification or regression models.
 -   Two feature sampling methods reviewed: bootstrap and k-fold cross-validation.
 
-## Random Forest Tree Structure {.smaller}
+## Random Forest Tree Structure {style="font-size: 70%;"}
 
 -   <b>Root Node:</b> Each tree starts with at a root node.
 -   <b>Internal Nodes:</b> Each tree decision splits at the internal nodes using Gini Impurity or Permutation Importance for the feature importance.
@@ -28,12 +32,12 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 
 ![[@Abdulkareem2021]](RF%20flowchart.png)
 
-## Tree Decision Splits {.smaller}
+## Tree Decision Splits {style="font-size: 80%;"}
 
 -   <b>Gini Impurity</b> is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average.
 -   <b>Permutation Importance</b> is calculated by evaluating the decrease in accuracy when a feature is randomly shuffled over all trees in the forest [@Jaiswal2017].
 
-## Steps for Random Forest Algorithm {.smaller}
+## Steps for Random Forest Algorithm {style="font-size: 80%;"}
 
 -   <b>Step 1:</b> Randomly select k features from a total of m features where k \< m.
 -   <b>Step 2:</b> 3 features in step 1 using the best split point discussed in step 3.
@@ -41,7 +45,7 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 -   <b>Step 4:</b> Repeat the previous steps 1 through 3 steps until 1 node is remaining.
 -   <b>Step 5:</b> Continue to build the forest by repeating all previous steps for n number of times to create n number of trees [@Jaiswal2017].
 
-## Dataset {.smaller}
+## Dataset {style="font-size: 80%;"}
 
 -   Heart Disease Prediction dataset:\
     https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset
@@ -50,7 +54,7 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 -   270 observations
 -   No missing values [@Singh2023]
 
-## Features and Target Fields {.smaller}
+## Features and Target Fields {style="font-size: 70%;"}
 
 -   age
 -   sex
@@ -89,7 +93,7 @@ library("reshape2")
 data<- read.csv('C:/Users/amybr/OneDrive/Desktop/dataset_heart.csv')
 ```
 
-## Visualization Boxplot #1 {.smaller}
+## Visualization Boxplot #1 {style="font-size: 80%;"}
 
 An extreme outlier was observed at a value of 564 in the feature serum cholesterol. Mild outliers were identified in features resting blood pressure, serum cholesterol, and max heart rate.
 
@@ -113,7 +117,7 @@ geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
-## Visualization Boxplot #2 {.smaller}
+## Visualization Boxplot #2 {style="font-size: 80%;"}
 
 Mild outliers were identified in features chest pain type, fasting blood sugar, old peak, and major vessels.
 
@@ -133,9 +137,9 @@ geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
-## Removal of Extreme Outlier {.smaller}
+## Removal of Extreme Outlier {style="font-size: 80%;"}
 
-Since the dataset is small, only the extreme outlier was removed.  Boxplot #1 was rerun to verify the extreme outlier of 564 was removed from feature serum cholesterol.
+Since the dataset is small, only the extreme outlier was removed. Boxplot #1 was rerun to verify the extreme outlier of 564 was removed from feature serum cholesterol.
 
 ```{r, message=FALSE}
 # Remove extreme outlier
@@ -157,7 +161,7 @@ geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
-## Data Transformation {.smaller}
+## Data Transformation {style="font-size: 80%;"}
 
 -   Features Heart Disease and Thal were set to a factor variable
 
@@ -177,10 +181,229 @@ data1$thal[data1$thal== 7]<-"reversible defect"
 data1$thal<- as.factor(data1$thal)
 ```
 
-## Model Training {.smaller}
+## Model Training {style="font-size: 80%;"}
 
-## Predictive Modeling {.smaller}
+The target variable was binary with categories of no heart disease (1) and heart disease (2).
 
-## Conclusion {.smaller}
+-   269 observations
 
-## References {.smaller}
+-   Data set was split for a training model and a testing model at a 0.7 ratio.
+
+-   189 observations in the training data set and 80 in the testing data set.
+
+```{r, message=FALSE}
+set.seed(123)
+split <- createDataPartition(data1$heart.disease, p = 0.7, list = FALSE)
+train <- data1[split, ]
+test <- data1[-split, ]
+```
+
+## Default Training Model {style="font-size: 80%;"}
+
+-   13 Predictor Features
+
+-   500 Decision Trees, 2 Features considered
+
+-   Accuracy = 0.8472
+
+```{r, message=FALSE}
+set.seed(123)
+# Define the control
+trControl <- trainControl(method = "cv",
+    number = 10,
+    search = "grid")
+#model with default values
+rf_default <- train(heart.disease~.,
+    data = train,
+    method = "rf",
+    metric = "Accuracy",
+    trControl = trControl)
+# Print the results
+print(rf_default)
+```
+
+## Tuning the Model {style="font-size: 50%;"}
+
+<b>Selecting the best possible number of features first</b>
+
+```{r, message=FALSE}
+#Search best mtry
+set.seed(123)
+tuneGrid <- expand.grid(.mtry = c(1: 10))
+rf_mtry <- train(heart.disease~.,
+    data = train,
+    method = "rf",
+    metric = "Accuracy",
+    tuneGrid = tuneGrid,
+    trControl = trControl,
+    importance = TRUE,
+    nodesize = 14,
+    ntree = 300)
+print(rf_mtry)
+print(rf_default)
+
+best_mtry <- rf_mtry$bestTune$mtry 
+```
+
+## Selecting for Optimal Number of Nodes {style="font-size: 44%;"}
+
+```{r, message=FALSE}
+# Search maxnodes - look for highest accuracy
+store_maxnode <- list()
+# Assigns best mtry to tuneGrid
+tuneGrid <- expand.grid(.mtry = best_mtry)
+for (maxnodes in c(5: 15)) {
+    set.seed(123)
+    rf_maxnode <- train(heart.disease~.,
+        data = train,
+        method = "rf",
+        metric = "Accuracy",
+        tuneGrid = tuneGrid,
+        trControl = trControl,
+        importance = TRUE,
+        nodesize = 14,
+        maxnodes = maxnodes,
+        ntree = 300)
+    current_iteration <- toString(maxnodes)
+    store_maxnode[[current_iteration]] <- rf_maxnode
+}
+results_mtry <- resamples(store_maxnode)
+summary(results_mtry)
+```
+
+## Ideal Number of Trees {style="font-size: 45%;"}
+
+```{r, message=FALSE}
+# Search best ntree
+store_maxtrees <- list()
+for (ntree in c(100, 200, 300, 400, 500, 600, 700, 800, 900, 1000)) {
+    set.seed(123)
+    rf_maxtrees <- train(heart.disease~.,
+        data = train,
+        method = "rf",
+        metric = "Accuracy",
+        tuneGrid = tuneGrid,
+        trControl = trControl,
+        importance = TRUE,
+        nodesize = 14,
+        maxnodes = 8,
+        ntree = ntree)
+    key <- toString(ntree)
+    store_maxtrees[[key]] <- rf_maxtrees
+}
+results_tree <- resamples(store_maxtrees)
+summary(results_tree)
+```
+
+## Training the Final Model {style="font-size: 70%;"}
+
+Model uses:
+
+-   200 Trees
+
+-   8 nodes
+
+-   2 Features
+
+```{r, message=FALSE}
+# Train final model
+set.seed(123)
+fit_rf <- train(heart.disease~.,
+    data = train,
+    method = "rf",
+    metric = "Accuracy",
+    tuneGrid = tuneGrid,
+    trControl = trControl,
+    importance = TRUE,
+    nodesize = 14,
+    ntree = 200,
+    maxnodes = 8)
+print(fit_rf)
+```
+
+## Predictive Modeling: Most Influential Features {style="font-size: 60%;"}
+
+-   Major Vessels
+
+-   Type of Chest Pain
+
+-   Reversible Thal Defect
+
+-   Normal Thal
+
+-   Maximum Heart Rate
+
+```{r, message=FALSE}
+# Evaluate model
+prediction <-predict(fit_rf, test)
+
+#varImp(fit_rf)
+rfImp<- varImp(fit_rf)
+ggplot(rfImp, aes(x = importance(), y = value)) +
+  geom_bar(stat = "identity", linewidth = 0.5,fill="blue")
+```
+
+## Predictive Model Accuracy {style="font-size: 70%;"}
+
+-   82.5% (0.825, CI: 0.7238, 0.9009, p\< 0.001)
+
+-   Sensitivity and specificity were calculated at 0.886 and 0.75 respectively
+
+-   Estimated false positive rate of 25%
+
+```{r, message=FALSE}
+cm <- confusionMatrix(prediction, test$heart.disease)
+
+draw_confusion_matrix <- function(cm) {
+  layout(matrix(c(1,1,2)))
+  par(mar=c(2,2,2,2))
+  plot(c(100, 345), c(300, 450), type = "n", xlab="", ylab="", xaxt='n', yaxt='n')
+  title('CONFUSION MATRIX', cex.main=2)
+
+  # Create the matrix 
+  rect(150, 430, 240, 370, col='#3F97D0')
+  text(195, 435, 'Positive', cex=1.2)
+  rect(250, 430, 340, 370, col='#F7AD50')
+  text(295, 435, 'Negative', cex=1.2)
+  text(125, 370, 'Predicted', cex=1.3, srt=90, font=2)
+  text(245, 450, 'Actual', cex=1.3, font=2)
+  rect(150, 305, 240, 365, col='#F7AD50')
+  rect(250, 305, 340, 365, col='#3F97D0')
+  text(140, 400, 'True', cex=1.2, srt=90)
+  text(140, 335, 'False', cex=1.2, srt=90)
+
+  # Add in the cm results 
+  res <- as.numeric(cm$table)
+  text(195, 400, res[1], cex=1.6, font=2, col='white')
+  text(195, 335, res[2], cex=1.6, font=2, col='white')
+  text(295, 400, res[3], cex=1.6, font=2, col='white')
+  text(295, 335, res[4], cex=1.6, font=2, col='white')
+
+  # Add in the specifics 
+  plot(c(100, 0), c(100, 0), type = "n", xlab="", ylab="", main = "DETAILS", xaxt='n', yaxt='n')
+  text(10, 85, names(cm$byClass[1]), cex=1.2, font=2)
+  text(10, 70, round(as.numeric(cm$byClass[1]), 3), cex=1.2)
+  text(30, 85, names(cm$byClass[2]), cex=1.2, font=2)
+  text(30, 70, round(as.numeric(cm$byClass[2]), 3), cex=1.2)
+  text(50, 85, names(cm$byClass[5]), cex=1.2, font=2)
+  text(50, 70, round(as.numeric(cm$byClass[5]), 3), cex=1.2)
+  text(70, 85, names(cm$byClass[6]), cex=1.2, font=2)
+  text(70, 70, round(as.numeric(cm$byClass[6]), 3), cex=1.2)
+  text(90, 85, names(cm$byClass[7]), cex=1.2, font=2)
+  text(90, 70, round(as.numeric(cm$byClass[7]), 3), cex=1.2)
+
+  # Add in the accuracy information 
+  text(30, 35, names(cm$overall[1]), cex=1.5, font=2)
+  text(30, 20, round(as.numeric(cm$overall[1]), 3), cex=1.4)
+  text(70, 35, names(cm$overall[2]), cex=1.5, font=2)
+  text(70, 20, round(as.numeric(cm$overall[2]), 3), cex=1.4)
+}  
+
+draw_confusion_matrix(cm)
+```
+
+## Conclusion {style="font-size: 70%;"}
+
+In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. Two feature sampling methods were reviewed: repeated k-fold cross-validation and bootstrap. In repeated k-fold cross-validation, decision trees are constructed based on Permutation Importance, while in bootstrap is constructed based on Gini Impurity. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.
+
+## References {style="font-size: 60%;"}

@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.3.361">
 
   <meta name="author" content="Amy Brown, Jeff Eddy, Armani Harris">
-  <meta name="dcterms.date" content="2023-07-25">
+  <meta name="dcterms.date" content="2023-07-27">
   <title>Random Forest Algorithm</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -355,15 +355,17 @@ Amy Brown, Jeff Eddy, Armani Harris
 </div>
 </div>
 
-  <p class="date">2023-07-25</p>
+  <p class="date">2023-07-27</p>
 </section>
-<section id="introduction" class="slide level2 smaller">
+<section id="introduction" class="slide level2" style="font-size: 80%;">
 <h2>Introduction</h2>
+<p>Random Forests (RF) is a popular ensemble learning algorithm that combines multiple decision trees to improve predictive accuracy and handle complex datasets. This literature review aims to explore ten articles that discuss various aspects of the Random Forest algorithm, including its theoretical foundation, feature selection, data imbalance resolution, interpretability, and comparisons with other classification methods. The selected articles offer valuable insights into the strengths, weaknesses, and practical applications of Random Forest in different domains.</p>
 </section>
-<section id="literature-review" class="slide level2 smaller">
+<section id="literature-review" class="slide level2" style="font-size: 70%;">
 <h2>Literature Review</h2>
+<p>Breiman <span class="citation" data-cites="Breiman2001">(<a href="#/references" role="doc-biblioref" onclick="">Breiman 2001</a>)</span> introduced the concept of Random Forests and highlighted the importance of the Law of Large Numbers in avoiding overfitting. Liaw and Wiener <span class="citation" data-cites="Liaw2002">(<a href="#/references" role="doc-biblioref" onclick="">Liaw and Wiener 2002</a>)</span> expanded on this work, focusing on the classification and regression capabilities of RF. They discussed the use of bagging and highlighted the significance of variable importance in RF models.When dealing with datasets containing a high number of variables the importance of feature selection is discussed by Jaiswal, K. &amp; Samikannu, R. <span class="citation" data-cites="Jaiswal2017">(<a href="#/references" role="doc-biblioref" onclick="">Jaiswal and Samikannu 2017</a>)</span>. Han and Kim investigated the optimal size of candidate feature sets in Random Forest for classification and regression tasks. The study reveals that the default candidate feature set is not always the best performing and that the optimal size can vary depending on the dataset used <span class="citation" data-cites="Han2019">(<a href="#/references" role="doc-biblioref" onclick="">Han and Kim 2019</a>)</span>.The potential challenges such as overfitting and handling multi-valued attributes exist when using the Random Forest (RF) algorithm. However, the advantages emphasized by Abdulkareem, N. M., &amp; Abdulazeez, A. M entail accuracy, efficiency with large datasets, and minimal data preprocessing requirements <span class="citation" data-cites="Abdulkareem2021">(<a href="#/references" role="doc-biblioref" onclick="">Abdulkareem and Abdulazeez 2021</a>)</span>.</p>
 </section>
-<section id="methods---random-forest-algorithm" class="slide level2 smaller">
+<section id="methods---random-forest-algorithm" class="slide level2" style="font-size: 80%;">
 <h2>Methods - Random Forest Algorithm</h2>
 <p>Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest.</p>
 <ul>
@@ -371,7 +373,7 @@ Amy Brown, Jeff Eddy, Armani Harris
 <li>Two feature sampling methods reviewed: bootstrap and k-fold cross-validation.</li>
 </ul>
 </section>
-<section id="random-forest-tree-structure" class="slide level2 smaller">
+<section id="random-forest-tree-structure" class="slide level2" style="font-size: 70%;">
 <h2>Random Forest Tree Structure</h2>
 <ul>
 <li><b>Root Node:</b> Each tree starts with at a root node.</li>
@@ -381,14 +383,14 @@ Amy Brown, Jeff Eddy, Armani Harris
 </ul>
 
 <img data-src="RF%20flowchart.png" class="r-stretch quarto-figure-center"><p class="caption"><span class="citation" data-cites="Abdulkareem2021">(<a href="#/references" role="doc-biblioref" onclick="">Abdulkareem and Abdulazeez 2021</a>)</span></p></section>
-<section id="tree-decision-splits" class="slide level2 smaller">
+<section id="tree-decision-splits" class="slide level2" style="font-size: 80%;">
 <h2>Tree Decision Splits</h2>
 <ul>
 <li><b>Gini Impurity</b> is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average.</li>
 <li><b>Permutation Importance</b> is calculated by evaluating the decrease in accuracy when a feature is randomly shuffled over all trees in the forest <span class="citation" data-cites="Jaiswal2017">(<a href="#/references" role="doc-biblioref" onclick="">Jaiswal and Samikannu 2017</a>)</span>.</li>
 </ul>
 </section>
-<section id="steps-for-random-forest-algorithm" class="slide level2 smaller">
+<section id="steps-for-random-forest-algorithm" class="slide level2" style="font-size: 80%;">
 <h2>Steps for Random Forest Algorithm</h2>
 <ul>
 <li><b>Step 1:</b> Randomly select k features from a total of m features where k &lt; m.</li>
@@ -398,7 +400,7 @@ Amy Brown, Jeff Eddy, Armani Harris
 <li><b>Step 5:</b> Continue to build the forest by repeating all previous steps for n number of times to create n number of trees <span class="citation" data-cites="Jaiswal2017">(<a href="#/references" role="doc-biblioref" onclick="">Jaiswal and Samikannu 2017</a>)</span>.</li>
 </ul>
 </section>
-<section id="dataset" class="slide level2 smaller">
+<section id="dataset" class="slide level2" style="font-size: 80%;">
 <h2>Dataset</h2>
 <ul>
 <li>Heart Disease Prediction dataset:<br>
@@ -409,7 +411,7 @@ https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset</li>
 <li>No missing values <span class="citation" data-cites="Singh2023">(<a href="#/references" role="doc-biblioref" onclick="">Singh 2023</a>)</span></li>
 </ul>
 </section>
-<section id="features-and-target-fields" class="slide level2 smaller">
+<section id="features-and-target-fields" class="slide level2" style="font-size: 70%;">
 <h2>Features and Target Fields</h2>
 <ul>
 <li>age</li>
@@ -427,22 +429,22 @@ https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset</li>
 <li>thal: 3 = normal; 6 = fixed defect; 7 = reversable defect <span class="citation" data-cites="Singh2023">(<a href="#/references" role="doc-biblioref" onclick="">Singh 2023</a>)</span></li>
 </ul>
 </section>
-<section id="visualization-boxplot-1" class="slide level2 smaller">
+<section id="visualization-boxplot-1" class="slide level2" style="font-size: 80%;">
 <h2>Visualization Boxplot #1</h2>
 <p>An extreme outlier was observed at a value of 564 in the feature serum cholesterol. Mild outliers were identified in features resting blood pressure, serum cholesterol, and max heart rate.</p>
 
 <img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
-<section id="visualization-boxplot-2" class="slide level2 smaller">
+<section id="visualization-boxplot-2" class="slide level2" style="font-size: 80%;">
 <h2>Visualization Boxplot #2</h2>
 <p>Mild outliers were identified in features chest pain type, fasting blood sugar, old peak, and major vessels.</p>
 
 <img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
-<section id="removal-of-extreme-outlier" class="slide level2 smaller">
+<section id="removal-of-extreme-outlier" class="slide level2" style="font-size: 80%;">
 <h2>Removal of Extreme Outlier</h2>
 <p>Since the dataset is small, only the extreme outlier was removed. Boxplot #1 was rerun to verify the extreme outlier of 564 was removed from feature serum cholesterol.</p>
 
 <img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
-<section id="data-transformation" class="slide level2 smaller">
+<section id="data-transformation" class="slide level2" style="font-size: 80%;">
 <h2>Data Transformation</h2>
 <ul>
 <li><p>Features Heart Disease and Thal were set to a factor variable</p></li>
@@ -454,16 +456,231 @@ https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset</li>
 </ul></li>
 </ul>
 </section>
-<section id="model-training" class="slide level2 smaller">
+<section id="model-training" class="slide level2" style="font-size: 80%;">
 <h2>Model Training</h2>
+<p>The target variable was binary with categories of no heart disease (1) and heart disease (2).</p>
+<ul>
+<li><p>269 observations</p></li>
+<li><p>Data set was split for a training model and a testing model at a 0.7 ratio.</p></li>
+<li><p>189 observations in the training data set and 80 in the testing data set.</p></li>
+</ul>
 </section>
-<section id="predictive-modeling" class="slide level2 smaller">
-<h2>Predictive Modeling</h2>
+<section id="default-training-model" class="slide level2" style="font-size: 80%;">
+<h2>Default Training Model</h2>
+<ul>
+<li><p>13 Predictor Features</p></li>
+<li><p>500 Decision Trees, 2 Features considered</p></li>
+<li><p>Accuracy = 0.8472</p></li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+189 samples
+ 13 predictor
+  2 classes: '1', '2' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 169, 170, 170, 171, 169, 171, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+   2    0.8471930  0.6869781
+   8    0.8311111  0.6550283
+  14    0.8258480  0.6427563
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 2.</code></pre>
+</div>
+</div>
 </section>
-<section id="conclusion" class="slide level2 smaller">
+<section id="tuning-the-model" class="slide level2" style="font-size: 50%;">
+<h2>Tuning the Model</h2>
+<p><b>Selecting the best possible number of features first</b></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+189 samples
+ 13 predictor
+  2 classes: '1', '2' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 169, 170, 170, 171, 169, 171, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+   1    0.8521637  0.6957755
+   2    0.8574561  0.7059519
+   3    0.8416374  0.6747361
+   4    0.8416667  0.6744959
+   5    0.8150292  0.6211198
+   6    0.8258480  0.6437005
+   7    0.8311111  0.6536152
+   8    0.8202924  0.6328778
+   9    0.8311111  0.6547690
+  10    0.8103216  0.6146161
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 2.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+189 samples
+ 13 predictor
+  2 classes: '1', '2' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 169, 170, 170, 171, 169, 171, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+   2    0.8471930  0.6869781
+   8    0.8311111  0.6550283
+  14    0.8258480  0.6427563
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 2.</code></pre>
+</div>
+</div>
+</section>
+<section id="selecting-for-optimal-number-of-nodes" class="slide level2" style="font-size: 44%;">
+<h2>Selecting for Optimal Number of Nodes</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+summary.resamples(object = results_mtry)
+
+Models: 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 
+Number of resamples: 10 
+
+Accuracy 
+        Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
+5  0.6842105 0.8333333 0.8500000 0.8524561 0.8947368    1    0
+6  0.7368421 0.8333333 0.8500000 0.8577193 0.8947368    1    0
+7  0.6842105 0.8375000 0.8694444 0.8527485 0.8947368    1    0
+8  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+9  0.6842105 0.8375000 0.8694444 0.8580117 0.8947368    1    0
+10 0.7368421 0.8333333 0.8723684 0.8627193 0.8986842    1    0
+11 0.6842105 0.8333333 0.8500000 0.8471930 0.8947368    1    0
+12 0.7368421 0.7833333 0.8377193 0.8416374 0.8855263    1    0
+13 0.6842105 0.8083333 0.8460526 0.8477485 0.8932749    1    0
+14 0.6842105 0.8333333 0.8723684 0.8574561 0.8986842    1    0
+15 0.6842105 0.8375000 0.8918129 0.8630117 0.8986842    1    0
+
+Kappa 
+        Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
+5  0.3666667 0.6493506 0.6938776 0.6959523 0.7857843    1    0
+6  0.4508671 0.6493506 0.6938776 0.7067994 0.7857843    1    0
+7  0.3294118 0.6604824 0.7346154 0.6964070 0.7857843    1    0
+8  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
+9  0.3294118 0.6604824 0.7375000 0.7078311 0.7857843    1    0
+10 0.4311377 0.6515699 0.7351741 0.7161245 0.7957071    1    0
+11 0.3294118 0.6515699 0.6969388 0.6853067 0.7857843    1    0
+12 0.4311377 0.5614899 0.6599354 0.6741824 0.7688759    1    0
+13 0.3294118 0.6093074 0.6852601 0.6868673 0.7839744    1    0
+14 0.3294118 0.6515699 0.7351741 0.7059519 0.7957071    1    0
+15 0.3294118 0.6604824 0.7728507 0.7170522 0.7957071    1    0</code></pre>
+</div>
+</div>
+</section>
+<section id="ideal-number-of-trees" class="slide level2" style="font-size: 45%;">
+<h2>Ideal Number of Trees</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+summary.resamples(object = results_tree)
+
+Models: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000 
+Number of resamples: 10 
+
+Accuracy 
+          Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
+100  0.6842105 0.7958333 0.8918129 0.8574561 0.8986842    1    0
+200  0.6842105 0.8472222 0.8947368 0.8680117 0.9000000    1    0
+300  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+400  0.6842105 0.8472222 0.8947368 0.8627485 0.9000000    1    0
+500  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+600  0.6842105 0.8333333 0.8723684 0.8521930 0.8986842    1    0
+700  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+800  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+900  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
+1000 0.6842105 0.8333333 0.8723684 0.8521930 0.8986842    1    0
+
+Kappa 
+          Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
+100  0.3294118 0.5682062 0.7728507 0.7037457 0.7925830    1    0
+200  0.3666667 0.6793207 0.7826797 0.7263713 0.7969385    1    0
+300  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
+400  0.3294118 0.6793207 0.7826797 0.7161987 0.7969385    1    0
+500  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
+600  0.3294118 0.6515699 0.7382353 0.6953004 0.7925830    1    0
+700  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
+800  0.3294118 0.6493506 0.7826797 0.7042107 0.7969385    1    0
+900  0.3294118 0.6493506 0.7826797 0.7042107 0.7969385    1    0
+1000 0.3294118 0.6493506 0.7382353 0.6944127 0.7925830    1    0</code></pre>
+</div>
+</div>
+</section>
+<section id="training-the-final-model" class="slide level2" style="font-size: 70%;">
+<h2>Training the Final Model</h2>
+<p>Model uses:</p>
+<ul>
+<li><p>200 Trees</p></li>
+<li><p>8 nodes</p></li>
+<li><p>2 Features</p></li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+189 samples
+ 13 predictor
+  2 classes: '1', '2' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 169, 170, 170, 171, 169, 171, ... 
+Resampling results:
+
+  Accuracy   Kappa    
+  0.8680117  0.7263713
+
+Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
+</div>
+</div>
+</section>
+<section id="predictive-modeling-most-influential-features" class="slide level2" style="font-size: 60%;">
+<h2>Predictive Modeling: Most Influential Features</h2>
+<ul>
+<li><p>Major Vessels</p></li>
+<li><p>Type of Chest Pain</p></li>
+<li><p>Reversible Thal Defect</p></li>
+<li><p>Normal Thal</p></li>
+<li><p>Maximum Heart Rate</p></li>
+</ul>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
+<section id="predictive-model-accuracy" class="slide level2" style="font-size: 70%;">
+<h2>Predictive Model Accuracy</h2>
+<ul>
+<li><p>82.5% (0.825, CI: 0.7238, 0.9009, p&lt; 0.001)</p></li>
+<li><p>Sensitivity and specificity were calculated at 0.886 and 0.75 respectively</p></li>
+<li><p>Estimated false positive rate of 25%</p></li>
+</ul>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
+<section id="conclusion" class="slide level2" style="font-size: 70%;">
 <h2>Conclusion</h2>
+<p>In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. Two feature sampling methods were reviewed: repeated k-fold cross-validation and bootstrap. In repeated k-fold cross-validation, decision trees are constructed based on Permutation Importance, while in bootstrap is constructed based on Gini Impurity. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.</p>
 </section>
-<section id="references" class="slide level2 smaller scrollable">
+<section id="references" class="slide level2 smaller scrollable" style="font-size: 60%;">
 <h2>References</h2>
 <div class="footer footer-default">
 
@@ -472,8 +689,17 @@ https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset</li>
 <div id="ref-Abdulkareem2021" class="csl-entry" role="listitem">
 Abdulkareem, Nasiba Mahdi, and Adnan Mohsin Abdulazeez. 2021. <span>“Machine Learning Classification Based on Radom Forest Algorithm: A Review.”</span> <em>International Journal of Science and Business</em> 5 (2): 128–42.
 </div>
+<div id="ref-Breiman2001" class="csl-entry" role="listitem">
+Breiman, Leo. 2001. <span>“Random Forests.”</span> <em>Machine Learning</em> 45: 5–32. <a href="https://doi.org/10.1023/A:1010933404324">https://doi.org/10.1023/A:1010933404324</a>.
+</div>
+<div id="ref-Han2019" class="csl-entry" role="listitem">
+Han, Sunwoo, and Hyunjoong Kim. 2019. <span>“On the Optimal Size of Candidate Feature Set in Random Forest.”</span> <em>Applied Sciences</em> 9 (5). <a href="https://doi.org/10.3390/app9050898">https://doi.org/10.3390/app9050898</a>.
+</div>
 <div id="ref-Jaiswal2017" class="csl-entry" role="listitem">
 Jaiswal, Jitendra Kumar, and Rita Samikannu. 2017. <span>“Application of Random Forest Algorithm on Feature Subset Selection and Classification and Regression.”</span> In <em>2017 World Congress on Computing and Communication Technologies (WCCCT)</em>, 65–68. <a href="https://doi.org/10.1109/WCCCT.2016.25">https://doi.org/10.1109/WCCCT.2016.25</a>.
+</div>
+<div id="ref-Liaw2002" class="csl-entry" role="listitem">
+Liaw, Andy, and Matthew Wiener. 2002. <span>“Classification and Regression by randomForest.”</span> <em>R News</em> 2 (3): 18–22.
 </div>
 <div id="ref-Singh2023" class="csl-entry" role="listitem">
 Singh, Utkarsh. 2023. <span>“Heart Disease Prediction Dataset.”</span> <em>Kaggle</em>. <a href="https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset">https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset</a>.
