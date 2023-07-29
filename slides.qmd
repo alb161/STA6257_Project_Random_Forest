@@ -1,7 +1,7 @@
 ---
 title: "Random Forest Algorithm"
 author: "Amy Brown, Jeff Eddy, Armani Harris"
-date: "July 27, 2023"
+date: "July 28, 2023"
 format: revealjs
 course: STA 6257 - Advance Statistical Modeling
 bibliography: references.bib # file contains bibtex for references
@@ -18,7 +18,7 @@ Breiman [@Breiman2001] introduced the concept of Random Forests and highlighted 
 
 ## Methods - Random Forest Algorithm {style="font-size: 80%;"}
 
-Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest.
+Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest [@Abdulkareem2021].
 
 -   The algorithm can be used for both classification or regression models.
 -   Two feature sampling methods reviewed: bootstrap and k-fold cross-validation.
@@ -198,7 +198,7 @@ train <- data1[split, ]
 test <- data1[-split, ]
 ```
 
-## Default Training Model {style="font-size: 80%;"}
+## K-Fold Cross-Validation: Default Training Model {style="font-size: 80%;"}
 
 -   13 Predictor Features
 
@@ -222,7 +222,34 @@ rf_default <- train(heart.disease~.,
 print(rf_default)
 ```
 
-## Tuning the Model {style="font-size: 50%;"}
+##  Bootstrap: Default Training Model {style="font-size: 80%;"}
+
+-   13 Predictor Features
+
+-   500 Decision Trees, 2 Features considered
+
+-   Accuracy = .08330
+
+
+```{r, message=FALSE}
+set.seed(123)
+fit_rf2 <- train(heart.disease~.,
+    data = train,
+    method = "rf",
+    importance = TRUE)
+print(fit_rf2)
+```
+## Bootstrap Versus K-fold Cross-Validation  {style="font-size: 80%;"}
+
+-  Bootstrap randomly selects n number of observations
+with replacement
+
+-  K-Fold Cross-validation creates subsets of the data
+then randomly shuffles the observations into the subset "folds"
+
+- K-Fold trial was more accurate 0.8472 vs 0.8330
+
+##  K-Fold Cross-Validation: Tuning the Model {style="font-size: 50%;"}
 
 <b>Selecting the best possible number of features first</b>
 
@@ -245,7 +272,7 @@ print(rf_default)
 best_mtry <- rf_mtry$bestTune$mtry 
 ```
 
-## Selecting for Optimal Number of Nodes {style="font-size: 44%;"}
+##  K-Fold Cross-Validation: Optimal Number of Nodes {style="font-size: 70%;"}
 
 ```{r, message=FALSE}
 # Search maxnodes - look for highest accuracy
@@ -268,10 +295,10 @@ for (maxnodes in c(5: 15)) {
     store_maxnode[[current_iteration]] <- rf_maxnode
 }
 results_mtry <- resamples(store_maxnode)
-summary(results_mtry)
+summary(results_mtry, metric="Accuracy")
 ```
 
-## Ideal Number of Trees {style="font-size: 45%;"}
+##  K-Fold Cross-Validation: Ideal Number of Trees {style="font-size: 70%;"}
 
 ```{r, message=FALSE}
 # Search best ntree
@@ -292,10 +319,16 @@ for (ntree in c(100, 200, 300, 400, 500, 600, 700, 800, 900, 1000)) {
     store_maxtrees[[key]] <- rf_maxtrees
 }
 results_tree <- resamples(store_maxtrees)
-summary(results_tree)
+summary(results_tree, metric="Accuracy")
 ```
 
-## Training the Final Model {style="font-size: 70%;"}
+##  K-Fold Cross-Validation: Training the Final Model {style="font-size: 70%;"}
+
+-   13 Predictor Features
+
+-   500 Decision Trees, 2 Features considered
+
+-   Accuracy = 0.8472
 
 Model uses:
 
@@ -319,6 +352,21 @@ fit_rf <- train(heart.disease~.,
     ntree = 200,
     maxnodes = 8)
 print(fit_rf)
+```
+## Bootstrap: Training the Final Model {style="font-size: 70%;"}
+
+```{r, message=FALSE}
+# Train final model
+set.seed(123)
+fit_rf2 <- train(heart.disease~.,
+    data = train,
+    method = "rf",
+    tuneGrid = tuneGrid,
+    importance = TRUE,
+    nodesize = 14,
+    ntree = 200,
+    maxnodes = 8)
+print(fit_rf2)
 ```
 
 ## Predictive Modeling: Most Influential Features {style="font-size: 60%;"}
