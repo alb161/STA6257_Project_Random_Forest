@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Amy Brown, Jeff Eddy, Armani Harris">
-<meta name="dcterms.date" content="2023-07-26">
+<meta name="dcterms.date" content="2023-07-28">
 
 <title>Random Forest Algorithm</title>
 <style>
@@ -117,7 +117,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 26, 2023</p>
+      <p class="date">July 28, 2023</p>
     </div>
   </div>
   
@@ -137,12 +137,12 @@ div.csl-indent {
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<p>Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. A decision tree starts at the tree root node and splits into internal nodes. The tree continues to grow as the data splits on the internal node. The tree ends with leaf node when the data splits have stopped. For the Random Forest algorithm, two feature sampling methods types were reviewed using the r caret package: repeated k-fold cross-validation and bootstrapping <span class="citation" data-cites="Abdulkareem2021">(<a href="#ref-Abdulkareem2021" role="doc-biblioref">Abdulkareem and Abdulazeez 2021</a>)</span>.</p>
+<p>Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. A decision tree starts at the tree root node and splits into internal nodes. The tree continues to grow as the data splits on the internal node. The tree ends with leaf node when the data splits have stopped. For the Random Forest algorithm, two feature sampling methods types were reviewed using the r caret package: k-fold cross-validation and bootstrapping. The k-fold cross-validation method creates subsets of the data and then randomly shuffles the observations into k subset folds where k is arbitrary set. The bootstrap method randomly selects n number of observations with replacement <span class="citation" data-cites="Abdulkareem2021">(<a href="#ref-Abdulkareem2021" role="doc-biblioref">Abdulkareem and Abdulazeez 2021</a>)</span>.</p>
 <p>The basic steps of the Random Forest algorithm are as follows:</p>
 <ol type="1">
 <li>Randomly select k features from a total of m features where k &lt; m.</li>
 <li>Specify a node size d between the minimum and maximum node size from the k features in step 1 using the best split point discussed in step 3.</li>
-<li>For bootstrap feature sampling method, each node is split into additional internal nodes using Gini Impurity. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. For the repeated k-fold cross-validation feature sampling method, each node is split into additional internal nodes using Permuation Importance. The Permutation Importance is calculated by evaluating the decrease in accuracy when a feature is randomly shuffled over all trees in the forest.</li>
+<li>Each ach node is split into additional internal nodes using Gini Impurity or Permutation Importance. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. The Permutation Importance is calculated by evaluating the decrease in accuracy when a feature is randomly shuffled over all trees in the forest.</li>
 <li>Repeat the previous steps 1 through 3 steps until 1 node is remaining.</li>
 <li>Continue to build the forest by repeating steps 1 through 4 for n number of times to create n number of trees <span class="citation" data-cites="Jaiswal2017">(<a href="#ref-Jaiswal2017" role="doc-biblioref">Jaiswal and Samikannu 2017</a>)</span>.</li>
 </ol>
@@ -336,7 +336,7 @@ div.csl-indent {
 </div>
 <section id="k-fold-cross-validation-sampling-method" class="level5">
 <h5 class="anchored" data-anchor-id="k-fold-cross-validation-sampling-method">K-Fold Cross-Validation Sampling Method</h5>
-<p>A default training model using repeated k-fold cross-validation sampling method based on classification was created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472.</p>
+<p>A default training model using k-fold cross-validation sampling method based on classification was created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -474,12 +474,12 @@ The final value used for the model was mtry = 2.</code></pre>
 <span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    store_maxnode[[current_iteration]] <span class="ot">&lt;-</span> rf_maxnode</span>
 <span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>results_mtry <span class="ot">&lt;-</span> <span class="fu">resamples</span>(store_maxnode)</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results_mtry)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results_mtry, <span class="at">metric =</span> <span class="st">"Accuracy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-summary.resamples(object = results_mtry)
+summary.resamples(object = results_mtry, metric = "Accuracy")
 
 Models: 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 
 Number of resamples: 10 
@@ -496,21 +496,7 @@ Accuracy
 12 0.7368421 0.7833333 0.8377193 0.8416374 0.8855263    1    0
 13 0.6842105 0.8083333 0.8460526 0.8477485 0.8932749    1    0
 14 0.6842105 0.8333333 0.8723684 0.8574561 0.8986842    1    0
-15 0.6842105 0.8375000 0.8918129 0.8630117 0.8986842    1    0
-
-Kappa 
-        Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
-5  0.3666667 0.6493506 0.6938776 0.6959523 0.7857843    1    0
-6  0.4508671 0.6493506 0.6938776 0.7067994 0.7857843    1    0
-7  0.3294118 0.6604824 0.7346154 0.6964070 0.7857843    1    0
-8  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
-9  0.3294118 0.6604824 0.7375000 0.7078311 0.7857843    1    0
-10 0.4311377 0.6515699 0.7351741 0.7161245 0.7957071    1    0
-11 0.3294118 0.6515699 0.6969388 0.6853067 0.7857843    1    0
-12 0.4311377 0.5614899 0.6599354 0.6741824 0.7688759    1    0
-13 0.3294118 0.6093074 0.6852601 0.6868673 0.7839744    1    0
-14 0.3294118 0.6515699 0.7351741 0.7059519 0.7957071    1    0
-15 0.3294118 0.6604824 0.7728507 0.7170522 0.7957071    1    0</code></pre>
+15 0.6842105 0.8375000 0.8918129 0.8630117 0.8986842    1    0</code></pre>
 </div>
 </div>
 <p>The final parameter evaluation was the ideal number of trees for the model. From the output of the code, investigators observed the accuracy of the model stabilizes at 200 trees.</p>
@@ -535,12 +521,12 @@ Kappa
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    store_maxtrees[[key]] <span class="ot">&lt;-</span> rf_maxtrees</span>
 <span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>results_tree <span class="ot">&lt;-</span> <span class="fu">resamples</span>(store_maxtrees)</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results_tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results_tree, <span class="at">metric=</span><span class="st">"Accuracy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-summary.resamples(object = results_tree)
+summary.resamples(object = results_tree, metric = "Accuracy")
 
 Models: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000 
 Number of resamples: 10 
@@ -556,20 +542,7 @@ Accuracy
 700  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
 800  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
 900  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-1000 0.6842105 0.8333333 0.8723684 0.8521930 0.8986842    1    0
-
-Kappa 
-          Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
-100  0.3294118 0.5682062 0.7728507 0.7037457 0.7925830    1    0
-200  0.3666667 0.6793207 0.7826797 0.7263713 0.7969385    1    0
-300  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
-400  0.3294118 0.6793207 0.7826797 0.7161987 0.7969385    1    0
-500  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
-600  0.3294118 0.6515699 0.7382353 0.6953004 0.7925830    1    0
-700  0.3294118 0.6515699 0.7826797 0.7050984 0.7969385    1    0
-800  0.3294118 0.6493506 0.7826797 0.7042107 0.7969385    1    0
-900  0.3294118 0.6493506 0.7826797 0.7042107 0.7969385    1    0
-1000 0.3294118 0.6493506 0.7382353 0.6944127 0.7925830    1    0</code></pre>
+1000 0.6842105 0.8333333 0.8723684 0.8521930 0.8986842    1    0</code></pre>
 </div>
 </div>
 <p>The final training model produced an accuracy of 0.8680 compared to the default training model with an accuracy of 0.8472, a 2.08% improvement in accuracy over the default RF parameters.</p>
@@ -611,7 +584,7 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </section>
 <section id="bootstrap-sampling-method" class="level5">
 <h5 class="anchored" data-anchor-id="bootstrap-sampling-method">Bootstrap Sampling Method</h5>
-<p>A default training model using bootstrap sampling method based on classification was created to compare with the repeated k-fold cross-validation sampling method. Bootstrap does not need cross-validation. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni Impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8330 compared to .8472 of the repeated -fold cross-validation sampling method.</p>
+<p>A default training model using bootstrap sampling method based on classification was created to compare with the k-fold cross-validation sampling method. Bootstrap does not need cross-validation. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni Impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8330 compared to .8472 of the k-fold cross-validation sampling method.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -643,7 +616,7 @@ Accuracy was used to select the optimal model using the largest value.
 The final value used for the model was mtry = 2.</code></pre>
 </div>
 </div>
-<p>To compare the final training settings in the repeated k-fold cross-validation sampling method to the bootstrap sampling method, the same settings were used to train. The bootstrap sampling method is still slightly lower than the repeated k-fold cross-validation Sampling Method with .8367 accuracy compared to .8680. Since repeated k-fold cross-validation sampling method is higher in Accuracy, the predictive modeling will be based off from the repeated k-fold cross-validation sampling method.</p>
+<p>To compare the final training settings in the k-fold cross-validation sampling method to the bootstrap sampling method, the same settings were used to train. The bootstrap sampling method is still slightly lower than the k-fold cross-validation Sampling Method with .8367 accuracy compared to .8680. Since k-fold cross-validation sampling method is higher in Accuracy, the predictive modeling will be based off from the k-fold cross-validation sampling method.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -794,7 +767,7 @@ fasting.blood.sugar                        0.00</code></pre>
 </section>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
-<p>In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. Two feature sampling methods were reviewed: repeated k-fold cross-validation and bootstrap. In repeated k-fold cross-validation, decision trees are constructed based on Permutation Importance, while in bootstrap is constructed based on Gini Impurity. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.</p>
+<p>In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. Two feature sampling methods were reviewed: k-fold cross-validation and bootstrap. In k-fold cross-validation, decision trees are constructed based on Permutation Importance, while in bootstrap is constructed based on Gini Impurity. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.</p>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
