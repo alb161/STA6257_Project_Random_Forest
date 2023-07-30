@@ -41,7 +41,7 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 
 -   **Step 1:** Randomly select k features from a total of m features where k \< m.
 -   **Step 2:** Specify a node size d for the features selected in step 1 using the best split point discussed in step 3.
--   **Step 3:** Each internal node is split into additional internal nodes using Gini Impurity or Permuation Importance.
+-   **Step 3:** Each internal node is split into additional nodes using Gini Impurity or Permuation Importance.
 -   **Step 4:** Repeat the previous steps 1 through 3 steps until 1 node is remaining.
 -   **Step 5:** Continue to build the forest by repeating all previous steps for n number of times to create n number of trees [@Jaiswal2017].
 
