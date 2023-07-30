@@ -54,7 +54,7 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 -   270 observations
 -   No missing values [@Singh2023]
 
-## Features and Target Fields {style="font-size: 70%;"}
+## Features and Target Fields {style="font-size: 65%;"}
 
 -   age
 -   sex
@@ -68,7 +68,8 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 -   oldpeak = ST depression induced by exercise relative to rest
 -   the slope of the peak exercise ST segment
 -   number of major vessels (0-3) colored by flourosopy
--   thal: 3 = normal; 6 = fixed defect; 7 = reversable defect [@Singh2023]
+-   thal: 3 = normal; 6 = fixed defect; 7 = reversable defect 
+-   Target (Absence (1) or presence (2) of heart disease) [@Singh2023]
 
 ## R Packages {style="font-size: 70%;"}
 
