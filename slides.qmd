@@ -411,7 +411,7 @@ ggplot(rfImp, aes(x = importance(), y = value)) +
 
 -   82.5% (0.825, CI: 0.7238, 0.9009, p\< 0.001)
 
--   Sensitivity and specificity were calculated at 0.886 and 0.75 respectively
+-   Sensitivity and specificity were calculated at 0.909 and 0.722 respectively
 
 -   Estimated false positive rate of 25%
 
