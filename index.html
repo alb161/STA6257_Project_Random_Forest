@@ -142,7 +142,7 @@ div.csl-indent {
 <p>The basic steps of the Random Forest algorithm are as follows:</p>
 <ol type="1">
 <li>Randomly select k features from a total of m features where k &lt; m.</li>
-<li>Specify a node size d between the minimum and maximum node size from the k features in step 1 using the best split point discussed in step 3.</li>
+<li>Specify a node size d between the minimum and maximum node size for the k features in step 1 using the best split point discussed in step 3.</li>
 <li>Each ach node is split into additional internal nodes using Gini Impurity or Permutation Importance. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. The Permutation Importance is calculated by evaluating the decrease in accuracy when a feature is randomly shuffled over all trees in the forest.</li>
 <li>Repeat the previous steps 1 through 3 steps until 1 node is remaining.</li>
 <li>Continue to build the forest by repeating steps 1 through 4 for n number of times to create n number of trees <span class="citation" data-cites="Jaiswal2017">(<a href="#ref-Jaiswal2017" role="doc-biblioref">Jaiswal and Samikannu 2017</a>)</span>.</li>
