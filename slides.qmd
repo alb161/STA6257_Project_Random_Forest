@@ -38,12 +38,12 @@ Abdulkareem, N. M., & Abdulazeez, A.[@Abdulkareem2021]
 
 ## Methods - Random Forest Algorithm {style="font-size: 80%;"}
 
-Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest [@Abdulkareem2021].
-
+-   The algorithm consists of multiple uncorrelated un-pruned decision trees creating a forest.
+-   The algorithm is a supervised learning model.
 -   The algorithm can be used for both classification or regression models.
--   Two feature sampling methods reviewed: bootstrap and k-fold cross-validation.
+-   Two feature sampling methods reviewed: k-fold cross-validation and bootstrap.
 
-## Random Forest Tree Structure {style="font-size: 70%;"}
+## Random Forest Decision Tree Structure {style="font-size: 70%;"}
 
 -   **Root Node:** Each tree starts with at a root node.
 -   **Internal Nodes:** Each tree decision splits at the internal nodes using Gini Impurity or Permutation Importance for the feature importance.
@@ -61,8 +61,8 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 
 -   **Step 1:** Randomly select k features from a total of m features where k \< m.
 -   **Step 2:** Specify a node size d for the features selected in step 1 using the best split point discussed in step 3.
--   **Step 3:** Each internal node is split into additional nodes using Gini Impurity or Permuation Importance.
--   **Step 4:** Repeat the previous steps 1 through 3 steps until 1 node is remaining.
+-   **Step 3:** Calculate the best split point at the internal node using Gini Impurity or Permuation Importance.
+-   **Step 4:** Repeat the previous steps 1 through 3 until 1 node is remaining.
 -   **Step 5:** Continue to build the forest by repeating all previous steps for n number of times to create n number of trees [@Jaiswal2017].
 
 ## Dataset {style="font-size: 80%;"}
@@ -74,7 +74,7 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 -   270 observations
 -   No missing values [@Singh2023]
 
-## Features and Target Fields {style="font-size: 65%;"}
+## Features and Target Fields  {style="font-size: 65%;"}
 
 -   age
 -   sex
@@ -89,7 +89,8 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 -   the slope of the peak exercise ST segment
 -   number of major vessels (0-3) colored by flourosopy
 -   thal: 3 = normal; 6 = fixed defect; 7 = reversable defect 
--   Target (Absence (1) or presence (2) of heart disease) [@Singh2023]
+-   heart disease (Target: (absence (1) or presence (2)) \
+    [@Singh2023]
 
 ## R Packages {style="font-size: 70%;"}
 

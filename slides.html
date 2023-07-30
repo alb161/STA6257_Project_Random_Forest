@@ -389,14 +389,15 @@ Armani Harris, Amy Brown, Jeff Eddy
 </section>
 <section id="methods---random-forest-algorithm" class="slide level2" style="font-size: 80%;">
 <h2>Methods - Random Forest Algorithm</h2>
-<p>Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest <span class="citation" data-cites="Abdulkareem2021">(<a href="#/references" role="doc-biblioref" onclick="">Abdulkareem and Abdulazeez 2021</a>)</span>.</p>
 <ul>
+<li>The algorithm consists of multiple uncorrelated un-pruned decision trees creating a forest.</li>
+<li>The algorithm is a supervised learning model.</li>
 <li>The algorithm can be used for both classification or regression models.</li>
-<li>Two feature sampling methods reviewed: bootstrap and k-fold cross-validation.</li>
+<li>Two feature sampling methods reviewed: k-fold cross-validation and bootstrap.</li>
 </ul>
 </section>
-<section id="random-forest-tree-structure" class="slide level2" style="font-size: 70%;">
-<h2>Random Forest Tree Structure</h2>
+<section id="random-forest-decision-tree-structure" class="slide level2" style="font-size: 70%;">
+<h2>Random Forest Decision Tree Structure</h2>
 <ul>
 <li><strong>Root Node:</strong> Each tree starts with at a root node.</li>
 <li><strong>Internal Nodes:</strong> Each tree decision splits at the internal nodes using Gini Impurity or Permutation Importance for the feature importance.</li>
@@ -417,8 +418,8 @@ Armani Harris, Amy Brown, Jeff Eddy
 <ul>
 <li><strong>Step 1:</strong> Randomly select k features from a total of m features where k &lt; m.</li>
 <li><strong>Step 2:</strong> Specify a node size d for the features selected in step 1 using the best split point discussed in step 3.</li>
-<li><strong>Step 3:</strong> Each internal node is split into additional nodes using Gini Impurity or Permuation Importance.</li>
-<li><strong>Step 4:</strong> Repeat the previous steps 1 through 3 steps until 1 node is remaining.</li>
+<li><strong>Step 3:</strong> Calculate the best split point at the internal node using Gini Impurity or Permuation Importance.</li>
+<li><strong>Step 4:</strong> Repeat the previous steps 1 through 3 until 1 node is remaining.</li>
 <li><strong>Step 5:</strong> Continue to build the forest by repeating all previous steps for n number of times to create n number of trees <span class="citation" data-cites="Jaiswal2017">(<a href="#/references" role="doc-biblioref" onclick="">Jaiswal and Samikannu 2017</a>)</span>.</li>
 </ul>
 </section>
@@ -449,7 +450,8 @@ https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset</li>
 <li>the slope of the peak exercise ST segment</li>
 <li>number of major vessels (0-3) colored by flourosopy</li>
 <li>thal: 3 = normal; 6 = fixed defect; 7 = reversable defect</li>
-<li>Target (Absence (1) or presence (2) of heart disease) <span class="citation" data-cites="Singh2023">(<a href="#/references" role="doc-biblioref" onclick="">Singh 2023</a>)</span></li>
+<li>heart disease (Target: (absence (1) or presence (2))<br>
+<span class="citation" data-cites="Singh2023">(<a href="#/references" role="doc-biblioref" onclick="">Singh 2023</a>)</span></li>
 </ul>
 </section>
 <section id="r-packages" class="slide level2" style="font-size: 70%;">
