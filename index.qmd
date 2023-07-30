@@ -10,6 +10,8 @@ bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
 ---
 
+[Slides](slides.html)
+
 ## Introduction
 
 Random Forests (RF) is a popular ensemble learning algorithm that combines multiple decision trees to improve predictive accuracy and handle complex datasets. This literature review aims to explore ten articles that discuss various aspects of the Random Forest algorithm, including its theoretical foundation, feature selection, data imbalance resolution, interpretability, and comparisons with other classification methods. The selected articles offer valuable insights into the strengths, weaknesses, and practical applications of Random Forest in different domains.
@@ -20,7 +22,7 @@ Breiman [@Breiman2001] introduced the concept of Random Forests and highlighted 
 
 ## Methods
 
-Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. A decision tree starts at the tree root node and splits into internal nodes. The tree continues to grow as the data splits on the internal node. The tree ends with leaf node when the data splits have stopped. For the Random Forest algorithm, two feature sampling methods types were reviewed using the r caret package: k-fold cross-validation and bootstrapping. The k-fold cross-validation method creates subsets of the data and then randomly shuffles the observations into k subset folds where k is arbitrary set.  The bootstrap method randomly selects n number of observations with replacement  [@Abdulkareem2021].
+Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. A decision tree starts at the tree root node and splits into internal nodes. The tree continues to grow as the data splits on the internal node. The tree ends with leaf node when the data splits have stopped. For the Random Forest algorithm, two feature sampling methods types were reviewed using the r caret package: k-fold cross-validation and bootstrapping. The k-fold cross-validation method creates subsets of the data and then randomly shuffles the observations into k subset folds where k is arbitrary set. The bootstrap method randomly selects n number of observations with replacement [@Abdulkareem2021].
 
 The basic steps of the Random Forest algorithm are as follows:
 
