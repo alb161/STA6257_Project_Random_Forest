@@ -1,7 +1,7 @@
 ---
 title: "Random Forest"
-author: "Amy Brown, Jeff Eddy, Armani Harris"
-date: "July 28, 2023"
+author: "Armani Harris, Amy Brown, Jeff Eddy"
+date: "July 30, 2023"
 format: revealjs
 course: STA 6257 - Advance Statistical Modeling
 bibliography: references.bib # file contains bibtex for references
@@ -12,9 +12,29 @@ bibliography: references.bib # file contains bibtex for references
 
 Random Forests (RF) is a popular ensemble learning algorithm that combines multiple decision trees to improve predictive accuracy and handle complex datasets. This literature review aims to explore ten articles that discuss various aspects of the Random Forest algorithm, including its theoretical foundation, feature selection, data imbalance resolution, interpretability, and comparisons with other classification methods. The selected articles offer valuable insights into the strengths, weaknesses, and practical applications of Random Forest in different domains.
 
-## Literature Review {style="font-size: 70%;"}
+## Literature Review {style="font-size: 80%;"}
 
-Breiman [@Breiman2001] introduced the concept of Random Forests and highlighted the importance of the Law of Large Numbers in avoiding overfitting. Liaw and Wiener [@Liaw2002] expanded on this work, focusing on the classification and regression capabilities of RF. They discussed the use of bagging and highlighted the significance of variable importance in RF models.When dealing with datasets containing a high number of variables the importance of feature selection is discussed by Jaiswal, K. & Samikannu, R. [@Jaiswal2017]. Han and Kim investigated the optimal size of candidate feature sets in Random Forest for classification and regression tasks. The study reveals that the default candidate feature set is not always the best performing and that the optimal size can vary depending on the dataset used [@Han2019].The potential challenges such as overfitting and handling multi-valued attributes exist when using the Random Forest (RF) algorithm. However, the advantages emphasized by Abdulkareem, N. M., & Abdulazeez, A. M entail accuracy, efficiency with large datasets, and minimal data preprocessing requirements [@Abdulkareem2021].
+Breiman [@Breiman2001]
+
+-   Introduced the concept of Random Forests and highlighted the importance of the Law of Large Numbers in avoiding overfitting.
+
+Liaw and Wiener [@Liaw2002]
+
+-   Expanded on this work, focusing on the classification and regression capabilities of RF.
+
+Jaiswal, K. & Samikannu, R. [@Jaiswal2017]
+
+-   Discussed the use of bagging and highlighted the significance of variable importance in RF models.When dealing with datasets containing a high number of variables the importance of feature selection.
+
+## Literature Review cont'd {style="font-size: 80%;"}
+
+Han and Kim [@Han2019] - Investigated the optimal size of candidate feature sets in Random Forest for classification and regression tasks.
+
+-   The study reveals that the default candidate feature set is not always the best performing and that the optimal size can vary depending on the dataset used . The potential challenges such as overfitting and handling multi-valued attributes exist when using the Random Forest (RF) algorithm.
+
+Abdulkareem, N. M., & Abdulazeez, A.[@Abdulkareem2021]
+
+-   The advantages emphasized in this article entails accuracy, efficiency with large datasets, and minimal data preprocessing requirements.
 
 ## Methods - Random Forest Algorithm {style="font-size: 80%;"}
 
@@ -336,7 +356,7 @@ summary(results_tree, metric="Accuracy")
 
 -   500 Decision Trees, 2 Features considered
 
--   Accuracy = 0.8472
+-   Default Training Model Accuracy = 0.8472
 
 Model uses:
 
@@ -414,7 +434,7 @@ ggplot(rfImp, aes(x = importance(), y = value)) +
 
 -   Sensitivity and specificity were calculated at 0.909 and 0.722 respectively
 
--   Estimated false positive rate of 25%
+-   Estimated false positive rate of 28.57%
 
 ```{r, message=FALSE}
 cm <- confusionMatrix(prediction, test$heart.disease)
@@ -469,6 +489,14 @@ draw_confusion_matrix(cm)
 
 ## Conclusion {style="font-size: 70%;"}
 
-In closing, the Random Forest algorithm is a powerful supervised learning model that combines multiple uncorrelated decision trees to form a forest. Two feature sampling methods were reviewed: repeated k-fold cross-validation and bootstrap. In repeated k-fold cross-validation, decision trees are constructed based on Permutation Importance, while in bootstrap is constructed based on Gini Impurity. The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively. The Random Forest algorithm offers a versatile approach to solving complex problems and is widely used in various domains of machine learning and data analysis.
+The Random Forest algorithm includes two feature sampling methods:
+
+-  K-fold cross-validation
+
+-  Bootstrap
+
+The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively.
+
+The algorithm is more cost effective and more reliable in understanding of the data.
 
 ## References {style="font-size: 60%;"}
