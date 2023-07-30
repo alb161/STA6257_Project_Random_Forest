@@ -158,25 +158,13 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="analysis-and-results">Analysis and Results</h2>
 <section id="packages" class="level3">
 <h3 class="anchored" data-anchor-id="packages">Packages</h3>
+<p>The R packages utilized for running the Random Forest algorithm in R were the caret, dplyr and reshape2 packages. The caret package is versatile package used for various classification and regression models. The caret package allows tuning of the model through parameters set in the model. The method used for the Random Forest algorithm is rf. The feature importance can be specified through the trcontrol parameter. The trcontrol parameters reviewed were k-fold cross-validation and bootstrap. The metric parameter specifies how the feature importance is measured such as Accuracy and Gini Impurity <span class="citation" data-cites="Johnson2023">(<a href="#ref-Johnson2023" role="doc-biblioref">Johnson 2023</a>)</span>. The dplyr package is used to filter the dataframes and to produce the box plots of the features. The reshape2 package reshapes the data to the correct format to build the box plots.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#library(boot)</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#library(tidymodels)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#library(lindia)</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#library(car)</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#library(haven)</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#library(htmltools)</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#library(tidyverse)</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#library(fastDummies)</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#library(nnet)</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#library(randomForest)</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#library(gridExtra)</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#library(AppliedPredictiveModeling)</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#library("ggplot2")</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"reshape2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -224,7 +212,7 @@ div.csl-indent {
 <li>Target (Absence (1) or presence (2) of heart disease) <span class="citation" data-cites="Singh2023">(<a href="#ref-Singh2023" role="doc-biblioref">Singh 2023</a>)</span><br>
 </li>
 </ol>
-<p>To visualize the data, two boxplots were created to scale the features accordingly. An extreme outlier was observed in the feature serum cholesterol at a value of 564. Mild outliers were also observed in features resting blood pressure, serum cholesterol, max heart rate, chest pain type, fasting blood sugar, old peak, and major vessels. Since there are only 270 observations, the extreme outlier datapoint will be removed before running the model.</p>
+<p>To visualize the data, two box plots were created to scale the features accordingly. An extreme outlier was observed in the feature serum cholesterol at a value of 564. Mild outliers were also observed in features resting blood pressure, serum cholesterol, max heart rate, chest pain type, fasting blood sugar, old peak, and major vessels. Since there are only 270 observations, the extreme outlier datapoint will be removed before running the model.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -232,7 +220,7 @@ div.csl-indent {
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_gt_100<span class="ot">=</span>data</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>data_lt_100<span class="ot">=</span>data</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot age, serum cholesterol, resting blood pressure, and max heart rate</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Box plot age, serum cholesterol, resting blood pressure, and max heart rate</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data_gt_100 <span class="ot">=</span> data <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">8</span>)</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape sample data to long form</span></span>
@@ -241,7 +229,7 @@ div.csl-indent {
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add variable parameter for axis label in dataset</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(data_gt_100_melt<span class="sc">$</span>variable) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"aging"</span>,<span class="st">"resting.blood.pressure"</span>,<span class="st">"serum.cholesterol"</span>,<span class="st">"max.heart.rate"</span>)</span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw boxplot</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw box plot</span></span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_gt_100_melt, <span class="fu">aes</span>(variable, value)) <span class="sc">+</span> </span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>(<span class="at">width =</span> .<span class="dv">25</span>)  <span class="sc">+</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -251,7 +239,7 @@ div.csl-indent {
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot of all other variables</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Box plot of all other variables</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data_lt_100 <span class="ot">=</span> data_lt_100 <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">9</span><span class="sc">:</span><span class="dv">14</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape sample data to long form</span></span>
@@ -260,7 +248,7 @@ div.csl-indent {
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add variable parameter for axis label in dataset</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(data_lt_100_melt<span class="sc">$</span>variable) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sex"</span>,<span class="st">"chest.pain.type"</span>,<span class="st">"fasting.blood.sugar"</span>,<span class="st">"resting.electrocardiographic.results"</span>, <span class="st">"exercise.induced.angina"</span>,<span class="st">"oldpeak"</span>,<span class="st">"ST.segment"</span>,<span class="st">"major.vessels"</span>, <span class="st">"thal"</span>, <span class="st">"heart.disease"</span>)</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw boxplot</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw box plot</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_lt_100_melt, <span class="fu">aes</span>(variable, value)) <span class="sc">+</span> </span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>(<span class="at">width =</span> .<span class="dv">25</span>)  <span class="sc">+</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -281,7 +269,7 @@ div.csl-indent {
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>data1<span class="ot">=</span>data</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">=</span> data1[data1<span class="sc">$</span>serum.cholestoral <span class="sc">!=</span> <span class="st">"564"</span>, ]</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Rerun boxplot after extreme outlier removed </span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Rerun box plot after extreme outlier removed </span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape sample data to long form</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>data_gt_100_melt <span class="ot">&lt;-</span> <span class="fu">melt</span>(data_gt_100)</span>
@@ -289,7 +277,7 @@ div.csl-indent {
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add variable parameter for axis label in dataset</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(data_gt_100_melt<span class="sc">$</span>variable) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"aging"</span>,<span class="st">"resting.blood.pressure"</span>,<span class="st">"serum.cholesterol"</span>,<span class="st">"max.heart.rate"</span>)</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw boxplot</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw box plot</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_gt_100_melt, <span class="fu">aes</span>(variable, value)) <span class="sc">+</span> </span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>(<span class="at">width =</span> .<span class="dv">25</span>)  <span class="sc">+</span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -301,7 +289,7 @@ div.csl-indent {
 </section>
 <section id="data-transformation" class="level3">
 <h3 class="anchored" data-anchor-id="data-transformation">Data Transformation</h3>
-<p>The extreme outlier for the feature serum cholesterol is removed from the dataset and validated in the boxplot.</p>
+<p>The extreme outlier for the feature serum cholesterol is removed from the dataset and validated in the box plot.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -793,6 +781,9 @@ Han, Sunwoo, and Hyunjoong Kim. 2019. <span>“On the Optimal Size of Candidate 
 </div>
 <div id="ref-Jaiswal2017" class="csl-entry" role="listitem">
 Jaiswal, Jitendra Kumar, and Rita Samikannu. 2017. <span>“Application of Random Forest Algorithm on Feature Subset Selection and Classification and Regression.”</span> In <em>2017 World Congress on Computing and Communication Technologies (WCCCT)</em>, 65–68. <a href="https://doi.org/10.1109/WCCCT.2016.25">https://doi.org/10.1109/WCCCT.2016.25</a>.
+</div>
+<div id="ref-Johnson2023" class="csl-entry" role="listitem">
+Johnson, Daniel. 2023. <span>“R Random Forest Tutorial with Example.”</span> <em>Guru99</em>. <a href="https://www.guru99.com/r-random-forest-tutorial.html">https://www.guru99.com/r-random-forest-tutorial.html</a>.
 </div>
 <div id="ref-Liaw2002" class="csl-entry" role="listitem">
 Liaw, Andy, and Matthew Wiener. 2002. <span>“Classification and Regression by randomForest.”</span> <em>R News</em> 2 (3): 18–22.

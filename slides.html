@@ -12,7 +12,7 @@
 
   <meta name="author" content="Amy Brown, Jeff Eddy, Armani Harris">
   <meta name="dcterms.date" content="2023-07-28">
-  <title>Random Forest Algorithm</title>
+  <title>Random Forest</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -345,7 +345,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Random Forest Algorithm</h1>
+  <h1 class="title">Random Forest</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -376,28 +376,28 @@ Amy Brown, Jeff Eddy, Armani Harris
 <section id="random-forest-tree-structure" class="slide level2" style="font-size: 70%;">
 <h2>Random Forest Tree Structure</h2>
 <ul>
-<li><b>Root Node:</b> Each tree starts with at a root node.</li>
-<li><b>Internal Nodes:</b> Each tree decision splits at the internal nodes using Gini Impurity or Permutation Importance for the feature importance.</li>
-<li><b>Leaf Node:</b> Each tree ends at the leaf node with the result stored as a categorical value for classification and numerical value regression.</li>
-<li><b>Final Result:</b> The final result is calculated by taking the majority vote for classification or the average for regression <span class="citation" data-cites="Abdulkareem2021">(<a href="#/references" role="doc-biblioref" onclick="">Abdulkareem and Abdulazeez 2021</a>)</span>.</li>
+<li><strong>Root Node:</strong> Each tree starts with at a root node.</li>
+<li><strong>Internal Nodes:</strong> Each tree decision splits at the internal nodes using Gini Impurity or Permutation Importance for the feature importance.</li>
+<li><strong>Leaf Node:</strong> Each tree ends at the leaf node with the result stored as a categorical value for classification and numerical value regression.</li>
+<li><strong>Final Result:</strong> The final result is calculated by taking the majority vote for classification or the average for regression <span class="citation" data-cites="Abdulkareem2021">(<a href="#/references" role="doc-biblioref" onclick="">Abdulkareem and Abdulazeez 2021</a>)</span>.</li>
 </ul>
 
 <img data-src="RF%20flowchart.png" class="r-stretch quarto-figure-center"><p class="caption"><span class="citation" data-cites="Abdulkareem2021">(<a href="#/references" role="doc-biblioref" onclick="">Abdulkareem and Abdulazeez 2021</a>)</span></p></section>
 <section id="tree-decision-splits" class="slide level2" style="font-size: 80%;">
 <h2>Tree Decision Splits</h2>
 <ul>
-<li><b>Gini Impurity</b> is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average.</li>
+<li><strong>Gini Impurity</strong> is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average.</li>
 <li><b>Permutation Importance</b> is calculated by evaluating the decrease in accuracy when a feature is randomly shuffled over all trees in the forest <span class="citation" data-cites="Jaiswal2017">(<a href="#/references" role="doc-biblioref" onclick="">Jaiswal and Samikannu 2017</a>)</span>.</li>
 </ul>
 </section>
 <section id="steps-for-random-forest-algorithm" class="slide level2" style="font-size: 80%;">
 <h2>Steps for Random Forest Algorithm</h2>
 <ul>
-<li><b>Step 1:</b> Randomly select k features from a total of m features where k &lt; m.</li>
-<li><b>Step 2:</b> 3 features in step 1 using the best split point discussed in step 3.</li>
-<li><b>Step 3:</b> Each internal node is split into additional internal nodes using Gini Impurity or Permuation Importance.</li>
-<li><b>Step 4:</b> Repeat the previous steps 1 through 3 steps until 1 node is remaining.</li>
-<li><b>Step 5:</b> Continue to build the forest by repeating all previous steps for n number of times to create n number of trees <span class="citation" data-cites="Jaiswal2017">(<a href="#/references" role="doc-biblioref" onclick="">Jaiswal and Samikannu 2017</a>)</span>.</li>
+<li><strong>Step 1:</strong> Randomly select k features from a total of m features where k &lt; m.</li>
+<li><strong>Step 2:</strong> 3 features in step 1 using the best split point discussed in step 3.</li>
+<li><strong>Step 3:</strong> Each internal node is split into additional internal nodes using Gini Impurity or Permuation Importance.</li>
+<li><strong>Step 4:</strong> Repeat the previous steps 1 through 3 steps until 1 node is remaining.</li>
+<li><strong>Step 5:</strong> Continue to build the forest by repeating all previous steps for n number of times to create n number of trees <span class="citation" data-cites="Jaiswal2017">(<a href="#/references" role="doc-biblioref" onclick="">Jaiswal and Samikannu 2017</a>)</span>.</li>
 </ul>
 </section>
 <section id="dataset" class="slide level2" style="font-size: 80%;">
@@ -429,19 +429,42 @@ https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset</li>
 <li>thal: 3 = normal; 6 = fixed defect; 7 = reversable defect <span class="citation" data-cites="Singh2023">(<a href="#/references" role="doc-biblioref" onclick="">Singh 2023</a>)</span></li>
 </ul>
 </section>
-<section id="visualization-boxplot-1" class="slide level2" style="font-size: 80%;">
-<h2>Visualization Boxplot #1</h2>
+<section id="r-packages" class="slide level2" style="font-size: 70%;">
+<h2>R Packages</h2>
+<ul>
+<li><p><strong>caret package</strong></p>
+<ul>
+<li><p>Versatile package used for various classification and regression models.</p></li>
+<li><p>Allows tuning of the model through parameters set in the package.</p>
+<ul>
+<li><p>Parameter method set to rf for Random Forest algorithm.</p></li>
+<li><p>Parameter trcontrol sets the sampling method for feature importance.</p></li>
+<li><p>Parameter metric set to measure feature importance such as Accuracy and Gini Impurity <span class="citation" data-cites="Johnson2023">(<a href="#/references" role="doc-biblioref" onclick="">Johnson 2023</a>)</span>.</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>dplyr package</strong></p>
+<ul>
+<li>Required for filtering dataframes and to produce the box plots of the data fields.</li>
+</ul></li>
+<li><p><strong>reshape2 package</strong></p>
+<ul>
+<li>Required to reshape the data to the correct format to build the box plots.</li>
+</ul></li>
+</ul>
+</section>
+<section id="visualization-box-plot-1" class="slide level2" style="font-size: 80%;">
+<h2>Visualization Box Plot #1</h2>
 <p>An extreme outlier was observed at a value of 564 in the feature serum cholesterol. Mild outliers were identified in features resting blood pressure, serum cholesterol, and max heart rate.</p>
 
 <img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
-<section id="visualization-boxplot-2" class="slide level2" style="font-size: 80%;">
-<h2>Visualization Boxplot #2</h2>
+<section id="visualization-box-plot-2" class="slide level2" style="font-size: 80%;">
+<h2>Visualization Box Plot #2</h2>
 <p>Mild outliers were identified in features chest pain type, fasting blood sugar, old peak, and major vessels.</p>
 
 <img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
 <section id="removal-of-extreme-outlier" class="slide level2" style="font-size: 80%;">
 <h2>Removal of Extreme Outlier</h2>
-<p>Since the dataset is small, only the extreme outlier was removed. Boxplot #1 was rerun to verify the extreme outlier of 564 was removed from feature serum cholesterol.</p>
+<p>Since the dataset is small, only the extreme outlier was removed. Box plot #1 was rerun to verify the extreme outlier of 564 was removed from feature serum cholesterol.</p>
 
 <img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
 <section id="data-transformation" class="slide level2" style="font-size: 80%;">
@@ -528,14 +551,14 @@ The final value used for the model was mtry = 2.</code></pre>
 <section id="bootstrap-versus-k-fold-cross-validation" class="slide level2" style="font-size: 80%;">
 <h2>Bootstrap Versus K-fold Cross-Validation</h2>
 <ul>
-<li><p>Bootstrap randomly selects n number of observations with replacement</p></li>
-<li><p>K-Fold Cross-validation creates subsets of the data then randomly shuffles the observations into the subset “folds”</p></li>
-<li><p>K-Fold trial was more accurate 0.8472 vs 0.8330</p></li>
+<li><p>Bootstrap randomly selects n number of observations with replacement.</p></li>
+<li><p>K-Fold Cross-validation creates subsets of the data then randomly shuffles the observations into the subset “folds”.</p></li>
+<li><p>K-Fold trial was more accurate 0.8472 vs 0.8330.</p></li>
 </ul>
 </section>
 <section id="k-fold-cross-validation-tuning-the-model" class="slide level2" style="font-size: 50%;">
 <h2>K-Fold Cross-Validation: Tuning the Model</h2>
-<p><b>Selecting the best possible number of features first</b></p>
+<p><strong>Selecting the best possible number of features first</strong></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Forest 
@@ -694,6 +717,14 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </div>
 </div>
 </section>
+<section id="final-model-comparison" class="slide level2" style="font-size: 80%;">
+<h2>Final Model Comparison</h2>
+<ul>
+<li><p>K-Fold Cross-Validation Accuracy = .8680</p></li>
+<li><p>Bootstrap Accuracy = .8367</p></li>
+<li><p>Predictive Modeling will use K-Fold Cross-Validation due to higher accuracy</p></li>
+</ul>
+</section>
 <section id="predictive-modeling-most-influential-features" class="slide level2" style="font-size: 60%;">
 <h2>Predictive Modeling: Most Influential Features</h2>
 <ul>
@@ -735,6 +766,9 @@ Han, Sunwoo, and Hyunjoong Kim. 2019. <span>“On the Optimal Size of Candidate 
 </div>
 <div id="ref-Jaiswal2017" class="csl-entry" role="listitem">
 Jaiswal, Jitendra Kumar, and Rita Samikannu. 2017. <span>“Application of Random Forest Algorithm on Feature Subset Selection and Classification and Regression.”</span> In <em>2017 World Congress on Computing and Communication Technologies (WCCCT)</em>, 65–68. <a href="https://doi.org/10.1109/WCCCT.2016.25">https://doi.org/10.1109/WCCCT.2016.25</a>.
+</div>
+<div id="ref-Johnson2023" class="csl-entry" role="listitem">
+Johnson, Daniel. 2023. <span>“R Random Forest Tutorial with Example.”</span> <em>Guru99</em>. <a href="https://www.guru99.com/r-random-forest-tutorial.html">https://www.guru99.com/r-random-forest-tutorial.html</a>.
 </div>
 <div id="ref-Liaw2002" class="csl-entry" role="listitem">
 Liaw, Andy, and Matthew Wiener. 2002. <span>“Classification and Regression by randomForest.”</span> <em>R News</em> 2 (3): 18–22.

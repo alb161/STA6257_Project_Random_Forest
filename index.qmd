@@ -38,23 +38,12 @@ The Random Forest algorithm can be used for classification or regression models.
 
 ### Packages
 
+The R packages utilized for running the Random Forest algorithm in R were the caret, dplyr and reshape2 packages. The caret package is versatile package used for various classification and regression models. The caret package allows tuning of the model through parameters set in the model. The method used for the Random Forest algorithm is rf. The feature importance can be specified through the trcontrol parameter. The trcontrol parameters reviewed were k-fold cross-validation and bootstrap. The metric parameter specifies how the feature importance is measured such as Accuracy and Gini Impurity [@Johnson2023]. The dplyr package is used to filter the dataframes and to produce the box plots of the features. The reshape2 package reshapes the data to the correct format to build the box plots.
+
 ```{r, message=FALSE}
 library(caret)
-#library(boot)
-#library(tidymodels)
-#library(lindia)
-#library(car)
-#library(haven)
-#library(htmltools)
-#library(tidyverse)
 library(dplyr)
-#library(fastDummies)
-#library(nnet)
-#library(randomForest)
-#library(gridExtra)
-#library(AppliedPredictiveModeling)
-#library("ggplot2")
-library("reshape2")
+library(reshape2)
 ```
 
 ### Load Data
@@ -86,14 +75,14 @@ The Random Forest algorithm is reviewed using the Heart Disease Prediction datas
 13. thal: 3 = normal; 6 = fixed defect; 7 = reversable defect\
 14. Target (Absence (1) or presence (2) of heart disease) [@Singh2023]\
 
-To visualize the data, two boxplots were created to scale the features accordingly. An extreme outlier was observed in the feature serum cholesterol at a value of 564. Mild outliers were also observed in features resting blood pressure, serum cholesterol, max heart rate, chest pain type, fasting blood sugar, old peak, and major vessels. Since there are only 270 observations, the extreme outlier datapoint will be removed before running the model.
+To visualize the data, two box plots were created to scale the features accordingly. An extreme outlier was observed in the feature serum cholesterol at a value of 564. Mild outliers were also observed in features resting blood pressure, serum cholesterol, max heart rate, chest pain type, fasting blood sugar, old peak, and major vessels. Since there are only 270 observations, the extreme outlier datapoint will be removed before running the model.
 
 ```{r, message=FALSE}
 # Split dataframe into dataframe for box plots only
 data_gt_100=data
 data_lt_100=data
 
-# Boxplot age, serum cholesterol, resting blood pressure, and max heart rate
+# Box plot age, serum cholesterol, resting blood pressure, and max heart rate
 data_gt_100 = data %>% select(1,4,5,8)
 
 # Reshape sample data to long form
@@ -102,12 +91,12 @@ data_gt_100_melt <- melt(data_gt_100)
 # Add variable parameter for axis label in dataset
 levels(data_gt_100_melt$variable) <- c("aging","resting.blood.pressure","serum.cholesterol","max.heart.rate")
   
-# Draw boxplot
+# Draw box plot
 ggplot(data_gt_100_melt, aes(variable, value)) + 
 geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
-# Boxplot of all other variables
+# Box plot of all other variables
 data_lt_100 = data_lt_100 %>% select(2,3,6,7,9:14)
 
 # Reshape sample data to long form
@@ -116,11 +105,10 @@ data_lt_100_melt <- melt(data_lt_100)
 # Add variable parameter for axis label in dataset
 levels(data_lt_100_melt$variable) <- c("sex","chest.pain.type","fasting.blood.sugar","resting.electrocardiographic.results", "exercise.induced.angina","oldpeak","ST.segment","major.vessels", "thal", "heart.disease")
   
-# Draw boxplot
+# Draw box plot
 ggplot(data_lt_100_melt, aes(variable, value)) + 
 geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
-
 ```
 
 ### Removal of Extreme Outlier
@@ -133,7 +121,7 @@ data_gt_100 = data_gt_100[data$serum.cholestoral != "564", ]
 data1=data
 data1 = data1[data1$serum.cholestoral != "564", ]
 
-# Rerun boxplot after extreme outlier removed 
+# Rerun box plot after extreme outlier removed 
 
 # Reshape sample data to long form
 data_gt_100_melt <- melt(data_gt_100)
@@ -141,7 +129,7 @@ data_gt_100_melt <- melt(data_gt_100)
 # Add variable parameter for axis label in dataset
 levels(data_gt_100_melt$variable) <- c("aging","resting.blood.pressure","serum.cholesterol","max.heart.rate")
   
-# Draw boxplot
+# Draw box plot
 ggplot(data_gt_100_melt, aes(variable, value)) + 
 geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
@@ -149,7 +137,7 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 ### Data Transformation
 
-The extreme outlier for the feature serum cholesterol is removed from the dataset and validated in the boxplot.
+The extreme outlier for the feature serum cholesterol is removed from the dataset and validated in the box plot.
 
 ```{r, message=FALSE}
 data1$heart.disease<- as.factor(data1$heart.disease)

@@ -1,5 +1,5 @@
 ---
-title: "Random Forest Algorithm"
+title: "Random Forest"
 author: "Amy Brown, Jeff Eddy, Armani Harris"
 date: "July 28, 2023"
 format: revealjs
@@ -25,25 +25,25 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 
 ## Random Forest Tree Structure {style="font-size: 70%;"}
 
--   <b>Root Node:</b> Each tree starts with at a root node.
--   <b>Internal Nodes:</b> Each tree decision splits at the internal nodes using Gini Impurity or Permutation Importance for the feature importance.
--   <b>Leaf Node:</b> Each tree ends at the leaf node with the result stored as a categorical value for classification and numerical value regression.
--   <b>Final Result:</b> The final result is calculated by taking the majority vote for classification or the average for regression [@Abdulkareem2021].
+-   **Root Node:** Each tree starts with at a root node.
+-   **Internal Nodes:** Each tree decision splits at the internal nodes using Gini Impurity or Permutation Importance for the feature importance.
+-   **Leaf Node:** Each tree ends at the leaf node with the result stored as a categorical value for classification and numerical value regression.
+-   **Final Result:** The final result is calculated by taking the majority vote for classification or the average for regression [@Abdulkareem2021].
 
 ![[@Abdulkareem2021]](RF%20flowchart.png)
 
 ## Tree Decision Splits {style="font-size: 80%;"}
 
--   <b>Gini Impurity</b> is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average.
+-   **Gini Impurity** is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average.
 -   <b>Permutation Importance</b> is calculated by evaluating the decrease in accuracy when a feature is randomly shuffled over all trees in the forest [@Jaiswal2017].
 
 ## Steps for Random Forest Algorithm {style="font-size: 80%;"}
 
--   <b>Step 1:</b> Randomly select k features from a total of m features where k \< m.
--   <b>Step 2:</b> 3 features in step 1 using the best split point discussed in step 3.
--   <b>Step 3:</b> Each internal node is split into additional internal nodes using Gini Impurity or Permuation Importance.
--   <b>Step 4:</b> Repeat the previous steps 1 through 3 steps until 1 node is remaining.
--   <b>Step 5:</b> Continue to build the forest by repeating all previous steps for n number of times to create n number of trees [@Jaiswal2017].
+-   **Step 1:** Randomly select k features from a total of m features where k \< m.
+-   **Step 2:** 3 features in step 1 using the best split point discussed in step 3.
+-   **Step 3:** Each internal node is split into additional internal nodes using Gini Impurity or Permuation Importance.
+-   **Step 4:** Repeat the previous steps 1 through 3 steps until 1 node is remaining.
+-   **Step 5:** Continue to build the forest by repeating all previous steps for n number of times to create n number of trees [@Jaiswal2017].
 
 ## Dataset {style="font-size: 80%;"}
 
@@ -70,23 +70,31 @@ Random Forest algorithm is a supervised learning model consisting of multiple un
 -   number of major vessels (0-3) colored by flourosopy
 -   thal: 3 = normal; 6 = fixed defect; 7 = reversable defect [@Singh2023]
 
+## R Packages {style="font-size: 70%;"}
+
+-   **caret package**
+
+    -   Versatile package used for various classification and regression models.
+
+    -   Allows tuning of the model through parameters set in the package.
+
+        -   Parameter method set to rf for Random Forest algorithm.
+
+        -   Parameter trcontrol sets the sampling method for feature importance.
+
+        -   Parameter metric set to measure feature importance such as Accuracy and Gini Impurity [@Johnson2023].
+
+-   **dplyr package**
+
+    -   Required for filtering dataframes and to produce the box plots of the data fields.
+
+-   **reshape2 package**
+
+    -   Required to reshape the data to the correct format to build the box plots.
 
 ```{r, message=FALSE}
 library(caret)
-#library(boot)
-#library(tidymodels)
-#library(lindia)
-#library(car)
-#library(haven)
-#library(htmltools)
-#library(tidyverse)
 library(dplyr)
-#library(fastDummies)
-#library(nnet)
-#library(randomForest)
-#library(gridExtra)
-#library(AppliedPredictiveModeling)
-#library("ggplot2")
 library("reshape2")
 ```
 
@@ -94,7 +102,7 @@ library("reshape2")
 data<- read.csv('C:/Users/amybr/OneDrive/Desktop/dataset_heart.csv')
 ```
 
-## Visualization Boxplot #1 {style="font-size: 80%;"}
+## Visualization Box Plot #1 {style="font-size: 80%;"}
 
 An extreme outlier was observed at a value of 564 in the feature serum cholesterol. Mild outliers were identified in features resting blood pressure, serum cholesterol, and max heart rate.
 
@@ -103,7 +111,7 @@ An extreme outlier was observed at a value of 564 in the feature serum cholester
 data_gt_100=data
 data_lt_100=data
 
-# Boxplot age, serum cholesterol, resting blood pressure, and max heart rate
+# Box plot age, serum cholesterol, resting blood pressure, and max heart rate
 data_gt_100 = data %>% select(1,4,5,8)
 
 # Reshape sample data to long form
@@ -112,18 +120,18 @@ data_gt_100_melt <- melt(data_gt_100)
 # Add variable parameter for axis label in dataset
 levels(data_gt_100_melt$variable) <- c("aging","resting.blood.pressure","serum.cholesterol","max.heart.rate")
   
-# Draw boxplot
+# Draw box plot
 ggplot(data_gt_100_melt, aes(variable, value)) + 
 geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
-## Visualization Boxplot #2 {style="font-size: 80%;"}
+## Visualization Box Plot #2 {style="font-size: 80%;"}
 
 Mild outliers were identified in features chest pain type, fasting blood sugar, old peak, and major vessels.
 
 ```{r}
-# Boxplot of all other variables
+# Box plot of all other variables
 data_lt_100 = data_lt_100 %>% select(2,3,6,7,9:14)
 
 # Reshape sample data to long form
@@ -132,7 +140,7 @@ data_lt_100_melt <- melt(data_lt_100)
 # Add variable parameter for axis label in dataset
 levels(data_lt_100_melt$variable) <- c("sex","chest.pain.type","fasting.blood.sugar","resting.electrocardiographic.results", "exercise.induced.angina","oldpeak","ST.segment","major.vessels", "thal", "heart.disease")
   
-# Draw boxplot
+# Draw box plot
 ggplot(data_lt_100_melt, aes(variable, value)) + 
 geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
@@ -140,7 +148,7 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 ## Removal of Extreme Outlier {style="font-size: 80%;"}
 
-Since the dataset is small, only the extreme outlier was removed. Boxplot #1 was rerun to verify the extreme outlier of 564 was removed from feature serum cholesterol.
+Since the dataset is small, only the extreme outlier was removed. Box plot #1 was rerun to verify the extreme outlier of 564 was removed from feature serum cholesterol.
 
 ```{r, message=FALSE}
 # Remove extreme outlier
@@ -148,7 +156,7 @@ data_gt_100 = data_gt_100[data$serum.cholestoral != "564", ]
 data1=data
 data1 = data1[data1$serum.cholestoral != "564", ]
 
-# Rerun boxplot after extreme outlier removed 
+# Rerun box plot after extreme outlier removed 
 
 # Reshape sample data to long form
 data_gt_100_melt <- melt(data_gt_100)
@@ -156,7 +164,7 @@ data_gt_100_melt <- melt(data_gt_100)
 # Add variable parameter for axis label in dataset
 levels(data_gt_100_melt$variable) <- c("aging","resting.blood.pressure","serum.cholesterol","max.heart.rate")
   
-# Draw boxplot
+# Draw box plot
 ggplot(data_gt_100_melt, aes(variable, value)) + 
 geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
@@ -223,14 +231,13 @@ rf_default <- train(heart.disease~.,
 print(rf_default)
 ```
 
-##  Bootstrap: Default Training Model {style="font-size: 80%;"}
+## Bootstrap: Default Training Model {style="font-size: 80%;"}
 
 -   13 Predictor Features
 
 -   500 Decision Trees, 2 Features considered
 
 -   Accuracy = .08330
-
 
 ```{r, message=FALSE}
 set.seed(123)
@@ -240,19 +247,18 @@ fit_rf2 <- train(heart.disease~.,
     importance = TRUE)
 print(fit_rf2)
 ```
-## Bootstrap Versus K-fold Cross-Validation  {style="font-size: 80%;"}
 
--  Bootstrap randomly selects n number of observations
-with replacement
+## Bootstrap Versus K-fold Cross-Validation {style="font-size: 80%;"}
 
--  K-Fold Cross-validation creates subsets of the data
-then randomly shuffles the observations into the subset "folds"
+-   Bootstrap randomly selects n number of observations with replacement.
 
-- K-Fold trial was more accurate 0.8472 vs 0.8330
+-   K-Fold Cross-validation creates subsets of the data then randomly shuffles the observations into the subset "folds".
 
-##  K-Fold Cross-Validation: Tuning the Model {style="font-size: 50%;"}
+-   K-Fold trial was more accurate 0.8472 vs 0.8330.
 
-<b>Selecting the best possible number of features first</b>
+## K-Fold Cross-Validation: Tuning the Model {style="font-size: 50%;"}
+
+**Selecting the best possible number of features first**
 
 ```{r, message=FALSE}
 #Search best mtry
@@ -273,7 +279,7 @@ print(rf_default)
 best_mtry <- rf_mtry$bestTune$mtry 
 ```
 
-##  K-Fold Cross-Validation: Optimal Number of Nodes {style="font-size: 70%;"}
+## K-Fold Cross-Validation: Optimal Number of Nodes {style="font-size: 70%;"}
 
 ```{r, message=FALSE}
 # Search maxnodes - look for highest accuracy
@@ -299,7 +305,7 @@ results_mtry <- resamples(store_maxnode)
 summary(results_mtry, metric="Accuracy")
 ```
 
-##  K-Fold Cross-Validation: Ideal Number of Trees {style="font-size: 70%;"}
+## K-Fold Cross-Validation: Ideal Number of Trees {style="font-size: 70%;"}
 
 ```{r, message=FALSE}
 # Search best ntree
@@ -323,7 +329,7 @@ results_tree <- resamples(store_maxtrees)
 summary(results_tree, metric="Accuracy")
 ```
 
-##  K-Fold Cross-Validation: Training the Final Model {style="font-size: 70%;"}
+## K-Fold Cross-Validation: Training the Final Model {style="font-size: 70%;"}
 
 -   13 Predictor Features
 
@@ -354,6 +360,7 @@ fit_rf <- train(heart.disease~.,
     maxnodes = 8)
 print(fit_rf)
 ```
+
 ## Bootstrap: Training the Final Model {style="font-size: 70%;"}
 
 ```{r, message=FALSE}
@@ -369,6 +376,14 @@ fit_rf2 <- train(heart.disease~.,
     maxnodes = 8)
 print(fit_rf2)
 ```
+
+## Final Model Comparison {style="font-size: 80%;"}
+
+-   K-Fold Cross-Validation Accuracy = .8680
+
+-   Bootstrap Accuracy = .8367
+
+-   Predictive Modeling will use K-Fold Cross-Validation due to higher accuracy
 
 ## Predictive Modeling: Most Influential Features {style="font-size: 60%;"}
 
