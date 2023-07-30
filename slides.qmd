@@ -277,10 +277,9 @@ print(fit_rf2)
 
 -   K-Fold trial was more accurate 0.8472 vs 0.8330.
 
-## K-Fold Cross-Validation: Tuning the Model {style="font-size: 50%;"}
+## K-Fold Cross-Validation: Tuning the Model {style="font-size: 60%;"}
 
 **Selecting the best possible number of features first**
-
 ```{r, message=FALSE}
 #Search best mtry
 set.seed(123)
@@ -295,7 +294,6 @@ rf_mtry <- train(heart.disease~.,
     nodesize = 14,
     ntree = 300)
 print(rf_mtry)
-print(rf_default)
 
 best_mtry <- rf_mtry$bestTune$mtry 
 ```
