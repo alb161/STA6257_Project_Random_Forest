@@ -1,7 +1,7 @@
 ---
 title: "Random Forest"
 author: "Armani Harris, Amy Brown, Jeff Eddy"
-date: "July 30, 2023"
+date: "July 31, 2023"
 format: revealjs
 course: STA 6257 - Advance Statistical Modeling
 bibliography: references.bib # file contains bibtex for references
@@ -497,5 +497,7 @@ The Random Forest algorithm includes two feature sampling methods:
 The algorithm can be applied to both classification and regression tasks, with the prediction determined by the majority vote or average of the leaf nodes, respectively.
 
 The algorithm is more cost effective and more reliable in understanding of the data.
+
+## Questions?
 
 ## References {style="font-size: 60%;"}
