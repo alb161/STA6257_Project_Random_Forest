@@ -47,7 +47,7 @@ Abdulkareem, N. M., & Abdulazeez, A.[@Abdulkareem2021]
 
 -   **Root Node:** Each tree starts with at a root node.
 -   **Internal Nodes:** Each tree decision splits at the internal nodes using Gini Impurity or Permutation Importance for the feature importance.
--   **Leaf Node:** Each tree ends at the leaf node with the result stored as a categorical value for classification and numerical value regression.
+-   **Leaf Node:** Each tree ends at the leaf node with the result stored as a categorical value for classification or numerical value for regression.
 -   **Final Result:** The final result is calculated by taking the majority vote for classification or the average for regression [@Abdulkareem2021].
 
 ![[@Abdulkareem2021]](RF%20flowchart.png)
