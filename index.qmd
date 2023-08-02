@@ -1,7 +1,7 @@
 ---
 title: "Random Forest Algorithm"
 author: "Amy Brown, Jeff Eddy, Armani Harris"
-date: "July 28, 2023"
+date: "August 1, 2023"
 format:
   html:
     code-fold: true
@@ -22,19 +22,19 @@ Breiman [@Breiman2001] introduced the concept of Random Forests and highlighted 
 
 ## Methods
 
-Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. A decision tree starts at the tree root node and splits into internal nodes. The tree continues to grow as the data splits on the internal node. The tree ends with leaf node when the data splits have stopped. For the Random Forest algorithm, two feature sampling methods types were reviewed using the r caret package: k-fold cross-validation and bootstrapping. The k-fold cross-validation method creates subsets of the data and then randomly shuffles the observations into k subset folds where k is arbitrary set. The bootstrap method randomly selects n number of observations with replacement [@Abdulkareem2021].
+The Random Forest algorithm is a supervised learning model consisting of multiple uncorrelated un-pruned decision trees creating a forest. The algorithm can be used for classification or regression models. The target selected for the algorithm identifies if the algorithm will use a classification or regression model. The algorithm has the capability to sample features using various methods. Two feature sampling methods types were reviewed during the statistical modeling process using the r caret package: k-fold cross-validation and bootstrapping. The k-fold cross-validation method creates subsets of the data and then randomly shuffles the observations into k subset folds where k is arbitrary set. The bootstrap method randomly selects n number of observations with replacement [@Abdulkareem2021].
 
-The basic steps of the Random Forest algorithm are as follows:
+The data flow diagram of a Random Forest decision tree can be viewed in Figure 1. The Random Forest algorithm process starts by building multiple decision trees starting at the tree root node and splitting into an internal node by measuring the feature importance through Gini Impurity or Permuatation Importance. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. The Permutation Importance is calculated by evaluating the decrease in accuracy when a feature is randomly shuffled over all trees in the forest. Each decision tree continues to grow as the data splits on the internal node. The decision tree ends with the leaf node when there is one node remaining. The leaf node will predict a category if a classification model is identified, and a numerical value for a regression model. The prediction is determined by taking the majority vote of all leaf nodes for classification and an average of the leaf nodes for regression [@Abdulkareem2021].
+
+![Figure 1 [@Abdulkareem2021]](RF%20flowchart.png)
+
+There are five basic steps of the Random Forest algorithm. The steps are as follows:
 
 1.  Randomly select k features from a total of m features where k \< m.
 2.  Specify a node size d between the minimum and maximum node size for the k features in step 1 using the best split point discussed in step 3.
-3.  Each internal node is split into additional internal nodes using Gini Impurity or Permutation Importance. The Gini Impurity is calculated by summing the Gini decrease across every tree in the forest and divided by the number of trees in the forest to provide an average. The Permutation Importance is calculated by evaluating the decrease in accuracy when a feature is randomly shuffled over all trees in the forest.
+3.  Each internal node is split into additional internal nodes using Gini Impurity or Permutation Importance.
 4.  Repeat the previous steps 1 through 3 steps until 1 node is remaining.
 5.  Continue to build the forest by repeating steps 1 through 4 for n number of times to create n number of trees [@Jaiswal2017].
-
-The Random Forest algorithm can be used for classification or regression models. The target selected for the algorithm identifies if the algorithm will use a classification or regression model. The leaf node will predict a category if a classification model is identified and a numerical value for a regression model. The prediction is determined by taking the majority vote of all leaf nodes for classification and an average of the leaf nodes for regression. This Random Forest algorithm process is represented in the flowchart of Figure 1 [@Abdulkareem2021].
-
-![Figure 1 [@Abdulkareem2021]](RF%20flowchart.png)
 
 ## Analysis and Results
 
@@ -56,28 +56,32 @@ data<- read.csv('C:/Users/amybr/OneDrive/Desktop/dataset_heart.csv')
 
 ### Data and Visualization
 
-The Random Forest algorithm is reviewed using the Heart Disease Prediction dataset. There are 270 observations in the dataset without any missing values. The target is heart disease predicting the presence or absence of heart disease. The target and the other 13 features are listed as follows [@Singh2023]:
+The Random Forest algorithm is reviewed using the Heart Disease Prediction dataset found on Kaggle. There are 270 observations in the dataset without any missing values. The target is heart disease predicting the presence or absence of heart disease. The 14 variables with their values are listed in Table 1 [@Singh2023]:
 
-<a href="https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset">Link to Documentation for Heart Disease Prediction data</a>
+[Link to Documentation for Heart Disease Prediction Data](https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset)
 
-<b>Heart Disease Prediction Features and Target:</b>
+**Heart Disease Prediction Features and Target:**
 
-1.  age\
-2.  sex\
-3.  chest pain type (4 values)\
-4.  resting blood pressure\
-5.  serum cholestoral in mg/dl\
-6.  fasting blood sugar 120 mg/dl\
-7.  resting electrocardiographic results (values 0,1,2)\
-8.  maximum heart rate achieved\
-9.  exercise induced angina\
-10. oldpeak = ST depression induced by exercise relative to rest\
-11. the slope of the peak exercise ST segment\
-12. number of major vessels (0-3) colored by flourosopy\
-13. thal: 3 = normal; 6 = fixed defect; 7 = reversable defect\
-14. Target (Absence (1) or presence (2) of heart disease) [@Singh2023]\
+| No. | Data Variables                                                                          | Data Values                                         |
+|--------------|-----------------------------|------------------------------|
+| 1   | age                                                                                     | range: 29 -77                                       |
+| 2   | sex                                                                                     | 0, 1                                                |
+| 3   | chest pain type                                                                         | 1, 2, 3, 4                                          |
+| 4   | resting blood pressure                                                                  | range: 94-200                                       |
+| 5   | serum cholestoral in mg/dl                                                              | range: 126-564                                      |
+| 6   | fasting blood sugar 120 mg/dl                                                           | 0, 1                                                |
+| 7   | resting electrocardiographic results                                                    | 0, 1, 2                                             |
+| 8   | maximum heart rate achieved                                                             | range: 71-202                                       |
+| 9   | exercise induced angina                                                                 | 0, 1                                                |
+| 10  | oldpeak: ST depression (positions on the ECG plot) induced by exercise relative to rest | range: 0-6.2                                        |
+| 11  | slope of the peak exercise ST segment                                                   | 1, 2 , 3                                            |
+| 12  | number of major vessels colored by flouroscopy                                          | 0, 1, 2, 3                                          |
+| 13  | thal: genetic blood disorder                                                            | 3 = normal; 6 = fixed defect; 7 = reversible defect |
+| 14  | heart disease (target)                                                                  | 1 = absence; 2 = presence                           |
 
-To visualize the data, two box plots were created to scale the features accordingly. An extreme outlier was observed in the feature serum cholesterol at a value of 564. Mild outliers were also observed in features resting blood pressure, serum cholesterol, max heart rate, chest pain type, fasting blood sugar, old peak, and major vessels. Since there are only 270 observations, the extreme outlier datapoint will be removed before running the model.
+Table 1 [@Singh2023]\
+
+To visualize the data, two box plots were created to scale the features accordingly. The first box plot has a scale of up to 600 and shows an extreme outlier was observed in the feature serum cholesterol at a value of 564. The first box plot also shows mild outliers were observed in features resting blood pressure and max heart rate. The second box plot has a scale up to 7 and shows mild outliers for chest pain type, fasting blood sugar, old peak, and major vessels. Since there are only 270 observations, the extreme outlier data point will be removed before running the model.
 
 ```{r, message=FALSE}
 # Split dataframe into dataframe for box plots only
@@ -97,6 +101,7 @@ levels(data_gt_100_melt$variable) <- c("aging","resting.blood.pressure","serum.c
 ggplot(data_gt_100_melt, aes(variable, value)) + 
 geom_boxplot(width = .25)  +
 theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+  
 
 # Box plot of all other variables
 data_lt_100 = data_lt_100 %>% select(2,3,6,7,9:14)
@@ -115,7 +120,7 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 ### Removal of Extreme Outlier
 
-Setting the target variable to factor. The thal feature was recoded for clarity and set as a factor variable.
+The extreme outlier for the feature serum cholesterol is removed from the dataset and validated by rerunning the first box plot. The scale was reduced from 600 to 450 indicating the data point 564 was removed for feature serum cholesterol.
 
 ```{r, message=FALSE}
 # Remove extreme outlier
@@ -139,7 +144,7 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 ### Data Transformation
 
-The extreme outlier for the feature serum cholesterol is removed from the dataset and validated in the box plot.
+The target variable, heart disease, was set as a factor. The thal feature was transformed for clarity and set as a factor variable.
 
 ```{r, message=FALSE}
 data1$heart.disease<- as.factor(data1$heart.disease)
@@ -167,7 +172,7 @@ Nodesize: Minimum size of terminal nodes.
 
 Feature: A set of inputs.
 
-The testing dataset was then passed into the tuned algorithm to create a predictive model.
+The testing dataset was then passed into the final tuned algorithm to create a predictive model.
 
 ```{r, message=FALSE}
 set.seed(123)
@@ -321,7 +326,7 @@ print(fit_rf2)
 prediction <-predict(fit_rf, test)
 ```
 
-Results from the predictive test model indicated that the feature major.vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 60.00. These features were major vessels, thal normal, old peak, chest pain type, max heart rate, and thal reversible defect.
+The final training model was run against the test data.  The results from the predictive test model indicated that the feature major vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 60.00. These features were major vessels, thal normal, old peak, chest pain type, max heart rate, and thal reversible defect.
 
 ```{r, message=FALSE}
 varImp(fit_rf)
@@ -330,7 +335,7 @@ ggplot(rfImp, aes(x = importance(), y = value)) +
   geom_bar(stat = "identity", linewidth = 0.5,fill="blue")
 ```
 
-Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p\< 0.001). Sensitivity and specificity were calculated at 0.909 and 0.722 respectively.
+A confusion matrix was ran for the predictive model. Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p\< 0.001). Sensitivity and specificity were calculated at 0.909 and 0.722 respectively.
 
 ```{r, message=FALSE}
 cm <- confusionMatrix(prediction, test$heart.disease)
@@ -383,7 +388,7 @@ draw_confusion_matrix <- function(cm) {
 draw_confusion_matrix(cm)
 ```
 
-The model has an estimated false positive rate of 28.57%. False positive rate is calculated by the number of false positives divided by the sum of false positives and true negatives. FPR= FP/(FP + TN).
+The predictive model has an estimated false positive rate of 28.57%. False positive rate is calculated by the number of false positives divided by the sum of false positives and true negatives. FPR= FP/(FP + TN).
 
 ```{r, message=FALSE}
 4/(4+10)
