@@ -144,7 +144,7 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 ### Data Transformation
 
-The target variable, heart disease, was set as a factor. The thal feature was transformed for clarity and set as a factor variable.
+A couple of data transformations were made on two variables before training the model. One transformation included setting the target variable, heart disease, as a factor variable. The other transformation included transforming the thal feature for clarity and setting it as a factor variable.
 
 ```{r, message=FALSE}
 data1$heart.disease<- as.factor(data1$heart.disease)
