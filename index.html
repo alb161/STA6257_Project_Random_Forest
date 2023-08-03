@@ -166,7 +166,7 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="analysis-and-results">Analysis and Results</h2>
 <section id="packages" class="level3">
 <h3 class="anchored" data-anchor-id="packages">Packages</h3>
-<p>The R packages utilized for running the Random Forest algorithm in R were the caret, dplyr and reshape2 packages. The caret package is versatile package used for various classification and regression models. The caret package allows tuning of the model through parameters set in the model. The method used for the Random Forest algorithm is rf. The parameters can be specified through the trcontrol parameter. The trcontrol parameters reviewed were k-fold cross-validation and bootstrap. The metric parameter specifies how the feature importance is measured such as Accuracy and Gini Impurity <span class="citation" data-cites="Johnson2023">(<a href="#ref-Johnson2023" role="doc-biblioref">Johnson 2023</a>)</span>. The dplyr package is used to filter the dataframes and to produce the box plots of the features. The reshape2 package reshapes the data to the correct format to build the box plots.</p>
+<p>The R packages utilized for running the Random Forest algorithm in R were the caret, dplyr and reshape2 packages. The caret package is versatile package used for various classification and regression models. The caret package allows tuning of the model through parameters set in the model. The method used for the Random Forest algorithm is rf. The sampling method can be specified through the trcontrol parameter. The trcontrol parameters reviewed were k-fold cross-validation and bootstrap. The metric parameter specifies how the feature importance is measured such as Accuracy and Gini Impurity <span class="citation" data-cites="Johnson2023">(<a href="#ref-Johnson2023" role="doc-biblioref">Johnson 2023</a>)</span>. The dplyr package is used to filter the dataframes and to produce the box plots of the features. The reshape2 package reshapes the data to the correct format to build the box plots.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -192,9 +192,9 @@ div.csl-indent {
 <p><strong>Heart Disease Prediction Features and Target:</strong></p>
 <table class="table">
 <colgroup>
-<col style="width: 19%">
-<col style="width: 39%">
-<col style="width: 41%">
+<col style="width: 23%">
+<col style="width: 37%">
+<col style="width: 38%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -396,17 +396,15 @@ div.csl-indent {
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the control</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>trControl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">number =</span> <span class="dv">10</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">search =</span> <span class="st">"grid"</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#model with default values</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>rf_default <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>trControl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>, <span class="at">search =</span> <span class="st">"grid"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#model with default values</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>rf_default <span class="ot">&lt;-</span> <span class="fu">train</span>(heart.disease<span class="sc">~</span>.,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> train,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="st">"Accuracy"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rf_default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Forest 

@@ -38,16 +38,16 @@ There are five basic steps of the Random Forest algorithm. The steps are as foll
 
 Once the final model is created from the training data of the Random Forest algorithm, predictions can be made based on the following steps:
 
-1. Run the test data through the final model to predict the outcome.
-2. The predicted target outcome for each decision tree is stored from the results in step 1.
-3. The votes are determined for each of the predicted targets.
-4. The final prediction is provided by the most highly voted predicted target [@Abdulkareem2021].
+1.  Run the test data through the final model to predict the outcome.
+2.  The predicted target outcome for each decision tree is stored from the results in step 1.
+3.  The votes are determined for each of the predicted targets.
+4.  The final prediction is provided by the most highly voted predicted target [@Abdulkareem2021].
 
 ## Analysis and Results
 
 ### Packages
 
-The R packages utilized for running the Random Forest algorithm in R were the caret, dplyr and reshape2 packages. The caret package is versatile package used for various classification and regression models. The caret package allows tuning of the model through parameters set in the model. The method used for the Random Forest algorithm is rf. The parameters can be specified through the trcontrol parameter. The trcontrol parameters reviewed were k-fold cross-validation and bootstrap. The metric parameter specifies how the feature importance is measured such as Accuracy and Gini Impurity [@Johnson2023]. The dplyr package is used to filter the dataframes and to produce the box plots of the features. The reshape2 package reshapes the data to the correct format to build the box plots.
+The R packages utilized for running the Random Forest algorithm in R were the caret, dplyr and reshape2 packages. The caret package is versatile package used for various classification and regression models. The caret package allows tuning of the model through parameters set in the model. The method used for the Random Forest algorithm is rf. The sampling method can be specified through the trcontrol parameter. The trcontrol parameters reviewed were k-fold cross-validation and bootstrap. The metric parameter specifies how the feature importance is measured such as Accuracy and Gini Impurity [@Johnson2023]. The dplyr package is used to filter the dataframes and to produce the box plots of the features. The reshape2 package reshapes the data to the correct format to build the box plots.
 
 ```{r, message=FALSE}
 library(caret)
@@ -70,7 +70,7 @@ The Random Forest algorithm is reviewed using the Heart Disease Prediction datas
 **Heart Disease Prediction Features and Target:**
 
 | No. | Data Variables                                                                          | Data Values                                         |
-|--------------|-----------------------------|------------------------------|
+|-----------------|---------------------------|----------------------------|
 | 1   | age                                                                                     | range: 29 -77                                       |
 | 2   | sex                                                                                     | 0, 1                                                |
 | 3   | chest pain type                                                                         | 1, 2, 3, 4                                          |
@@ -195,9 +195,7 @@ A default training model using k-fold cross-validation sampling method based on 
 ```{r, message=FALSE}
 set.seed(123)
 # Define the control
-trControl <- trainControl(method = "cv",
-    number = 10,
-    search = "grid")
+trControl <- trainControl(method = "cv", number = 10, search = "grid")
 #model with default values
 rf_default <- train(heart.disease~.,
     data = train,
@@ -333,7 +331,7 @@ print(fit_rf2)
 prediction <-predict(fit_rf, test)
 ```
 
-The final training model was run against the test data.  The results from the predictive test model indicated that the feature major vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 60.00. These features were major vessels, thal normal, old peak, chest pain type, max heart rate, and thal reversible defect.
+The final training model was run against the test data. The results from the predictive test model indicated that the feature major vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 60.00. These features were major vessels, thal normal, old peak, chest pain type, max heart rate, and thal reversible defect.
 
 ```{r, message=FALSE}
 varImp(fit_rf)
