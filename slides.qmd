@@ -41,7 +41,7 @@ Abdulkareem, N. M., & Abdulazeez, A.[@Abdulkareem2021]
 -   The algorithm consists of multiple uncorrelated un-pruned decision trees creating a forest.
 -   The algorithm is a supervised learning model.
 -   The algorithm can be used for both classification or regression models.
--   Two feature sampling methods reviewed: k-fold cross-validation and bootstrap.
+-   Two sampling methods reviewed: k-fold cross-validation and bootstrap.
 
 ## Random Forest Decision Tree Structure {style="font-size: 70%;"}
 
@@ -102,7 +102,7 @@ Abdulkareem, N. M., & Abdulazeez, A.[@Abdulkareem2021]
 
         -   Parameter method set to rf for Random Forest algorithm.
 
-        -   Parameter trcontrol sets the sampling method for feature importance.
+        -   Parameter trcontrol sets the sampling method for the dataset.
 
         -   Parameter metric set to measure feature importance such as Accuracy and Gini Impurity [@Johnson2023].
 
