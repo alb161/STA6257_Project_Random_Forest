@@ -50,7 +50,7 @@ Abdulkareem, N. M., & Abdulazeez, A.[@Abdulkareem2021]
 -   **Leaf Node:** Each tree ends at the leaf node with the result stored as a categorical value for classification or numerical value for regression.
 -   **Final Result:** The final result is calculated by taking the majority vote for classification or the average for regression [@Abdulkareem2021].
 
-![Figure 1 [@Abdulkareem2021]](RF%20flowchart.png)
+![Figure 1 [@Abdulkareem2021]](RF_flowchart.png)
 
 ## Tree Decision Splits {style="font-size: 80%;"}
 
