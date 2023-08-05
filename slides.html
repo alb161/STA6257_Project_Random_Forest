@@ -495,13 +495,8 @@ https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset</li>
 <section id="data-transformation" class="slide level2" style="font-size: 80%;">
 <h2>Data Transformation</h2>
 <ul>
-<li><p>Features Heart Disease and Thal were set to a factor variable</p></li>
-<li><p>Feature Thal was transformed as follows:</p>
-<ul>
-<li><p>Value 3 to normal</p></li>
-<li><p>Value 6 to fixed defect</p></li>
-<li><p>Value 7 to reversible defect</p></li>
-</ul></li>
+<li>Random forest classification model requires a dependent factor variable.</li>
+<li>Target variable heart disease was transformed to a factor variable.</li>
 </ul>
 </section>
 <section id="model-training" class="slide level2" style="font-size: 80%;">
@@ -518,7 +513,7 @@ https://www.kaggle.com/datasets/utkarshx27/heart-disease-diagnosis-dataset</li>
 <ul>
 <li><p>13 Predictor Features</p></li>
 <li><p>500 Decision Trees, 2 Features considered</p></li>
-<li><p>Accuracy = 0.8472</p></li>
+<li><p>Accuracy = 0.8358</p></li>
 </ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -534,9 +529,9 @@ Summary of sample sizes: 169, 170, 170, 171, 169, 171, ...
 Resampling results across tuning parameters:
 
   mtry  Accuracy   Kappa    
-   2    0.8471930  0.6869781
-   8    0.8311111  0.6550283
-  14    0.8258480  0.6427563
+   2    0.8357895  0.6638724
+   7    0.8311404  0.6531982
+  13    0.8264035  0.6444556
 
 Accuracy was used to select the optimal model using the largest value.
 The final value used for the model was mtry = 2.</code></pre>
@@ -548,7 +543,7 @@ The final value used for the model was mtry = 2.</code></pre>
 <ul>
 <li><p>13 Predictor Features</p></li>
 <li><p>500 Decision Trees, 2 Features considered</p></li>
-<li><p>Accuracy = .08330</p></li>
+<li><p>Accuracy = .8322</p></li>
 </ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -564,9 +559,9 @@ Summary of sample sizes: 189, 189, 189, 189, 189, 189, ...
 Resampling results across tuning parameters:
 
   mtry  Accuracy   Kappa    
-   2    0.8330381  0.6595505
-   8    0.8236219  0.6407188
-  14    0.8097574  0.6129731
+   2    0.8321817  0.6571619
+   7    0.8229013  0.6393790
+  13    0.8117677  0.6172537
 
 Accuracy was used to select the optimal model using the largest value.
 The final value used for the model was mtry = 2.</code></pre>
@@ -578,7 +573,7 @@ The final value used for the model was mtry = 2.</code></pre>
 <ul>
 <li><p>Bootstrap randomly selects n number of observations with replacement.</p></li>
 <li><p>K-Fold Cross-validation creates subsets of the data then randomly shuffles the observations into the subset “folds”.</p></li>
-<li><p>K-Fold trial was more accurate 0.8472 vs 0.8330.</p></li>
+<li><p>K-Fold trial was more accurate 0.8358 vs 0.8322.</p></li>
 </ul>
 </section>
 <section id="k-fold-cross-validation-tuning-the-model" class="slide level2" style="font-size: 60%;">
@@ -598,16 +593,16 @@ Summary of sample sizes: 169, 170, 170, 171, 169, 171, ...
 Resampling results across tuning parameters:
 
   mtry  Accuracy   Kappa    
-   1    0.8521637  0.6957755
-   2    0.8574561  0.7059519
-   3    0.8416374  0.6747361
-   4    0.8416667  0.6744959
-   5    0.8150292  0.6211198
-   6    0.8258480  0.6437005
-   7    0.8311111  0.6536152
-   8    0.8202924  0.6328778
-   9    0.8311111  0.6547690
-  10    0.8103216  0.6146161
+   1    0.8308187  0.6497031
+   2    0.8521637  0.6938909
+   3    0.8407895  0.6711918
+   4    0.8410819  0.6746692
+   5    0.8305556  0.6515543
+   6    0.8311404  0.6546218
+   7    0.8261404  0.6452077
+   8    0.8150292  0.6223296
+   9    0.8150292  0.6232846
+  10    0.8047953  0.6038736
 
 Accuracy was used to select the optimal model using the largest value.
 The final value used for the model was mtry = 2.</code></pre>
@@ -627,17 +622,17 @@ Number of resamples: 10
 
 Accuracy 
         Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
-5  0.6842105 0.8333333 0.8500000 0.8524561 0.8947368    1    0
-6  0.7368421 0.8333333 0.8500000 0.8577193 0.8947368    1    0
-7  0.6842105 0.8375000 0.8694444 0.8527485 0.8947368    1    0
-8  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-9  0.6842105 0.8375000 0.8694444 0.8580117 0.8947368    1    0
-10 0.7368421 0.8333333 0.8723684 0.8627193 0.8986842    1    0
-11 0.6842105 0.8333333 0.8500000 0.8471930 0.8947368    1    0
-12 0.7368421 0.7833333 0.8377193 0.8416374 0.8855263    1    0
-13 0.6842105 0.8083333 0.8460526 0.8477485 0.8932749    1    0
-14 0.6842105 0.8333333 0.8723684 0.8574561 0.8986842    1    0
-15 0.6842105 0.8375000 0.8918129 0.8630117 0.8986842    1    0</code></pre>
+5  0.6842105 0.8355263 0.8947368 0.8674269 0.9000000    1    0
+6  0.6842105 0.8355263 0.8947368 0.8674269 0.9000000    1    0
+7  0.6842105 0.7807018 0.8210526 0.8360819 0.8947368    1    0
+8  0.7368421 0.8355263 0.8460526 0.8624269 0.8986842    1    0
+9  0.6842105 0.8355263 0.8460526 0.8519006 0.8947368    1    0
+10 0.6842105 0.7921053 0.8377193 0.8363743 0.8815789    1    0
+11 0.7368421 0.7938596 0.8421053 0.8463450 0.8835526    1    0
+12 0.6842105 0.7833333 0.8421053 0.8413450 0.8855263    1    0
+13 0.6842105 0.8355263 0.8421053 0.8521930 0.8835526    1    0
+14 0.6842105 0.8083333 0.8421053 0.8521637 0.8986842    1    0
+15 0.6842105 0.8355263 0.8421053 0.8569006 0.9000000    1    0</code></pre>
 </div>
 </div>
 </section>
@@ -653,32 +648,33 @@ Models: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
 Number of resamples: 10 
 
 Accuracy 
-          Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
-100  0.6842105 0.7958333 0.8918129 0.8574561 0.8986842    1    0
-200  0.6842105 0.8472222 0.8947368 0.8680117 0.9000000    1    0
-300  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-400  0.6842105 0.8472222 0.8947368 0.8627485 0.9000000    1    0
-500  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-600  0.6842105 0.8333333 0.8723684 0.8521930 0.8986842    1    0
-700  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-800  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-900  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-1000 0.6842105 0.8333333 0.8723684 0.8521930 0.8986842    1    0</code></pre>
+          Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's
+100  0.7368421 0.7777778 0.8947368 0.8457895 0.8986842 0.9444444    0
+200  0.7368421 0.7807018 0.8947368 0.8618713 0.9000000 1.0000000    0
+300  0.6842105 0.8355263 0.8947368 0.8674269 0.9000000 1.0000000    0
+400  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+500  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+600  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+700  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+800  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+900  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+1000 0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0</code></pre>
 </div>
 </div>
 </section>
-<section id="k-fold-cross-validation-training-the-final-model" class="slide level2" style="font-size: 70%;">
+<section id="k-fold-cross-validation-training-the-final-model" class="slide level2" style="font-size: 65%;">
 <h2>K-Fold Cross-Validation: Training the Final Model</h2>
 <ul>
 <li><p>13 Predictor Features</p></li>
 <li><p>500 Decision Trees, 2 Features considered</p></li>
-<li><p>Default Training Model Accuracy = 0.8472</p></li>
+<li><p>Default Training Model Accuracy = 0.8358</p></li>
 </ul>
-<p>Model uses:</p>
+<p>Tuned Model uses:</p>
 <ul>
-<li><p>200 Trees</p></li>
-<li><p>8 nodes</p></li>
+<li><p>300 Trees</p></li>
+<li><p>6 nodes</p></li>
 <li><p>2 Features</p></li>
+<li><p>Accuracy = .8674</p></li>
 </ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -694,7 +690,7 @@ Summary of sample sizes: 169, 170, 170, 171, 169, 171, ...
 Resampling results:
 
   Accuracy   Kappa    
-  0.8680117  0.7263713
+  0.8674269  0.7242847
 
 Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </div>
@@ -716,7 +712,7 @@ Summary of sample sizes: 189, 189, 189, 189, 189, 189, ...
 Resampling results:
 
   Accuracy   Kappa    
-  0.8367264  0.6650343
+  0.8344737  0.6605306
 
 Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </div>
@@ -725,18 +721,18 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 <section id="final-model-comparison" class="slide level2" style="font-size: 80%;">
 <h2>Final Model Comparison</h2>
 <ul>
-<li><p>K-Fold Cross-Validation Accuracy = .8680</p></li>
-<li><p>Bootstrap Accuracy = .8367</p></li>
+<li><p>K-Fold Cross-Validation Accuracy = .8674</p></li>
+<li><p>Bootstrap Accuracy = .8344</p></li>
 <li><p>Predictive Modeling will use K-Fold Cross-Validation due to higher accuracy</p></li>
 </ul>
 </section>
-<section id="predictive-modeling-most-influential-features" class="slide level2" style="font-size: 60%;">
+<section id="predictive-modeling-most-influential-features" class="slide level2" style="font-size: 55%;">
 <h2>Predictive Modeling: Most Influential Features</h2>
 <ul>
 <li><p>Major Vessels</p></li>
-<li><p>Type of Chest Pain</p></li>
-<li><p>Reversible Thal Defect</p></li>
-<li><p>Normal Thal</p></li>
+<li><p>Thal</p></li>
+<li><p>Chest Pain Type</p></li>
+<li><p>Old Peak</p></li>
 <li><p>Maximum Heart Rate</p></li>
 </ul>
 
@@ -744,9 +740,9 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 <section id="predictive-model-accuracy" class="slide level2" style="font-size: 70%;">
 <h2>Predictive Model Accuracy</h2>
 <ul>
-<li><p>82.5% (0.825, CI: 0.7238, 0.9009, p&lt; 0.001)</p></li>
-<li><p>Sensitivity and specificity were calculated at 0.909 and 0.722 respectively</p></li>
-<li><p>Estimated false positive rate of 28.57%</p></li>
+<li><p>83.8% (0.8375, CI: 0.7382, 0.9105, p&lt; 0.001)</p></li>
+<li><p>Sensitivity and specificity were calculated at 0.909 and 0.75 respectively</p></li>
+<li><p>Estimated false positive rate of 30.77%</p></li>
 </ul>
 
 <img data-src="slides_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>

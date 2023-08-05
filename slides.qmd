@@ -194,22 +194,11 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 ## Data Transformation {style="font-size: 80%;"}
 
--   Features Heart Disease and Thal were set to a factor variable
-
--   Feature Thal was transformed as follows:
-
-    -   Value 3 to normal
-
-    -   Value 6 to fixed defect
-
-    -   Value 7 to reversible defect
+-   Random forest classification model requires a dependent factor variable.
+-   Target variable heart disease was transformed to a factor variable.
 
 ```{r, message=FALSE}
 data1$heart.disease<- as.factor(data1$heart.disease)
-data1$thal[data1$thal== 3]<-"normal"
-data1$thal[data1$thal== 6]<-"fixed defect"
-data1$thal[data1$thal== 7]<-"reversible defect"
-data1$thal<- as.factor(data1$thal)
 ```
 
 ## Model Training {style="font-size: 80%;"}
@@ -235,7 +224,7 @@ test <- data1[-split, ]
 
 -   500 Decision Trees, 2 Features considered
 
--   Accuracy = 0.8472
+-   Accuracy = 0.8358
 
 ```{r, message=FALSE}
 set.seed(123)
@@ -259,7 +248,7 @@ print(rf_default)
 
 -   500 Decision Trees, 2 Features considered
 
--   Accuracy = .08330
+-   Accuracy = .8322
 
 ```{r, message=FALSE}
 set.seed(123)
@@ -276,7 +265,7 @@ print(fit_rf2)
 
 -   K-Fold Cross-validation creates subsets of the data then randomly shuffles the observations into the subset "folds".
 
--   K-Fold trial was more accurate 0.8472 vs 0.8330.
+-   K-Fold trial was more accurate 0.8358 vs 0.8322.
 
 ## K-Fold Cross-Validation: Tuning the Model {style="font-size: 60%;"}
 
@@ -340,7 +329,7 @@ for (ntree in c(100, 200, 300, 400, 500, 600, 700, 800, 900, 1000)) {
         trControl = trControl,
         importance = TRUE,
         nodesize = 14,
-        maxnodes = 8,
+        maxnodes = 6,
         ntree = ntree)
     key <- toString(ntree)
     store_maxtrees[[key]] <- rf_maxtrees
@@ -349,21 +338,23 @@ results_tree <- resamples(store_maxtrees)
 summary(results_tree, metric="Accuracy")
 ```
 
-## K-Fold Cross-Validation: Training the Final Model {style="font-size: 70%;"}
+## K-Fold Cross-Validation: Training the Final Model {style="font-size: 65%;"}
 
 -   13 Predictor Features
 
 -   500 Decision Trees, 2 Features considered
 
--   Default Training Model Accuracy = 0.8472
+-   Default Training Model Accuracy = 0.8358
 
-Model uses:
+Tuned Model uses:
 
--   200 Trees
+-   300 Trees
 
--   8 nodes
+-   6 nodes
 
 -   2 Features
+
+-   Accuracy = .8674
 
 ```{r, message=FALSE}
 # Train final model
@@ -376,8 +367,8 @@ fit_rf <- train(heart.disease~.,
     trControl = trControl,
     importance = TRUE,
     nodesize = 14,
-    ntree = 200,
-    maxnodes = 8)
+    ntree = 300,
+    maxnodes = 6)
 print(fit_rf)
 ```
 
@@ -392,31 +383,30 @@ fit_rf2 <- train(heart.disease~.,
     tuneGrid = tuneGrid,
     importance = TRUE,
     nodesize = 14,
-    ntree = 200,
-    maxnodes = 8)
+    ntree = 300,
+    maxnodes = 6)
 print(fit_rf2)
 ```
 
 ## Final Model Comparison {style="font-size: 80%;"}
 
--   K-Fold Cross-Validation Accuracy = .8680
+-   K-Fold Cross-Validation Accuracy = .8674
 
--   Bootstrap Accuracy = .8367
+-   Bootstrap Accuracy = .8344
 
 -   Predictive Modeling will use K-Fold Cross-Validation due to higher accuracy
 
-## Predictive Modeling: Most Influential Features {style="font-size: 60%;"}
+## Predictive Modeling: Most Influential Features {style="font-size: 55%;"}
 
 -   Major Vessels
 
--   Type of Chest Pain
+-   Thal
 
--   Reversible Thal Defect
+-   Chest Pain Type
 
--   Normal Thal
+-   Old Peak
 
 -   Maximum Heart Rate
-
 ```{r, message=FALSE}
 # Evaluate model
 prediction <-predict(fit_rf, test)
@@ -429,11 +419,11 @@ ggplot(rfImp, aes(x = importance(), y = value)) +
 
 ## Predictive Model Accuracy {style="font-size: 70%;"}
 
--   82.5% (0.825, CI: 0.7238, 0.9009, p\< 0.001)
+-   83.8% (0.8375, CI: 0.7382, 0.9105, p\< 0.001)
 
--   Sensitivity and specificity were calculated at 0.909 and 0.722 respectively
+-   Sensitivity and specificity were calculated at 0.909 and 0.75 respectively
 
--   Estimated false positive rate of 28.57%
+-   Estimated false positive rate of 30.77%
 
 ```{r, message=FALSE}
 cm <- confusionMatrix(prediction, test$heart.disease)
