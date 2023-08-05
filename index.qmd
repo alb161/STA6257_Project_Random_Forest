@@ -151,7 +151,7 @@ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 ### Data Transformation
 
-One transformation was made setting the target variable, heart disease, as a factor variable.
+In order to run a classification model of the random forest algorithm with heart disease as a target, the heart disease variable was transformed to a factor variable. The random forest classification model requires a dependent factor variable.
 
 ```{r}
 data1$heart.disease<- as.factor(data1$heart.disease)
@@ -335,11 +335,15 @@ ggplot(rfImp, aes(x = importance(), y = value)) +
   geom_bar(stat = "identity", linewidth = 0.5,fill="blue")
 ```
 
-A confusion matrix was ran for the predictive model. Accuracy for the predictive model was calculated to be 83.8% (0.835, CI: 0.7238, 0.9009, p\< 0.001). Sensitivity and specificity were calculated at 0.909 and 0.75 respectively.
+A confusion matrix was ran for the predictive model. Accuracy for the predictive model was calculated to be 83.8% (0.8375, CI: 0.7382, 0.9105, p\< 0.001). Sensitivity and specificity were calculated at 0.909 and 0.75 respectively.
 
 ```{r, message=FALSE}
 cm <- confusionMatrix(prediction, test$heart.disease)
+cm
+```
 
+
+```{r, message=FALSE}
 draw_confusion_matrix <- function(cm) {
   layout(matrix(c(1,1,2)))
   par(mar=c(2,2,2,2))
