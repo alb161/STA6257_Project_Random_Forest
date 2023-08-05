@@ -355,15 +355,11 @@ div.csl-indent {
 </section>
 <section id="data-transformation" class="level3">
 <h3 class="anchored" data-anchor-id="data-transformation">Data Transformation</h3>
-<p>A couple of data transformations were made on two variables before training the model. One transformation included setting the target variable, heart disease, as a factor variable. The other transformation included transforming the thal feature for clarity and setting it as a factor variable.</p>
+<p>One transformation was made setting the target variable, heart disease, as a factor variable.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>heart.disease<span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data1<span class="sc">$</span>heart.disease)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">3</span>]<span class="ot">&lt;-</span><span class="st">"normal"</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">6</span>]<span class="ot">&lt;-</span><span class="st">"fixed defect"</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal[data1<span class="sc">$</span>thal<span class="sc">==</span> <span class="dv">7</span>]<span class="ot">&lt;-</span><span class="st">"reversible defect"</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>thal<span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data1<span class="sc">$</span>thal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data1<span class="sc">$</span>heart.disease<span class="ot">&lt;-</span> <span class="fu">as.factor</span>(data1<span class="sc">$</span>heart.disease)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -390,7 +386,7 @@ div.csl-indent {
 </div>
 <section id="k-fold-cross-validation-sampling-method" class="level5">
 <h5 class="anchored" data-anchor-id="k-fold-cross-validation-sampling-method">K-Fold Cross-Validation Sampling Method</h5>
-<p>A default training model using k-fold cross-validation sampling method based on classification was created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8472.</p>
+<p>A default training model using k-fold cross-validation sampling method based on classification was created to establish a baseline accuracy. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by permutation importance by removing the association between the feature and target. Accuracy of the default model was 0.8358.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -419,15 +415,15 @@ Summary of sample sizes: 169, 170, 170, 171, 169, 171, ...
 Resampling results across tuning parameters:
 
   mtry  Accuracy   Kappa    
-   2    0.8471930  0.6869781
-   8    0.8311111  0.6550283
-  14    0.8258480  0.6427563
+   2    0.8357895  0.6638724
+   7    0.8311404  0.6531982
+  13    0.8264035  0.6444556
 
 Accuracy was used to select the optimal model using the largest value.
 The final value used for the model was mtry = 2.</code></pre>
 </div>
 </div>
-<p>The training model was assessed for the best possible number of decision trees, nodes, and number of features to consider at each node. After performing the following procedures, the greatest accuracy was determined to be 200 trees with a node size of 14, max nodes of 8, and 2 features considered at each node. The first tuning parameter evaluated was the number of features the model could consider at each node in a tree.</p>
+<p>The training model was assessed for the best possible number of decision trees, nodes, and number of features to consider at each node. After performing the following procedures, the greatest accuracy was determined to be 300 trees with a node size of 14, max nodes of 6, and 2 features considered at each node. The first tuning parameter evaluated was the number of features the model could consider at each node in a tree. The parameter mtry has the highest accuracy at mtry = 2 with a value of .8522. The mtry value is the same as the default model.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -458,16 +454,16 @@ Summary of sample sizes: 169, 170, 170, 171, 169, 171, ...
 Resampling results across tuning parameters:
 
   mtry  Accuracy   Kappa    
-   1    0.8521637  0.6957755
-   2    0.8574561  0.7059519
-   3    0.8416374  0.6747361
-   4    0.8416667  0.6744959
-   5    0.8150292  0.6211198
-   6    0.8258480  0.6437005
-   7    0.8311111  0.6536152
-   8    0.8202924  0.6328778
-   9    0.8311111  0.6547690
-  10    0.8103216  0.6146161
+   1    0.8308187  0.6497031
+   2    0.8521637  0.6938909
+   3    0.8407895  0.6711918
+   4    0.8410819  0.6746692
+   5    0.8305556  0.6515543
+   6    0.8311404  0.6546218
+   7    0.8261404  0.6452077
+   8    0.8150292  0.6223296
+   9    0.8150292  0.6232846
+  10    0.8047953  0.6038736
 
 Accuracy was used to select the optimal model using the largest value.
 The final value used for the model was mtry = 2.</code></pre>
@@ -477,7 +473,7 @@ The final value used for the model was mtry = 2.</code></pre>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>best_mtry <span class="ot">&lt;-</span> rf_mtry<span class="sc">$</span>bestTune<span class="sc">$</span>mtry </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The subsequent procedure evaluates the optimal number of max nodes for the model.</p>
+<p>The subsequent procedure evaluates the optimal number of max nodes for the model. The maxnodes = 6 has the highest accuracy of max nodes ran between 5 and 15.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -514,20 +510,20 @@ Number of resamples: 10
 
 Accuracy 
         Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
-5  0.6842105 0.8333333 0.8500000 0.8524561 0.8947368    1    0
-6  0.7368421 0.8333333 0.8500000 0.8577193 0.8947368    1    0
-7  0.6842105 0.8375000 0.8694444 0.8527485 0.8947368    1    0
-8  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-9  0.6842105 0.8375000 0.8694444 0.8580117 0.8947368    1    0
-10 0.7368421 0.8333333 0.8723684 0.8627193 0.8986842    1    0
-11 0.6842105 0.8333333 0.8500000 0.8471930 0.8947368    1    0
-12 0.7368421 0.7833333 0.8377193 0.8416374 0.8855263    1    0
-13 0.6842105 0.8083333 0.8460526 0.8477485 0.8932749    1    0
-14 0.6842105 0.8333333 0.8723684 0.8574561 0.8986842    1    0
-15 0.6842105 0.8375000 0.8918129 0.8630117 0.8986842    1    0</code></pre>
+5  0.6842105 0.8355263 0.8947368 0.8674269 0.9000000    1    0
+6  0.6842105 0.8355263 0.8947368 0.8674269 0.9000000    1    0
+7  0.6842105 0.7807018 0.8210526 0.8360819 0.8947368    1    0
+8  0.7368421 0.8355263 0.8460526 0.8624269 0.8986842    1    0
+9  0.6842105 0.8355263 0.8460526 0.8519006 0.8947368    1    0
+10 0.6842105 0.7921053 0.8377193 0.8363743 0.8815789    1    0
+11 0.7368421 0.7938596 0.8421053 0.8463450 0.8835526    1    0
+12 0.6842105 0.7833333 0.8421053 0.8413450 0.8855263    1    0
+13 0.6842105 0.8355263 0.8421053 0.8521930 0.8835526    1    0
+14 0.6842105 0.8083333 0.8421053 0.8521637 0.8986842    1    0
+15 0.6842105 0.8355263 0.8421053 0.8569006 0.9000000    1    0</code></pre>
 </div>
 </div>
-<p>The final parameter evaluation was the ideal number of trees for the model. From the output of the code, investigators observed the accuracy of the model stabilizes at 200 trees.</p>
+<p>The final parameter evaluation was the ideal number of trees for the model. From the output of the code, investigators observed the accuracy of the model stabilizes at 300 trees with the highest accuracy mean of ntree ran between 100 and 1,000.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -543,7 +539,7 @@ Accuracy
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">trControl =</span> trControl,</span>
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxnodes =</span> <span class="dv">8</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">maxnodes =</span> <span class="dv">6</span>,</span>
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">ntree =</span> ntree)</span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    key <span class="ot">&lt;-</span> <span class="fu">toString</span>(ntree)</span>
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    store_maxtrees[[key]] <span class="ot">&lt;-</span> rf_maxtrees</span>
@@ -560,20 +556,20 @@ Models: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
 Number of resamples: 10 
 
 Accuracy 
-          Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA's
-100  0.6842105 0.7958333 0.8918129 0.8574561 0.8986842    1    0
-200  0.6842105 0.8472222 0.8947368 0.8680117 0.9000000    1    0
-300  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-400  0.6842105 0.8472222 0.8947368 0.8627485 0.9000000    1    0
-500  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-600  0.6842105 0.8333333 0.8723684 0.8521930 0.8986842    1    0
-700  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-800  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-900  0.6842105 0.8333333 0.8947368 0.8571930 0.9000000    1    0
-1000 0.6842105 0.8333333 0.8723684 0.8521930 0.8986842    1    0</code></pre>
+          Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's
+100  0.7368421 0.7777778 0.8947368 0.8457895 0.8986842 0.9444444    0
+200  0.7368421 0.7807018 0.8947368 0.8618713 0.9000000 1.0000000    0
+300  0.6842105 0.8355263 0.8947368 0.8674269 0.9000000 1.0000000    0
+400  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+500  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+600  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+700  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+800  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+900  0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0
+1000 0.6842105 0.8355263 0.8460526 0.8571637 0.8986842 1.0000000    0</code></pre>
 </div>
 </div>
-<p>The final training model produced an accuracy of 0.8680 compared to the default training model with an accuracy of 0.8472, a 2.08% improvement in accuracy over the default RF parameters.</p>
+<p>The final training model produced an accuracy of 0.8674 compared to the default training model with an accuracy of 0.8358, a 3.78% improvement in accuracy over the default RF parameters.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -587,8 +583,8 @@ Accuracy
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> trControl,</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesize =</span> <span class="dv">14</span>,</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">200</span>,</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxnodes =</span> <span class="dv">8</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">300</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">maxnodes =</span> <span class="dv">6</span>)</span>
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -604,7 +600,7 @@ Summary of sample sizes: 169, 170, 170, 171, 169, 171, ...
 Resampling results:
 
   Accuracy   Kappa    
-  0.8680117  0.7263713
+  0.8674269  0.7242847
 
 Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </div>
@@ -612,7 +608,7 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </section>
 <section id="bootstrap-sampling-method" class="level5">
 <h5 class="anchored" data-anchor-id="bootstrap-sampling-method">Bootstrap Sampling Method</h5>
-<p>A default training model using bootstrap sampling method based on classification was created to compare with the k-fold cross-validation sampling method. Bootstrap does not need cross-validation. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni Impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the default model was 0.8330 compared to .8472 of the k-fold cross-validation sampling method.</p>
+<p>A default training model using bootstrap sampling method based on classification was created to compare with the k-fold cross-validation sampling method. Bootstrap does not need cross-validation. Random Forests are predictive models that form multiple decision trees. At each tree node, a subset of the 13 predictor features were used to introduce randomness into the model. The default training model used 500 decision trees (ntree=500) and determined the optimal number of features to compare to be 2 (mtry= 2). For this classification RF, the decision at each tree node was conducted by Ginni Impurity, which is a process of estimating the likelihood that a feature may be misclassified at random, then the feature with the lowest likelihood of misclassification is selected at that node. Accuracy of the bootstrap default model is 0.8322 compared to .8358 of the k-fold cross-validation sampling method.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -636,15 +632,15 @@ Summary of sample sizes: 189, 189, 189, 189, 189, 189, ...
 Resampling results across tuning parameters:
 
   mtry  Accuracy   Kappa    
-   2    0.8330381  0.6595505
-   8    0.8236219  0.6407188
-  14    0.8097574  0.6129731
+   2    0.8321817  0.6571619
+   7    0.8229013  0.6393790
+  13    0.8117677  0.6172537
 
 Accuracy was used to select the optimal model using the largest value.
 The final value used for the model was mtry = 2.</code></pre>
 </div>
 </div>
-<p>To compare the final training settings in the k-fold cross-validation sampling method to the bootstrap sampling method, the same settings were used to train. The bootstrap sampling method is still slightly lower than the k-fold cross-validation Sampling Method with .8367 accuracy compared to .8680. Since k-fold cross-validation sampling method is higher in Accuracy, the predictive modeling will be based off from the k-fold cross-validation sampling method.</p>
+<p>To compare the final training settings in the k-fold cross-validation sampling method to the bootstrap sampling method, the same settings were used to train. The bootstrap sampling method is still slightly lower than the k-fold cross-validation sampling method with .8340 accuracy compared to .8674 of the k-fold cross validation sampling method. Since k-fold cross-validation sampling method is higher in Accuracy, the predictive modeling will be based off from the k-fold cross-validation sampling method.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -673,7 +669,7 @@ Summary of sample sizes: 189, 189, 189, 189, 189, 189, ...
 Resampling results:
 
   Accuracy   Kappa    
-  0.8367264  0.6650343
+  0.8340342  0.6598946
 
 Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 </div>
@@ -690,7 +686,7 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span><span class="fu">predict</span>(fit_rf, test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The final training model was run against the test data. The results from the predictive test model indicated that the feature major vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 60.00. These features were major vessels, thal normal, old peak, chest pain type, max heart rate, and thal reversible defect.</p>
+<p>The final training model was run against the test data. The results from the predictive test model indicated that the feature major vessels was the most influential feature when predicting heart disease from the current dataset with a variable importance score of 100.00. The five most influential features all had variable importance scores above 50.00. These features were major vessels, thal, chest pain type, old peak, and max heart rate.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -700,20 +696,19 @@ Tuning parameter 'mtry' was held constant at a value of 2</code></pre>
 <pre><code>rf variable importance
 
                                      Importance
-major.vessels                            100.00
-thalnormal                                87.28
-oldpeak                                   77.00
-chest.pain.type                           73.60
-max.heart.rate                            60.95
-thalreversible defect                     60.57
-exercise.induced.angina                   50.54
-ST.segment                                41.34
-resting.blood.pressure                    37.15
-sex                                       34.07
-age                                       30.89
-resting.electrocardiographic.results      24.41
-serum.cholestoral                         17.40
-fasting.blood.sugar                        0.00</code></pre>
+major.vessels                           100.000
+thal                                     94.662
+chest.pain.type                          76.738
+oldpeak                                  67.389
+max.heart.rate                           54.524
+exercise.induced.angina                  47.493
+sex                                      35.574
+age                                      32.505
+ST.segment                               30.580
+resting.blood.pressure                   15.787
+resting.electrocardiographic.results      3.221
+fasting.blood.sugar                       2.348
+serum.cholestoral                         0.000</code></pre>
 </div>
 <details>
 <summary>Code</summary>
@@ -725,7 +720,7 @@ fasting.blood.sugar                        0.00</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>A confusion matrix was ran for the predictive model. Accuracy for the predictive model was calculated to be 82.5% (0.825, CI: 0.7238, 0.9009, p&lt; 0.001). Sensitivity and specificity were calculated at 0.909 and 0.722 respectively.</p>
+<p>A confusion matrix was ran for the predictive model. Accuracy for the predictive model was calculated to be 83.8% (0.835, CI: 0.7238, 0.9009, p&lt; 0.001). Sensitivity and specificity were calculated at 0.909 and 0.75 respectively.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -782,14 +777,14 @@ fasting.blood.sugar                        0.00</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The predictive model has an estimated false positive rate of 28.57%. False positive rate is calculated by the number of false positives divided by the sum of false positives and true negatives. FPR= FP/(FP + TN).</p>
+<p>The predictive model has an estimated false positive rate of 30.77%. False positive rate is calculated by the number of false positives divided by the sum of false positives and true negatives. FPR= FP/(FP + TN).</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">/</span>(<span class="dv">4</span><span class="sc">+</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span><span class="sc">/</span>(<span class="dv">4</span><span class="sc">+</span><span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.2857143</code></pre>
+<pre><code>[1] 0.3076923</code></pre>
 </div>
 </div>
 </section>
