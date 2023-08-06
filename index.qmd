@@ -1,7 +1,7 @@
 ---
 title: "Random Forest Algorithm"
 author: "Amy Brown, Jeff Eddy, Armani Harris"
-date: "August 5, 2023"
+date: "August 6, 2023"
 format:
   html:
     code-fold: true
@@ -303,7 +303,7 @@ fit_rf2 <- train(heart.disease~.,
 print(fit_rf2)
 ```
 
-To compare the final training settings in the k-fold cross-validation sampling method to the bootstrap sampling method, the same settings were used to train. The bootstrap sampling method is still slightly lower than the k-fold cross-validation sampling method with .8340 accuracy compared to .8674 of the k-fold cross validation sampling method. Since k-fold cross-validation sampling method is higher in Accuracy, the predictive modeling will be based off from the k-fold cross-validation sampling method.
+To compare the final training settings in the k-fold cross-validation sampling method to the bootstrap sampling method, the same settings were used to train. The bootstrap sampling method is still slightly lower than the k-fold cross-validation sampling method with .8345 accuracy compared to .8674 of the k-fold cross validation sampling method. Since k-fold cross-validation sampling method is higher in Accuracy, the predictive modeling will be based off from the k-fold cross-validation sampling method.
 
 ```{r, message=FALSE}
 # Train final model
@@ -314,8 +314,8 @@ fit_rf2 <- train(heart.disease~.,
     tuneGrid = tuneGrid,
     importance = TRUE,
     nodesize = 14,
-    ntree = 200,
-    maxnodes = 8)
+    ntree = 300,
+    maxnodes = 6)
 print(fit_rf2)
 ```
 
