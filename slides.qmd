@@ -392,7 +392,7 @@ print(fit_rf2)
 
 -   K-Fold Cross-Validation Accuracy = .8674
 
--   Bootstrap Accuracy = .8344
+-   Bootstrap Accuracy = .8345
 
 -   Predictive Modeling will use K-Fold Cross-Validation due to higher accuracy
 
